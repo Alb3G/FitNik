@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Fitnik</string>
+    <string name="ai_tracking_body">
+        Track your goals effortlessly with AI-powered insights. Get personalized recommendations and real-time analytics to stay on the path to success.
+    </string>
+    <string name="get_burn_body">
+        Burn calories effectively with guided workouts. Stay consistent,
+        and you’ll see long-lasting results in your fitness journey.
+    </string>
+    <string name="eat_well_body">
+        Discover nutritious meal plans and balanced diets. Learn how small,
+        healthy choices can make a big impact on your well-being.
+    </string>
+    <string name="sleep_body">
+        Enhance your sleep with science-backed tips. Quality rest leads to improved
+        mood, focus, and overall health.
+    </string>
 </resources>
