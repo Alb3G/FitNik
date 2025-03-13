@@ -2,7 +2,6 @@ package com.example.fitnik.onboarding.data.repository
 
 import android.content.SharedPreferences
 import com.example.fitnik.onboarding.domain.repository.OnboardingRepository
-import androidx.core.content.edit
 
 class OnboardingRepositoryImpl(
     private val sharedPreferences: SharedPreferences
@@ -17,6 +16,6 @@ class OnboardingRepositoryImpl(
     }
 
     override fun onboardingComplete() {
-        sharedPreferences.edit { putBoolean(HAS_SEEN_ONBOARDING, true) }
+        sharedPreferences.edit().putBoolean(HAS_SEEN_ONBOARDING, true).apply()
     }
 }

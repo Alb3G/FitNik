@@ -3,7 +3,6 @@ package com.example.fitnik.onboarding.presentation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.fitnik.R
 import com.example.fitnik.onboarding.model.OnboardingPagerModel
@@ -47,5 +46,7 @@ fun OnboardingScreen(
         )
     )
 
-    OnboardingPager(pages = pages, onFinish = onFinish)
+    OnboardingPager(pages = pages, onFinish = {
+        viewModel.completeOnboarding()
+    })
 }
