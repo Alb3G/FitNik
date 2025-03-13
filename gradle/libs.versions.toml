@@ -8,13 +8,14 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
-composeBom = "2025.02.00"
+composeBom = "2025.03.00"
 material3 = "1.3.1"
-navigation = "2.8.8"
+navigation = "2.8.9"
 viewmodel = "2.8.7"
-koin = "3.5.3"
+hiltNavigationCompose = "1.2.0"
+hiltVersion = "2.55"
+hiltCompiler = "1.2.0"
 room = "2.6.1"
-datastore = "1.1.3"
 serialization = "1.7.3"
 coil = "2.5.0"
 coroutines = "1.7.3"
@@ -42,14 +43,18 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewmodel" }
 
 # Inyección de dependencias
-koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
+hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltVersion" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltVersion" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltVersion" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltVersion" }
+androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltCompiler" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "hiltNavigationCompose" }
 
 # Base de datos
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
 # Utilidades
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
@@ -63,3 +68,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion"}

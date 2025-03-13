@@ -58,7 +58,7 @@ fun OnboardingPager(
                     contentDescription = "",
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(information.imageHeight),
+                        .height(470.dp),
                     contentScale = ContentScale.Crop
                 )
                 Spacer(modifier = Modifier.height(32.dp))
@@ -138,25 +138,21 @@ fun PreviewOnboardingPager() {
             title = "AI Tracking Goals",
             body = "",
             image = R.drawable.onb1,
-            imageHeight = 500.dp
         ),
         OnboardingPagerModel(
             title = "AI Tracking Goals",
             body = "",
             image = R.drawable.onb2,
-            imageHeight = 450.dp
         ),
         OnboardingPagerModel(
             title = "AI Tracking Goals",
             body = "",
             image = R.drawable.onb3,
-            imageHeight = 450.dp
         ),
         OnboardingPagerModel(
             title = "AI Tracking Goals",
             body = "",
             image = R.drawable.onb4,
-            imageHeight = 450.dp
         )
     )
 

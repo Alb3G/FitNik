@@ -5,9 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.fitnik.navigation.NavigationScreens.Home
+import com.example.fitnik.navigation.NavigationScreens.Login
 import com.example.fitnik.navigation.NavigationScreens.Onboarding
+import com.example.fitnik.onboarding.domain.usecase.HasSeenOnboardingUseCase
 import com.example.fitnik.onboarding.presentation.OnboardingScreen
+import com.example.fitnik.onboarding.presentation.OnboardingViewModel
 
 @Composable
 fun NavigationHost(
@@ -16,11 +18,13 @@ fun NavigationHost(
 ) {
     NavHost(navController = navHostController, startDestination = startDestination) {
         composable<Onboarding> {
-            OnboardingScreen(onFinish = { navHostController.navigate(Home) })
+            OnboardingScreen(
+                onFinish = { navHostController.navigate(Login) }
+            )
         }
 
-        composable<Home> {
-            Text("Home")
+        composable<Login> {
+            Text("Login")
         }
     }
 }

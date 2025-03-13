@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -55,9 +56,11 @@ dependencies {
     implementation(libs.kotlinx.coroutines)
     // Coil
     implementation(libs.coil.compose)
-    // Koin
-    implementation(libs.koin.android)
-    implementation(libs.koin.compose)
+    // Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+    ksp(libs.androidx.hilt.compiler)
     // Room
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)

@@ -12,7 +12,9 @@ import com.example.fitnik.navigation.NavigationHost
 import com.example.fitnik.navigation.NavigationScreens.Onboarding
 import com.example.fitnik.ui.theme.FitnikTheme
 import com.example.fitnik.ui.theme.white
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

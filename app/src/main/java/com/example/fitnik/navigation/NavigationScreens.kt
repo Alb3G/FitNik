@@ -10,4 +10,6 @@ sealed class NavigationScreens {
     @Serializable
     object Onboarding : NavigationScreens()
 
+    @Serializable
+    object Login : NavigationScreens()
 }
