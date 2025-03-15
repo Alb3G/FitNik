@@ -83,7 +83,8 @@ fun OnboardingPager(
             if (pagerState.currentPage == pagerState.pageCount - 1) {
                 FitnikDefButton(
                     text = "Get Started",
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    textStyle = MaterialTheme.typography.titleMedium,
                 ) { onFinish() }
             } else {
                 TextButton(onClick = onFinish) {
