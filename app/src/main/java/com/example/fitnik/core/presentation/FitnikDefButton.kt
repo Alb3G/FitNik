@@ -1,7 +1,6 @@
 package com.example.fitnik.core.presentation
 
-    import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -23,25 +22,20 @@ fun FitnikDefButton(
     textStyle: TextStyle,
     onAction: () -> Unit,
 ) {
-    Box( // Contenedor con fondo degradado
-        modifier = modifier
-            .background(
-                Brush.horizontalGradient(
-                    colors = listOf(primary2, primary) // Azul a naranja
-                ),
-                shape = RoundedCornerShape(percent = 50) // Esquinas redondeadas
-            )
-    ) {
-        Button(
-            onClick = onAction,
-            modifier = modifier,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Transparent, // Transparente para mostrar el gradiente
-                contentColor = white // Color del texto
+    Button(
+        onClick = onAction,
+        modifier = modifier.background(
+            Brush.horizontalGradient(
+                colors = listOf(primary2, primary)
             ),
-            contentPadding = PaddingValues() // Evita padding extra que pueda tapar el gradiente
-        ) {
-            Text(text = text, style = textStyle)
-        }
+            shape = RoundedCornerShape(percent = 50)
+        ),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent, // Transparente para mostrar el gradiente
+            contentColor = white
+        ),
+        contentPadding = PaddingValues() // Evita padding extra que pueda tapar el gradiente
+    ) {
+        Text(text = text, style = textStyle)
     }
 }

@@ -5,11 +5,14 @@ import kotlinx.serialization.Serializable
 sealed class NavigationScreens {
 
     @Serializable
-    object Home : NavigationScreens()
+    object Home: NavigationScreens()
 
     @Serializable
-    object Onboarding : NavigationScreens()
+    object Onboarding: NavigationScreens()
 
     @Serializable
-    object Login : NavigationScreens()
+    object Login: NavigationScreens()
+
+    @Serializable
+    object SignUp: NavigationScreens()
 }

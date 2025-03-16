@@ -1,4 +1,4 @@
-package com.example.fitnik.authentication.presentation.login.components
+package com.example.fitnik.core.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,15 +10,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.fitnik.R
@@ -29,7 +38,7 @@ import com.example.fitnik.ui.theme.smokeWhite
 import com.example.fitnik.ui.theme.white
 
 @Composable
-fun LoginTextField(
+fun AuthTextField(
     modifier: Modifier = Modifier,
     tfValue: String,
     label: String,
@@ -39,23 +48,29 @@ fun LoginTextField(
     isPassword: Boolean = false,
 ) {
 
-    val keyboardOptions = if (isEmail) KeyboardOptions(
-        keyboardType = KeyboardType.Email
-    ) else KeyboardOptions(keyboardType = KeyboardType.Password)
+    var passVisible by remember { mutableStateOf(false) }
+
+    val keyboardOptions = if (isEmail) {
+        KeyboardOptions(keyboardType = KeyboardType.Email)
+    } else {
+        KeyboardOptions(keyboardType = KeyboardType.Password)
+    }
 
     val trailingIcon: @Composable (() -> Unit)? = if (isPassword) {
         {
-            Icon(
-                painter = painterResource(R.drawable.hide),
-                contentDescription = "Show password icon"
-            )
+            IconButton(onClick = { passVisible = !passVisible }) {
+                Icon(
+                    painter = if (passVisible) painterResource(R.drawable.hide) else painterResource(R.drawable.show),
+                    contentDescription = "Show password icon"
+                )
+            }
         }
     } else {
         null
     }
 
     OutlinedTextField(
-        modifier = modifier,
+        modifier = modifier.semantics { this.contentDescription = contentDescription },
         value = tfValue,
         onValueChange = { it },
         label = { Text(label) },
@@ -76,6 +91,7 @@ fun LoginTextField(
         },
         singleLine = true,
         keyboardOptions = keyboardOptions,
+        visualTransformation = if (isPassword && !passVisible) PasswordVisualTransformation() else VisualTransformation.None,
         trailingIcon = trailingIcon
     )
 }
