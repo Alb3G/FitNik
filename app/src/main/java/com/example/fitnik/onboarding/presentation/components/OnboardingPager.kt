@@ -85,6 +85,7 @@ fun OnboardingPager(
                     text = "Get Started",
                     modifier = Modifier.fillMaxWidth(),
                     textStyle = MaterialTheme.typography.titleMedium,
+                    enabled = true,
                 ) { onFinish() }
             } else {
                 TextButton(onClick = onFinish) {

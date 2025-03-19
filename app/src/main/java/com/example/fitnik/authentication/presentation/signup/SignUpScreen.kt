@@ -21,23 +21,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.fitnik.R
 import com.example.fitnik.authentication.presentation.signup.components.InputGroup
 import com.example.fitnik.core.presentation.AuthIconButton
-import com.example.fitnik.core.presentation.LoginDivider
-import com.example.fitnik.core.presentation.AuthTextField
 import com.example.fitnik.core.presentation.FitnikDefButton
+import com.example.fitnik.core.presentation.LoginDivider
 import com.example.fitnik.ui.theme.lightGray
 import com.example.fitnik.ui.theme.primary
 import com.example.fitnik.ui.theme.secondary
@@ -45,9 +42,11 @@ import com.example.fitnik.ui.theme.white
 
 @Composable
 fun SignUpScreen(
+    viewModel: SignUpViewModel = hiltViewModel(),
     onLoginClick: () -> Unit
 ) {
-    var isChecked by remember { mutableStateOf(false) }
+    val state by viewModel.state.collectAsState()
+
     Column(
         modifier = Modifier
             .background(white)
@@ -60,14 +59,14 @@ fun SignUpScreen(
         Spacer(modifier = Modifier.height(6.dp))
         Text("Create an Account", fontSize = 24.sp, style = MaterialTheme.typography.headlineLarge)
         Spacer(modifier = Modifier.height(24.dp))
-        InputGroup()
+        InputGroup(viewModel)
         Spacer(modifier = Modifier.height(24.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
-                checked = isChecked,
-                onCheckedChange = { isChecked = !isChecked },
+                checked = state.privacyConsent,
+                onCheckedChange = { viewModel.onEvent(SignUpEvent.PrivacyConsentChante(it)) },
                 colors = CheckboxDefaults.colors(
                     checkedColor = primary,
                     uncheckedColor = lightGray,
@@ -88,8 +87,9 @@ fun SignUpScreen(
             .padding(bottom = 24.dp),
             textStyle = MaterialTheme.typography.titleMedium.copy(
                 fontSize = 18.sp
-            )
-        ) {  }
+            ),
+            enabled = state.privacyConsent
+        ) { /* Implementacion del proceso de registro */ }
         LoginDivider()
         Spacer(modifier = Modifier.height(24.dp))
         Row(
@@ -133,35 +133,5 @@ fun SignUpScreen(
                 Text("Login")
             }
         }
-    }
-}
-
-@Preview(
-    showBackground = true,
-    showSystemUi = true
-)
-@Composable
-fun LoginScreenPreview() {
-    Column(
-        modifier = Modifier
-            .background(white)
-            .fillMaxSize()
-            .padding(horizontal = 24.dp)
-            .padding(top = 48.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Hey there,", fontSize = 20.sp, style = MaterialTheme.typography.bodyLarge)
-        Spacer(modifier = Modifier.height(8.dp))
-        Text("Create an Account", fontSize = 24.sp, style = MaterialTheme.typography.headlineLarge)
-        Spacer(modifier = Modifier.height(24.dp))
-        AuthTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
-            tfValue = "",
-            label = "First Name",
-            leadingIcon = R.drawable.profile,
-            contentDescription = "Profile icon",
-        )
     }
 }

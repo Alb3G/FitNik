@@ -20,6 +20,7 @@ fun FitnikDefButton(
     text: String,
     modifier: Modifier = Modifier,
     textStyle: TextStyle,
+    enabled: Boolean,
     onAction: () -> Unit,
 ) {
     Button(
@@ -32,9 +33,11 @@ fun FitnikDefButton(
         ),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Transparent, // Transparente para mostrar el gradiente
-            contentColor = white
+            contentColor = white,
+            disabledContainerColor = primary.copy(alpha = 0.5f)
         ),
-        contentPadding = PaddingValues() // Evita padding extra que pueda tapar el gradiente
+        contentPadding = PaddingValues(), // Evita padding extra que pueda tapar el gradiente
+        enabled = enabled
     ) {
         Text(text = text, style = textStyle)
     }

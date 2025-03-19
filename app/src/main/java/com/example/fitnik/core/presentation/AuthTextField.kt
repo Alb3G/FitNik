@@ -31,6 +31,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.fitnik.R
+import com.example.fitnik.core.model.TextFieldConfig
 import com.example.fitnik.ui.theme.lightGray
 import com.example.fitnik.ui.theme.midGray
 import com.example.fitnik.ui.theme.primary
@@ -41,22 +42,21 @@ import com.example.fitnik.ui.theme.white
 fun AuthTextField(
     modifier: Modifier = Modifier,
     tfValue: String,
-    label: String,
-    leadingIcon: Int,
-    contentDescription: String = "",
-    isEmail: Boolean = false,
-    isPassword: Boolean = false,
+    textFieldConfig: TextFieldConfig,
+    onValueChange: (String) -> Unit,
 ) {
 
     var passVisible by remember { mutableStateOf(false) }
 
-    val keyboardOptions = if (isEmail) {
+    val keyboardOptions = if (textFieldConfig.isEmail) {
         KeyboardOptions(keyboardType = KeyboardType.Email)
-    } else {
+    } else if (textFieldConfig.isPassword) {
         KeyboardOptions(keyboardType = KeyboardType.Password)
+    } else {
+        KeyboardOptions(keyboardType = KeyboardType.Text)
     }
 
-    val trailingIcon: @Composable (() -> Unit)? = if (isPassword) {
+    val trailingIcon: @Composable (() -> Unit)? = if (textFieldConfig.isPassword) {
         {
             IconButton(onClick = { passVisible = !passVisible }) {
                 Icon(
@@ -72,8 +72,8 @@ fun AuthTextField(
     OutlinedTextField(
         modifier = modifier.semantics { this.contentDescription = contentDescription },
         value = tfValue,
-        onValueChange = { it },
-        label = { Text(label) },
+        onValueChange = { onValueChange(it) },
+        label = { Text(textFieldConfig.label) },
         shape = RoundedCornerShape(15.dp),
         colors = TextFieldDefaults.colors(
             focusedContainerColor = smokeWhite,
@@ -87,12 +87,16 @@ fun AuthTextField(
             focusedLabelColor = primary
         ),
         leadingIcon = {
-            Icon(painter = painterResource(leadingIcon), contentDescription)
+            Icon(painter = painterResource(textFieldConfig.leadingIcon), textFieldConfig.contentDescription)
         },
         singleLine = true,
         keyboardOptions = keyboardOptions,
-        visualTransformation = if (isPassword && !passVisible) PasswordVisualTransformation() else VisualTransformation.None,
-        trailingIcon = trailingIcon
+        visualTransformation = if (textFieldConfig.isPassword && !passVisible)
+            PasswordVisualTransformation()
+        else
+            VisualTransformation.None,
+        trailingIcon = trailingIcon,
+        keyboardActions = textFieldConfig.keyboardActions
     )
 }
 
