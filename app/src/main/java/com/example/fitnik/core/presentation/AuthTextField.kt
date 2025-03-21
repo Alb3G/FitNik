@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.fitnik.R
 import com.example.fitnik.core.model.TextFieldConfig
+import com.example.fitnik.ui.theme.error
 import com.example.fitnik.ui.theme.lightGray
 import com.example.fitnik.ui.theme.midGray
 import com.example.fitnik.ui.theme.primary
@@ -43,6 +44,7 @@ fun AuthTextField(
     modifier: Modifier = Modifier,
     tfValue: String,
     textFieldConfig: TextFieldConfig,
+    errorMessage: String? = null,
     onValueChange: (String) -> Unit,
 ) {
 
@@ -60,7 +62,10 @@ fun AuthTextField(
         {
             IconButton(onClick = { passVisible = !passVisible }) {
                 Icon(
-                    painter = if (passVisible) painterResource(R.drawable.hide) else painterResource(R.drawable.show),
+                    painter = if (passVisible)
+                        painterResource(R.drawable.hide)
+                    else
+                        painterResource(R.drawable.show),
                     contentDescription = "Show password icon"
                 )
             }
@@ -84,7 +89,14 @@ fun AuthTextField(
             focusedTextColor = Color.Black,
             unfocusedTextColor = lightGray,
             focusedLeadingIconColor = primary,
-            focusedLabelColor = primary
+            focusedLabelColor = primary,
+            errorContainerColor = error.copy(alpha = 0.3f),
+            errorIndicatorColor = error,
+            errorCursorColor = error,
+            errorLabelColor = error,
+            errorLeadingIconColor = error,
+            errorTrailingIconColor = error,
+            errorTextColor = white
         ),
         leadingIcon = {
             Icon(painter = painterResource(textFieldConfig.leadingIcon), textFieldConfig.contentDescription)
@@ -96,7 +108,13 @@ fun AuthTextField(
         else
             VisualTransformation.None,
         trailingIcon = trailingIcon,
-        keyboardActions = textFieldConfig.keyboardActions
+        keyboardActions = textFieldConfig.keyboardActions,
+        isError = textFieldConfig.isError,
+        supportingText = {
+            if (textFieldConfig.isError && errorMessage != null) {
+                Text(errorMessage)
+            }
+        }
     )
 }
 

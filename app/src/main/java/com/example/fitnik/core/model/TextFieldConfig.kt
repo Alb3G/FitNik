@@ -9,4 +9,5 @@ data class TextFieldConfig(
     val keyboardActions: KeyboardActions,
     val isEmail: Boolean = false,
     val isPassword: Boolean = false,
+    val isError: Boolean = false,
 )

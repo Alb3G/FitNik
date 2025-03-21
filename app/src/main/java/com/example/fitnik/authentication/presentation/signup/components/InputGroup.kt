@@ -1,6 +1,7 @@
 package com.example.fitnik.authentication.presentation.signup.components
 
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
@@ -31,54 +32,58 @@ fun InputGroup(
         label = "First Name",
         leadingIcon = R.drawable.profile,
         contentDescription = "Write down your name",
-        keyboardActions = KeyboardActions { focusManager.moveFocus(FocusDirection.Next) }
+        keyboardActions = KeyboardActions { focusManager.moveFocus(FocusDirection.Next) },
+        isError = !viewModel.validateName(state.firsName) && state.hasTypedFirstName
     )
     val lastNameConfig = TextFieldConfig(
         label = "Last Name",
         leadingIcon = R.drawable.profile,
         contentDescription = "Profile icon",
-        keyboardActions = KeyboardActions { focusManager.moveFocus(FocusDirection.Next) }
+        keyboardActions = KeyboardActions { focusManager.moveFocus(FocusDirection.Next) },
+        isError = !viewModel.validateName(state.lastName) && state.hasTypedLastName
     )
     val emailConfig = TextFieldConfig(
         label = "Email",
         leadingIcon = R.drawable.message,
         contentDescription = "Email icon",
         isEmail = true,
-        keyboardActions = KeyboardActions { focusManager.moveFocus(FocusDirection.Next) }
+        keyboardActions = KeyboardActions { focusManager.moveFocus(FocusDirection.Next) },
+        isError = !viewModel.validateEmail(state.email) && state.hasTypedEmail
     )
     val passwordConfig = TextFieldConfig(
         label = "Password",
         leadingIcon = R.drawable.lock,
         contentDescription = "Password icon",
         isPassword = true,
-        keyboardActions = KeyboardActions {
-            focusManager.clearFocus()
-        }
+        keyboardActions = KeyboardActions { focusManager.clearFocus() },
+        isError = !viewModel.validatePassword(state.password) && state.hasTypedPassword
     )
 
     AuthTextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(64.dp),
+        modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 64.dp),
         tfValue = state.firsName,
         textFieldConfig = firstNameConfig,
+        errorMessage = state.firstNameError.takeIf { state.hasTypedFirstName }
     ) { viewModel.onEvent(SignUpEvent.FirstNameChange(it)) }
-    Spacer(modifier = Modifier.height(24.dp))
+    Spacer(modifier = Modifier.height(8.dp))
     AuthTextField(
-        modifier = Modifier.fillMaxWidth().height(64.dp),
+        modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 64.dp),
         tfValue = state.lastName,
         textFieldConfig = lastNameConfig,
+        errorMessage = state.lastNameError.takeIf { state.hasTypedLastName }
     ) { viewModel.onEvent(SignUpEvent.LastNameChange(it)) }
-    Spacer(modifier = Modifier.height(24.dp))
+    Spacer(modifier = Modifier.height(8.dp))
     AuthTextField(
-        modifier = Modifier.fillMaxWidth().height(64.dp),
+        modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 64.dp),
         tfValue = state.email,
-        textFieldConfig = emailConfig
+        textFieldConfig = emailConfig,
+        errorMessage = state.emailError.takeIf { state.hasTypedEmail }
     ) { viewModel.onEvent(SignUpEvent.EmailChange(it)) }
-    Spacer(modifier = Modifier.height(24.dp))
+    Spacer(modifier = Modifier.height(8.dp))
     AuthTextField(
-        modifier = Modifier.fillMaxWidth().height(64.dp),
+        modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 64.dp),
         tfValue = state.password,
-        textFieldConfig = passwordConfig
+        textFieldConfig = passwordConfig,
+        errorMessage = state.passwordError.takeIf { state.hasTypedPassword }
     ) { viewModel.onEvent(SignUpEvent.PasswordChange(it)) }
 }
