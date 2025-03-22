@@ -20,6 +20,9 @@ serialization = "1.7.3"
 coil = "2.5.0"
 coroutines = "1.7.3"
 ksp = "2.1.10-1.0.29"
+firebaseBom = "33.11.0"
+firebaseAnalytics = "22.3.0"
+firebaseAuth = "22.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -59,8 +62,14 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 # Utilidades
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+
 # Serialization
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
+
+# Firebase
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -69,3 +78,4 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion"}
+google-services = { id="com.google.gms.google-services", version = "4.4.2"}
