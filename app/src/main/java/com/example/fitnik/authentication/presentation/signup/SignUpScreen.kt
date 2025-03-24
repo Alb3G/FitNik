@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.fitnik.authentication.presentation.signup.components.InputGroup
+import com.example.fitnik.authentication.presentation.signup.components.PasswordRequirements
 import com.example.fitnik.core.presentation.FitnikDefButton
 import com.example.fitnik.core.presentation.LoginDivider
 import com.example.fitnik.ui.theme.lightGray
@@ -52,7 +53,9 @@ fun SignUpScreen(
         Text("Create an Account", fontSize = 24.sp, style = MaterialTheme.typography.headlineLarge)
         Spacer(modifier = Modifier.height(24.dp))
         InputGroup(viewModel)
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(8.dp))
+        PasswordRequirements(state.password, viewModel)
+        Spacer(modifier = Modifier.height(12.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -70,7 +73,7 @@ fun SignUpScreen(
                 style = MaterialTheme.typography.bodySmall
             )
         }
-        Spacer(modifier = Modifier.height(110.dp))
+        Spacer(modifier = Modifier.weight(1f))
         FitnikDefButton(
             text = "Sign Up",
             modifier = Modifier

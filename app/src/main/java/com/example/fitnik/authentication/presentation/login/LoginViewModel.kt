@@ -1,16 +1,23 @@
 package com.example.fitnik.authentication.presentation.login
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.fitnik.authentication.domain.repository.AuthRepository
+import com.example.fitnik.authentication.model.PasswordValidationResult
+import com.example.fitnik.authentication.model.passIsValid
 import com.example.fitnik.authentication.presentation.signup.SignUpState
 import com.example.fitnik.utils.emailIsValid
-import com.example.fitnik.utils.passwordIsValid
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(): ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+): ViewModel() {
 
     private val _state = MutableStateFlow(SignUpState())
     val state: StateFlow<SignUpState> = _state
@@ -44,16 +51,18 @@ class LoginViewModel @Inject constructor(): ViewModel() {
         return true
     }
 
-    fun validatePassword(password: String): Boolean {
-        val isValid = passwordIsValid(password)
-        if (!isValid) {
-            _state.value = _state.value.copy(
-                passwordError = "Remember to have 1Mayus, 1Number and 1Special character and minimum 8 characters."
-            )
-            return false
-        }
-        return true
+    fun validatePassword(password: String): PasswordValidationResult {
+        return passIsValid(password)
     }
 
-    private fun login() {}
+    fun login() {
+        viewModelScope.launch {
+            authRepository.login(state.value.email, state.value.password).onSuccess {
+                Log.i("Login Process", "SUCCESS")
+            }.onFailure {
+                val error = it.message
+                Log.i("Login Process", error.toString())
+            }
+        }
+    }
 }

@@ -65,7 +65,7 @@ fun LoginScreen(
             ),
             enabled = true,
             hasIcon = true
-        ) { /* Implementacion del proceso de registro */ }
+        ) { viewModel.login() }
         LoginDivider()
         Spacer(modifier = Modifier.height(24.dp))
         LoginOptionsComponent()

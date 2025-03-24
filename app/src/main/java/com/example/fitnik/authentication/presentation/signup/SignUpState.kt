@@ -1,5 +1,6 @@
 package com.example.fitnik.authentication.presentation.signup
 
+// Probably this dataclass needs a refactor
 data class SignUpState(
     val firsName: String = "",
     val firstNameError: String = "",

@@ -56,7 +56,6 @@ fun InputGroup(
         contentDescription = "Password icon",
         isPassword = true,
         keyboardActions = KeyboardActions { focusManager.clearFocus() },
-        isError = !viewModel.validatePassword(state.password) && state.hasTypedPassword
     )
 
     AuthTextField(
@@ -84,6 +83,5 @@ fun InputGroup(
         modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 64.dp),
         tfValue = state.password,
         textFieldConfig = passwordConfig,
-        errorMessage = state.passwordError.takeIf { state.hasTypedPassword }
     ) { viewModel.onEvent(SignUpEvent.PasswordChange(it)) }
 }

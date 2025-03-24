@@ -1,9 +1,10 @@
 package com.example.fitnik.authentication.presentation.signup
 
 import androidx.lifecycle.ViewModel
+import com.example.fitnik.authentication.model.PasswordValidationResult
+import com.example.fitnik.authentication.model.passIsValid
 import com.example.fitnik.utils.emailIsValid
 import com.example.fitnik.utils.nameIsValid
-import com.example.fitnik.utils.passwordIsValid
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +15,6 @@ class SignUpViewModel @Inject constructor(): ViewModel() {
 
     private val _state = MutableStateFlow(SignUpState())
     val state: StateFlow<SignUpState> = _state
-
 
     fun onEvent(event: SignUpEvent) {
         when (event) {
@@ -74,14 +74,7 @@ class SignUpViewModel @Inject constructor(): ViewModel() {
         return true
     }
 
-    fun validatePassword(password: String): Boolean {
-        val isValid = passwordIsValid(password)
-        if (!isValid) {
-            _state.value = _state.value.copy(
-                passwordError = "Remember to have 1Mayus, 1Number and 1Special character and minimum 8 characters."
-            )
-            return false
-        }
-        return true
+    fun validatePassword(password: String): PasswordValidationResult {
+        return passIsValid(password)
     }
 }
