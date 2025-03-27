@@ -2,7 +2,7 @@ package com.example.fitnik.authentication.presentation.signup
 
 import androidx.lifecycle.ViewModel
 import com.example.fitnik.authentication.model.PasswordValidationResult
-import com.example.fitnik.authentication.model.passIsValid
+import com.example.fitnik.utils.passIsValid
 import com.example.fitnik.utils.emailIsValid
 import com.example.fitnik.utils.nameIsValid
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +15,14 @@ class SignUpViewModel @Inject constructor(): ViewModel() {
 
     private val _state = MutableStateFlow(SignUpState())
     val state: StateFlow<SignUpState> = _state
+
+    val signUpAllowed: Boolean get() =
+        state.value.privacyConsent &&
+        validateName(state.value.firsName) &&
+        validateName(state.value.lastName) &&
+        validateEmail(state.value.email) &&
+        validatePassword(state.value.password).metAllRequirements
+
 
     fun onEvent(event: SignUpEvent) {
         when (event) {
@@ -42,14 +50,16 @@ class SignUpViewModel @Inject constructor(): ViewModel() {
                     hasTypedPassword = true
                 )
             }
-            is SignUpEvent.PrivacyConsentChante -> {
+            is SignUpEvent.PrivacyConsentChange -> {
                 _state.value = _state.value.copy(privacyConsent = event.isAccepted)
             }
             SignUpEvent.SignUp -> signUp()
         }
     }
 
-    private fun signUp() {}
+    private fun signUp() {
+
+    }
 
     fun validateName(name: String): Boolean {
         val isValid = nameIsValid(name)

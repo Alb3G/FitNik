@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitnik.authentication.domain.repository.AuthRepository
 import com.example.fitnik.authentication.model.PasswordValidationResult
-import com.example.fitnik.authentication.model.passIsValid
+import com.example.fitnik.utils.passIsValid
 import com.example.fitnik.authentication.presentation.signup.SignUpState
 import com.example.fitnik.utils.emailIsValid
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -8,12 +8,3 @@ data class PasswordValidationResult(
 ) {
     val metAllRequirements = metMinLength && metUpperCase && metNumber && metSpecialChar
 }
-
-fun passIsValid(password: String): PasswordValidationResult {
-    return PasswordValidationResult(
-        metMinLength = password.length >= 8,
-        metUpperCase = password.any { it.isUpperCase() },
-        metNumber = password.any { it.isDigit() },
-        metSpecialChar = password.any { !it.isLetterOrDigit() }
-    )
-}

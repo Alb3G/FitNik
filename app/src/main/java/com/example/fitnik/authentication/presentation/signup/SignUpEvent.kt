@@ -16,7 +16,7 @@ sealed interface SignUpEvent {
 
     data class PasswordChange(val password: String): SignUpEvent
 
-    data class PrivacyConsentChante(val isAccepted: Boolean): SignUpEvent
+    data class PrivacyConsentChange(val isAccepted: Boolean): SignUpEvent
 
     object SignUp: SignUpEvent
 

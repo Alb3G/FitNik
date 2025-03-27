@@ -25,7 +25,7 @@ fun FitnikDefButton(
     text: String,
     modifier: Modifier = Modifier,
     textStyle: TextStyle,
-    enabled: Boolean,
+    enabled: Boolean = true,
     hasIcon: Boolean = false,
     onAction: () -> Unit,
 ) {
