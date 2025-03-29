@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.fitnik.navigation.NavigationHost
 import com.example.fitnik.navigation.NavigationScreens
+import com.example.fitnik.navigation.NavigationScreens.Login
 import com.example.fitnik.navigation.NavigationScreens.Onboarding
-import com.example.fitnik.navigation.NavigationScreens.SignUp
 import com.example.fitnik.ui.theme.FitnikTheme
 import com.example.fitnik.ui.theme.white
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
 
     private fun getStartDestination(): NavigationScreens {
         return if (viewModel.hasSeenOnboarding) {
-            SignUp
+            Login
         } else {
             Onboarding
         }

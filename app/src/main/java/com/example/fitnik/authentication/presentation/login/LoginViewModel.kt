@@ -54,6 +54,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun login() {
+        activateLoading()
         viewModelScope.launch {
             authRepository.login(state.value.email, state.value.password).onSuccess {
                 _state.value = _state.value.copy(
@@ -61,6 +62,7 @@ class LoginViewModel @Inject constructor(
                     isLoading = false
                 )
             }.onFailure {
+                // Refactorizar los mensajes de error que muestro en la ui.
                 val error = it.message
                 _state.value = _state.value.copy(
                     emailError = error.toString(),
@@ -71,7 +73,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun toggleLoading() {
+    private fun activateLoading() {
         _state.value = _state.value.copy(isLoading = true)
     }
 }

@@ -88,10 +88,7 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .padding(bottom = 24.dp),
             enabled = !state.isLoading,
-            onAction = {
-                viewModel.toggleLoading()
-                viewModel.login()
-            }
+            onAction = { viewModel.login() }
         ) {
             if (state.isLoading) {
                 CircularProgressIndicator(color = white)

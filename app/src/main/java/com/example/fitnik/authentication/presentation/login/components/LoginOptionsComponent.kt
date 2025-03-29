@@ -34,7 +34,7 @@ fun LoginOptionsComponent() {
                 .background(Color.Transparent),
             iconResId = R.drawable.icons8_google,
             contentDescription = "Sign Up with google"
-        )
+        ) { /* Login with Google */ }
         Spacer(modifier = Modifier.width(24.dp))
         AuthIconButton(
             modifier = Modifier
@@ -44,6 +44,6 @@ fun LoginOptionsComponent() {
                 .background(Color.Transparent),
             iconResId = R.drawable.icons8_github,
             contentDescription = "Sign Up with Github"
-        )
+        ) { /* Login with github */ }
     }
 }

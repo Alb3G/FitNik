@@ -1,17 +1,22 @@
 package com.example.fitnik.authentication.presentation.signup
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.fitnik.authentication.domain.repository.AuthRepository
 import com.example.fitnik.authentication.model.PasswordValidationResult
-import com.example.fitnik.utils.passIsValid
 import com.example.fitnik.utils.emailIsValid
 import com.example.fitnik.utils.nameIsValid
+import com.example.fitnik.utils.passIsValid
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(): ViewModel() {
+class SignUpViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+): ViewModel() {
 
     private val _state = MutableStateFlow(SignUpState())
     val state: StateFlow<SignUpState> = _state
@@ -57,8 +62,26 @@ class SignUpViewModel @Inject constructor(): ViewModel() {
         }
     }
 
-    private fun signUp() {
+    fun signUp() {
+        activateLoading()
+        viewModelScope.launch {
+            authRepository.signUp(_state.value.email, _state.value.password).onSuccess {
+                _state.value = _state.value.copy(
+                    isSignedUp = true,
+                    isLoading = false
+                )
+            }.onFailure {
+                val error = it.message
+                _state.value = _state.value.copy(
+                    emailError = error.toString(),
+                    isLoading = false
+                )
+            }
+        }
+    }
 
+    private fun activateLoading() {
+        _state.value = _state.value.copy(isLoading = true)
     }
 
     fun validateName(name: String): Boolean {

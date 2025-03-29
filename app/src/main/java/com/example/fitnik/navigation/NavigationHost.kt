@@ -11,6 +11,7 @@ import com.example.fitnik.navigation.NavigationScreens.Home
 import com.example.fitnik.navigation.NavigationScreens.Login
 import com.example.fitnik.navigation.NavigationScreens.Onboarding
 import com.example.fitnik.navigation.NavigationScreens.SignUp
+import com.example.fitnik.navigation.NavigationScreens.UserProfileSetUp
 import com.example.fitnik.onboarding.presentation.OnboardingScreen
 
 @Composable
@@ -22,26 +23,40 @@ fun NavigationHost(
         composable<Onboarding> {
             OnboardingScreen(
                 onFinish = {
+                    navHostController.popBackStack()
                     navHostController.navigate(SignUp)
                 }
             )
         }
 
         composable<SignUp> {
-            SignUpScreen {
-                navHostController.navigate(Login)
-            }
+            SignUpScreen(
+                onLoginClick = {
+                    navHostController.popBackStack()
+                    navHostController.navigate(Login)
+                },
+                onSignedUpSuccess = { navHostController.navigate(Home) }
+            )
         }
 
         composable<Login> {
             LoginScreen(
-                onRegisterClick = { navHostController.navigate(SignUp) },
-                onLogin = { navHostController.navigate(Home) }
+                onRegisterClick = {
+                    navHostController.navigate(SignUp)
+                },
+                onLogin = {
+                    navHostController.popBackStack()
+                    navHostController.navigate(Home)
+                }
             )
         }
 
         composable<Home> {
             Text("Home")
+        }
+
+        composable<UserProfileSetUp> { backStackEntry ->
+            Text("Set up")
         }
     }
 }

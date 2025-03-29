@@ -15,10 +15,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,11 +46,17 @@ import com.example.fitnik.ui.theme.white
 @Composable
 fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel(),
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    onSignedUpSuccess: () -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     val buttonTextStyle = MaterialTheme.typography.titleMedium.copy(fontSize = 18.sp)
     var showTerms by remember { mutableStateOf(false) }
+
+    LaunchedEffect(state.isSignedUp) {
+        if (state.isSignedUp)
+            onSignedUpSuccess()
+    }
 
     if (showTerms) {
         PDFTermsScreen(
@@ -112,12 +120,18 @@ fun SignUpScreen(
                 .fillMaxWidth()
                 .padding(bottom = 24.dp),
                 enabled = viewModel.signUpAllowed,
-                onAction = { /* Implementacion del proceso de registro */ }
-            ) { Text("Sign Up", style = buttonTextStyle) }
+                onAction = { viewModel.signUp() }
+            ) {
+                if (state.isLoading) {
+                    CircularProgressIndicator(color = white)
+                } else {
+                    Text("Sign Up", style = buttonTextStyle)
+                }
+            }
 
             LoginDivider()
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
