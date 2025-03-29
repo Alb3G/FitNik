@@ -1,13 +1,11 @@
 package com.example.fitnik.authentication.presentation.login
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitnik.authentication.domain.repository.AuthRepository
 import com.example.fitnik.authentication.model.PasswordValidationResult
-import com.example.fitnik.utils.passIsValid
-import com.example.fitnik.authentication.presentation.signup.SignUpState
 import com.example.fitnik.utils.emailIsValid
+import com.example.fitnik.utils.passIsValid
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,21 +17,21 @@ class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ): ViewModel() {
 
-    private val _state = MutableStateFlow(SignUpState())
-    val state: StateFlow<SignUpState> = _state
+    private val _state = MutableStateFlow(LoginState())
+    val state: StateFlow<LoginState> = _state
 
     fun onEvent(event: LoginEvent) {
         when (event) {
             is LoginEvent.EmailChange -> {
                 _state.value = _state.value.copy(
                     email = event.email,
-                    hasTypedEmail = true
+                    emailError = null
                 )
             }
             is LoginEvent.PasswordChange -> {
                 _state.value = _state.value.copy(
                     password = event.password,
-                    hasTypedPassword = true
+                    passwordError = null
                 )
             }
             LoginEvent.Login -> login()
@@ -58,11 +56,22 @@ class LoginViewModel @Inject constructor(
     fun login() {
         viewModelScope.launch {
             authRepository.login(state.value.email, state.value.password).onSuccess {
-                Log.i("Login Process", "SUCCESS")
+                _state.value = _state.value.copy(
+                    isLoggedIn = true,
+                    isLoading = false
+                )
             }.onFailure {
                 val error = it.message
-                Log.i("Login Process", error.toString())
+                _state.value = _state.value.copy(
+                    emailError = error.toString(),
+                    passwordError = error.toString(),
+                    isLoading = false
+                )
             }
         }
+    }
+
+    fun toggleLoading() {
+        _state.value = _state.value.copy(isLoading = true)
     }
 }

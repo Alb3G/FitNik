@@ -34,7 +34,7 @@ fun InputGroup(
         contentDescription = "Email icon",
         isEmail = true,
         keyboardActions = KeyboardActions { focusManager.moveFocus(FocusDirection.Next) },
-        isError = false
+        isError = state.emailError != null
     )
     val passwordConfig = TextFieldConfig(
         label = "Password",
@@ -42,19 +42,20 @@ fun InputGroup(
         contentDescription = "Password icon",
         isPassword = true,
         keyboardActions = KeyboardActions { focusManager.clearFocus() },
-        isError = false
+        isError = state.passwordError != null
     )
 
     AuthTextField(
         modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 64.dp),
         tfValue = state.email,
         textFieldConfig = emailConfig,
-        errorMessage = state.emailError.takeIf { state.hasTypedEmail }
+        errorMessage = state.emailError
     ) { viewModel.onEvent(LoginEvent.EmailChange(it)) }
     Spacer(modifier = Modifier.height(8.dp))
     AuthTextField(
         modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 64.dp),
         tfValue = state.password,
         textFieldConfig = passwordConfig,
+        errorMessage = state.passwordError
     ) { viewModel.onEvent(LoginEvent.PasswordChange(it)) }
 }

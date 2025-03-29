@@ -34,9 +34,10 @@ fun NavigationHost(
         }
 
         composable<Login> {
-            LoginScreen {
-                navHostController.navigate(SignUp)
-            }
+            LoginScreen(
+                onRegisterClick = { navHostController.navigate(SignUp) },
+                onLogin = { navHostController.navigate(Home) }
+            )
         }
 
         composable<Home> {

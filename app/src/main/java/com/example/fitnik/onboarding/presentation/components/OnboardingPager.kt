@@ -82,11 +82,10 @@ fun OnboardingPager(
         ) {
             if (pagerState.currentPage == pagerState.pageCount - 1) {
                 FitnikDefButton(
-                    text = "Get Started",
                     modifier = Modifier.fillMaxWidth(),
-                    textStyle = MaterialTheme.typography.titleMedium,
                     enabled = true,
-                ) { onFinish() }
+                    onAction = { onFinish() }
+                ) { Text("Get Started", style = MaterialTheme.typography.titleMedium) }
             } else {
                 TextButton(onClick = onFinish) {
                     Text("Skip",

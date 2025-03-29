@@ -47,6 +47,7 @@ fun SignUpScreen(
     onLoginClick: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
+    val buttonTextStyle = MaterialTheme.typography.titleMedium.copy(fontSize = 18.sp)
     var showTerms by remember { mutableStateOf(false) }
 
     if (showTerms) {
@@ -106,16 +107,13 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             FitnikDefButton(
-                text = "Sign Up",
                 modifier = Modifier
                 .defaultMinSize(minHeight = 84.dp)
                 .fillMaxWidth()
                 .padding(bottom = 24.dp),
-                textStyle = MaterialTheme.typography.titleMedium.copy(
-                    fontSize = 18.sp
-                ),
-                enabled = viewModel.signUpAllowed
-            ) { /* Implementacion del proceso de registro */ }
+                enabled = viewModel.signUpAllowed,
+                onAction = { /* Implementacion del proceso de registro */ }
+            ) { Text("Sign Up", style = buttonTextStyle) }
 
             LoginDivider()
 

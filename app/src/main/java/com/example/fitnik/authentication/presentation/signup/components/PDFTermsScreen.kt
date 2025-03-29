@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ fun PDFTermsScreen(
     fileName: String,
     onDisplay: () -> Unit
 ) {
+    val buttonTextStyle = MaterialTheme.typography.titleMedium.copy(fontSize = 18.sp)
     Box(modifier = Modifier.fillMaxSize()) {
         AndroidView(
             modifier = Modifier.fillMaxSize(),
@@ -39,13 +41,13 @@ fun PDFTermsScreen(
         )
 
         FitnikDefButton(
-            text = "Back",
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .padding(16.dp),
-            textStyle = MaterialTheme.typography.titleMedium.copy(fontSize = 18.sp),
             onAction = onDisplay
-        )
+        ) {
+            Text("Back", style = buttonTextStyle)
+        }
     }
 }
