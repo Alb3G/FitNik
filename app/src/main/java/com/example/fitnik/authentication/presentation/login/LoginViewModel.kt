@@ -3,9 +3,9 @@ package com.example.fitnik.authentication.presentation.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitnik.authentication.domain.repository.AuthRepository
+import com.example.fitnik.authentication.domain.usecase.LoginUseCases
 import com.example.fitnik.authentication.model.PasswordValidationResult
-import com.example.fitnik.utils.emailIsValid
-import com.example.fitnik.utils.passIsValid
+import com.google.firebase.auth.AuthCredential
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val loginUseCases: LoginUseCases
 ): ViewModel() {
 
     private val _state = MutableStateFlow(LoginState())
@@ -39,7 +40,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun validateEmail(email: String): Boolean {
-        val isValid = emailIsValid(email)
+        val isValid = loginUseCases.validateEmailUseCase(email)
         if (!isValid) {
             _state.value = _state.value.copy(
                 emailError = "Invalid email format"
@@ -50,13 +51,13 @@ class LoginViewModel @Inject constructor(
     }
 
     fun validatePassword(password: String): PasswordValidationResult {
-        return passIsValid(password)
+        return loginUseCases.validatePasswordUseCase(password)
     }
 
     fun login() {
         activateLoading()
         viewModelScope.launch {
-            authRepository.login(state.value.email, state.value.password).onSuccess {
+            loginUseCases.loginWithEmailUseCase(state.value.email, state.value.password).onSuccess {
                 _state.value = _state.value.copy(
                     isLoggedIn = true,
                     isLoading = false
@@ -71,6 +72,18 @@ class LoginViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun loginWithGoogle(credential: AuthCredential) {
+//        viewModelScope.launch {
+//            loginUseCases.loginWithGoogleCredentialUseCase()
+//        }
+    }
+
+    fun setError(message: String) {
+        _state.value = _state.value.copy(
+            credentialError = message
+        )
     }
 
     private fun activateLoading() {

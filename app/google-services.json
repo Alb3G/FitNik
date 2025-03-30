@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "519350555394",
+    "firebase_url": "https://fitnik-ee3b8-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "fitnik-ee3b8",
     "storage_bucket": "fitnik-ee3b8.firebasestorage.app"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.example.fitnik"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "519350555394-3sum9oh8ctvqo55k0skq59tli7pard4a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fitnik",
+            "certificate_hash": "6bda4299abe9531e4685c791334d213212b7a4fd"
+          }
+        },
+        {
+          "client_id": "519350555394-d9f0emlj4sp0bgq1kqghb4335k8um5bt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBXEdmvgIKZ0sS6kn1QkSmMIg18CX3v4XI"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "519350555394-d9f0emlj4sp0bgq1kqghb4335k8um5bt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

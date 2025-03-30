@@ -106,7 +106,10 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        LoginOptionsComponent()
+        LoginOptionsComponent(
+            onGoogleLogin = {  },
+            onGitHubLogin = {  }
+        )
 
         Spacer(modifier = Modifier.height(24.dp))
 

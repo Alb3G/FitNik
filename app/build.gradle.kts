@@ -78,6 +78,8 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
+    // Google Sign-In
+    implementation(libs.play.services.auth)
     // PDF
     //noinspection UseTomlInstead
     implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.3")

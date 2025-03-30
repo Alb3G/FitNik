@@ -3,10 +3,8 @@ package com.example.fitnik.authentication.presentation.signup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitnik.authentication.domain.repository.AuthRepository
+import com.example.fitnik.authentication.domain.usecase.SignUpUseCases
 import com.example.fitnik.authentication.model.PasswordValidationResult
-import com.example.fitnik.utils.emailIsValid
-import com.example.fitnik.utils.nameIsValid
-import com.example.fitnik.utils.passIsValid
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val signUpUseCases: SignUpUseCases
 ): ViewModel() {
 
     private val _state = MutableStateFlow(SignUpState())
@@ -65,7 +64,7 @@ class SignUpViewModel @Inject constructor(
     fun signUp() {
         activateLoading()
         viewModelScope.launch {
-            authRepository.signUp(_state.value.email, _state.value.password).onSuccess {
+            signUpUseCases.signUpUseCase(_state.value.email, _state.value.password).onSuccess {
                 _state.value = _state.value.copy(
                     isSignedUp = true,
                     isLoading = false
@@ -85,7 +84,7 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun validateName(name: String): Boolean {
-        val isValid = nameIsValid(name)
+        val isValid = signUpUseCases.validateNameUseCase(name)
         if (!isValid) {
             _state.value = _state.value.copy(
                 firstNameError = "Invalid Name format",
@@ -97,7 +96,7 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun validateEmail(email: String): Boolean {
-        val isValid = emailIsValid(email)
+        val isValid = signUpUseCases.validateEmailUseCase(email)
         if (!isValid) {
             _state.value = _state.value.copy(
                 emailError = "Invalid email format"
@@ -108,6 +107,6 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun validatePassword(password: String): PasswordValidationResult {
-        return passIsValid(password)
+        return signUpUseCases.validatePasswordUseCase(password)
     }
 }

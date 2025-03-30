@@ -2,7 +2,9 @@ package com.example.fitnik.authentication.data.repository
 
 import android.util.Log
 import com.example.fitnik.authentication.domain.repository.AuthRepository
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
@@ -41,6 +43,19 @@ class AuthRepositoryImpl: AuthRepository {
             Log.e("Login Error", "Code: ${authException?.errorCode}, Msg: ${authException?.localizedMessage}")
             Result.failure(e)
         }
+    }
+
+    override suspend fun loginWithCredential(crendential: AuthCredential): Result<FirebaseUser> {
+        return try {
+            val authResult = Firebase.auth.signInWithCredential(crendential).await()
+            Result.success(authResult.user!!)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override fun getUserId(): String? {
+        return Firebase.auth.currentUser?.uid
     }
 
 }

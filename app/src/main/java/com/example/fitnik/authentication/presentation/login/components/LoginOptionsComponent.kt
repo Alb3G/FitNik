@@ -20,7 +20,10 @@ import com.example.fitnik.core.presentation.AuthIconButton
 import com.example.fitnik.ui.theme.lightGray
 
 @Composable
-fun LoginOptionsComponent() {
+fun LoginOptionsComponent(
+    onGoogleLogin: () -> Unit,
+    onGitHubLogin: () -> Unit
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
@@ -34,7 +37,7 @@ fun LoginOptionsComponent() {
                 .background(Color.Transparent),
             iconResId = R.drawable.icons8_google,
             contentDescription = "Sign Up with google"
-        ) { /* Login with Google */ }
+        ) { onGoogleLogin() }
         Spacer(modifier = Modifier.width(24.dp))
         AuthIconButton(
             modifier = Modifier
@@ -44,6 +47,6 @@ fun LoginOptionsComponent() {
                 .background(Color.Transparent),
             iconResId = R.drawable.icons8_github,
             contentDescription = "Sign Up with Github"
-        ) { /* Login with github */ }
+        ) { onGitHubLogin() }
     }
 }

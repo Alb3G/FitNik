@@ -24,7 +24,7 @@ fun NavigationHost(
             OnboardingScreen(
                 onFinish = {
                     navHostController.popBackStack()
-                    navHostController.navigate(SignUp)
+                    navHostController.navigate(Login)
                 }
             )
         }

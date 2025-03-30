@@ -1,7 +1,19 @@
 package com.example.fitnik.authentication.di
 
+import com.example.fitnik.authentication.data.matcher.EmailMatcherImpl
 import com.example.fitnik.authentication.data.repository.AuthRepositoryImpl
+import com.example.fitnik.authentication.domain.matcher.EmailMatcher
 import com.example.fitnik.authentication.domain.repository.AuthRepository
+import com.example.fitnik.authentication.domain.usecase.GetUserIdUseCase
+import com.example.fitnik.authentication.domain.usecase.LoginUseCases
+import com.example.fitnik.authentication.domain.usecase.LoginWithEmailUseCase
+import com.example.fitnik.authentication.domain.usecase.LoginWithGitHubCredentialUseCase
+import com.example.fitnik.authentication.domain.usecase.LoginWithGoogleCredentialUseCase
+import com.example.fitnik.authentication.domain.usecase.SignUpUseCase
+import com.example.fitnik.authentication.domain.usecase.SignUpUseCases
+import com.example.fitnik.authentication.domain.usecase.ValidateEmailUseCase
+import com.example.fitnik.authentication.domain.usecase.ValidateNameUseCase
+import com.example.fitnik.authentication.domain.usecase.ValidatePasswordUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,6 +28,47 @@ object AuthModule {
     @Singleton
     fun provideAuthRepository(): AuthRepository {
         return AuthRepositoryImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun providesEmailMatcher(): EmailMatcher {
+        return EmailMatcherImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLoginUseCases(
+        repository: AuthRepository,
+        emailMatcher: EmailMatcher
+    ): LoginUseCases {
+        return LoginUseCases(
+            loginWithEmailUseCase = LoginWithEmailUseCase(repository),
+            validateEmailUseCase = ValidateEmailUseCase(emailMatcher),
+            validatePasswordUseCase = ValidatePasswordUseCase(),
+            loginWithGoogleCredentialUseCase = LoginWithGoogleCredentialUseCase(repository),
+            loginWithGitHubCredentialUseCase = LoginWithGitHubCredentialUseCase(repository)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideSignUpUseCases(
+        repository: AuthRepository,
+        emailMatcher: EmailMatcher
+    ): SignUpUseCases {
+        return SignUpUseCases(
+            validateNameUseCase = ValidateNameUseCase(),
+            validateEmailUseCase = ValidateEmailUseCase(emailMatcher),
+            validatePasswordUseCase = ValidatePasswordUseCase(),
+            signUpUseCase = SignUpUseCase(repository)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetUserIdUseCase(repository: AuthRepository): GetUserIdUseCase {
+        return GetUserIdUseCase(repository)
     }
 
 }
