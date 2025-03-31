@@ -21,7 +21,8 @@ coil = "2.5.0"
 coroutines = "1.7.3"
 ksp = "2.1.10-1.0.29"
 firebaseBom = "33.11.0"
-play-services-auth = "20.7.0"
+credentials = "1.5.0"
+googleid = "1.1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -71,7 +72,9 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 
 # Google Sign-In
-play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-services-auth" }
+credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
+credentials-play-services = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentials" }
+google-id = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

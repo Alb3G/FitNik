@@ -1,6 +1,5 @@
 package com.example.fitnik.authentication.domain.repository
 
-import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseUser
 
 interface AuthRepository {
@@ -9,7 +8,7 @@ interface AuthRepository {
 
     suspend fun signUp(email: String, password: String): Result<Unit>
 
-    suspend fun loginWithCredential(crendential: AuthCredential): Result<FirebaseUser>
+    suspend fun loginWithCredential(idToken: String): Result<FirebaseUser>
 
     fun getUserId(): String?
 }

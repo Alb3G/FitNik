@@ -1,15 +1,24 @@
 package com.example.fitnik.authentication.presentation.login
 
+import android.content.Context
+import android.widget.Toast
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitnik.authentication.domain.repository.AuthRepository
 import com.example.fitnik.authentication.domain.usecase.LoginUseCases
 import com.example.fitnik.authentication.model.PasswordValidationResult
-import com.google.firebase.auth.AuthCredential
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.security.MessageDigest
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -58,10 +67,7 @@ class LoginViewModel @Inject constructor(
         activateLoading()
         viewModelScope.launch {
             loginUseCases.loginWithEmailUseCase(state.value.email, state.value.password).onSuccess {
-                _state.value = _state.value.copy(
-                    isLoggedIn = true,
-                    isLoading = false
-                )
+                updateLoggedInState()
             }.onFailure {
                 // Refactorizar los mensajes de error que muestro en la ui.
                 val error = it.message
@@ -74,10 +80,39 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun loginWithGoogle(credential: AuthCredential) {
-//        viewModelScope.launch {
-//            loginUseCases.loginWithGoogleCredentialUseCase()
-//        }
+    fun loginWithGoogle(context: Context) {
+        val credentialManager = CredentialManager.create(context)
+        val rawNonce = UUID.randomUUID().toString()
+        val bytes = rawNonce.toByteArray()
+        val md = MessageDigest.getInstance("SHA-256")
+        val digest = md.digest(bytes)
+        val hashedNonce = digest.fold("") { str, it -> str + "%02x".format(it) }
+        val googleIdOption = GetGoogleIdOption.Builder()
+            .setFilterByAuthorizedAccounts(false)
+            .setServerClientId("519350555394-d9f0emlj4sp0bgq1kqghb4335k8um5bt.apps.googleusercontent.com")
+            .setNonce(hashedNonce)
+            .build()
+        val request = GetCredentialRequest.Builder()
+            .addCredentialOption(googleIdOption)
+            .build()
+        viewModelScope.launch {
+            try {
+                val result = credentialManager.getCredential(context, request)
+                val credential = result.credential
+                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                val googleIdToken = googleIdTokenCredential.idToken
+                loginUseCases.loginWithGoogleCredentialUseCase(googleIdToken).onSuccess { user ->
+                    updateLoggedInState()
+                    Toast.makeText(context, "Welcome ${user.displayName}", Toast.LENGTH_SHORT).show()
+                }.onFailure {
+                    Toast.makeText(context, "Something went wrong there.", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: GoogleIdTokenParsingException) {
+                Toast.makeText(context, e.localizedMessage, Toast.LENGTH_SHORT).show()
+            } catch (e: GetCredentialException) {
+                Toast.makeText(context, e.localizedMessage, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     fun setError(message: String) {
@@ -89,4 +124,12 @@ class LoginViewModel @Inject constructor(
     private fun activateLoading() {
         _state.value = _state.value.copy(isLoading = true)
     }
+
+    private fun updateLoggedInState() {
+        _state.value = _state.value.copy(
+            isLoggedIn = true,
+            isLoading = false
+        )
+    }
+
 }
