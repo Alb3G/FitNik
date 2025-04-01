@@ -5,5 +5,4 @@ data class LoginUseCases(
     val validateEmailUseCase: ValidateEmailUseCase,
     val validatePasswordUseCase: ValidatePasswordUseCase,
     val loginWithGoogleCredentialUseCase: LoginWithGoogleCredentialUseCase,
-    val loginWithGitHubCredentialUseCase: LoginWithGitHubCredentialUseCase
 )

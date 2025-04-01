@@ -4,9 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -22,7 +20,6 @@ import com.example.fitnik.ui.theme.lightGray
 @Composable
 fun LoginOptionsComponent(
     onGoogleLogin: () -> Unit,
-    onGitHubLogin: () -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -31,22 +28,12 @@ fun LoginOptionsComponent(
     ) {
         AuthIconButton(
             modifier = Modifier
-                .size(50.dp)
+                .width(250.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .border(width = 1.dp, color = lightGray, shape = RoundedCornerShape(12.dp))
                 .background(Color.Transparent),
             iconResId = R.drawable.icons8_google,
             contentDescription = "Sign Up with google"
         ) { onGoogleLogin() }
-        Spacer(modifier = Modifier.width(24.dp))
-        AuthIconButton(
-            modifier = Modifier
-                .size(50.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .border(width = 1.dp, color = lightGray, shape = RoundedCornerShape(12.dp))
-                .background(Color.Transparent),
-            iconResId = R.drawable.icons8_github,
-            contentDescription = "Sign Up with Github"
-        ) { onGitHubLogin() }
     }
 }

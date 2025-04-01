@@ -110,7 +110,6 @@ fun LoginScreen(
 
         LoginOptionsComponent(
             onGoogleLogin = { viewModel.loginWithGoogle(context) },
-            onGitHubLogin = {  }
         )
 
         Spacer(modifier = Modifier.height(24.dp))

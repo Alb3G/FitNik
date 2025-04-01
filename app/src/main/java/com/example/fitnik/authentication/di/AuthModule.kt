@@ -7,7 +7,6 @@ import com.example.fitnik.authentication.domain.repository.AuthRepository
 import com.example.fitnik.authentication.domain.usecase.GetUserIdUseCase
 import com.example.fitnik.authentication.domain.usecase.LoginUseCases
 import com.example.fitnik.authentication.domain.usecase.LoginWithEmailUseCase
-import com.example.fitnik.authentication.domain.usecase.LoginWithGitHubCredentialUseCase
 import com.example.fitnik.authentication.domain.usecase.LoginWithGoogleCredentialUseCase
 import com.example.fitnik.authentication.domain.usecase.SignUpUseCase
 import com.example.fitnik.authentication.domain.usecase.SignUpUseCases
@@ -47,7 +46,6 @@ object AuthModule {
             validateEmailUseCase = ValidateEmailUseCase(emailMatcher),
             validatePasswordUseCase = ValidatePasswordUseCase(),
             loginWithGoogleCredentialUseCase = LoginWithGoogleCredentialUseCase(repository),
-            loginWithGitHubCredentialUseCase = LoginWithGitHubCredentialUseCase(repository)
         )
     }
 

@@ -1,8 +1,12 @@
 package com.example.fitnik.core.presentation
 
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,12 +24,16 @@ fun AuthIconButton(
         onClick = onClick,
         modifier = modifier
     ) {
-        Icon(
-            painter = painterResource(iconResId),
-            contentDescription = contentDescription,
-            tint = Color.Unspecified,
-            modifier = Modifier.size(24.dp)
-        )
+        Row {
+            Text("Login with google")
+            Spacer(modifier = Modifier.width(16.dp))
+            Icon(
+                painter = painterResource(iconResId),
+                contentDescription = contentDescription,
+                tint = Color.Unspecified,
+                modifier = Modifier.size(24.dp)
+            )
+        }
     }
 
 }
