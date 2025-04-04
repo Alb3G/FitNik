@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.fitnik.authentication.presentation.login.LoginScreen
+import com.example.fitnik.authentication.presentation.setUpAccInfo.UserProfileSetUpScreen
 import com.example.fitnik.authentication.presentation.signup.SignUpScreen
 import com.example.fitnik.navigation.NavigationScreens.Home
 import com.example.fitnik.navigation.NavigationScreens.Login
@@ -46,7 +47,7 @@ fun NavigationHost(
                 },
                 onLogin = {
                     navHostController.popBackStack()
-                    navHostController.navigate(Home)
+                    navHostController.navigate(UserProfileSetUp)
                 }
             )
         }
@@ -55,8 +56,8 @@ fun NavigationHost(
             Text("Home")
         }
 
-        composable<UserProfileSetUp> { backStackEntry ->
-            Text("Set up")
+        composable<UserProfileSetUp> {
+            UserProfileSetUpScreen()
         }
     }
 }

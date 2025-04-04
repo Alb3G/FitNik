@@ -11,12 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.fitnik.R
 import com.example.fitnik.authentication.presentation.signup.SignUpViewModel
-import com.example.fitnik.core.presentation.AuthTextField
+import com.example.fitnik.authentication.presentation.components.AuthTextField
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import com.example.fitnik.authentication.presentation.signup.SignUpEvent
-import com.example.fitnik.core.model.TextFieldConfig
+import com.example.fitnik.authentication.model.TextFieldConfig
 
 @Composable
 fun InputGroup(

@@ -1,4 +1,4 @@
-package com.example.fitnik.core.presentation
+package com.example.fitnik.authentication.presentation.components
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -6,6 +6,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,7 +23,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.fitnik.R
-import com.example.fitnik.core.model.TextFieldConfig
+import com.example.fitnik.authentication.model.TextFieldConfig
 import com.example.fitnik.ui.theme.error
 import com.example.fitnik.ui.theme.lightGray
 import com.example.fitnik.ui.theme.primary
@@ -70,24 +71,7 @@ fun AuthTextField(
         onValueChange = { onValueChange(it) },
         label = { Text(textFieldConfig.label) },
         shape = RoundedCornerShape(15.dp),
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = smokeWhite,
-            unfocusedContainerColor = smokeWhite,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            cursorColor = Color.Black,
-            focusedTextColor = Color.Black,
-            unfocusedTextColor = lightGray,
-            focusedLeadingIconColor = primary,
-            focusedLabelColor = primary,
-            errorContainerColor = error.copy(alpha = 0.3f),
-            errorIndicatorColor = error,
-            errorCursorColor = error,
-            errorLabelColor = error,
-            errorLeadingIconColor = error,
-            errorTrailingIconColor = error,
-            errorTextColor = white
-        ),
+        colors = getTextFieldColors(),
         leadingIcon = {
             Icon(painter = painterResource(textFieldConfig.leadingIcon), textFieldConfig.contentDescription)
         },
@@ -105,5 +89,27 @@ fun AuthTextField(
                 Text(errorMessage)
             }
         }
+    )
+}
+
+@Composable
+fun getTextFieldColors(): TextFieldColors {
+    return TextFieldDefaults.colors(
+        focusedContainerColor = smokeWhite,
+        unfocusedContainerColor = smokeWhite,
+        focusedIndicatorColor = Color.Transparent,
+        unfocusedIndicatorColor = Color.Transparent,
+        cursorColor = Color.Black,
+        focusedTextColor = Color.Black,
+        unfocusedTextColor = lightGray,
+        focusedLeadingIconColor = primary,
+        focusedLabelColor = primary,
+        errorContainerColor = error.copy(alpha = 0.3f),
+        errorIndicatorColor = error,
+        errorCursorColor = error,
+        errorLabelColor = error,
+        errorLeadingIconColor = error,
+        errorTrailingIconColor = error,
+        errorTextColor = white
     )
 }

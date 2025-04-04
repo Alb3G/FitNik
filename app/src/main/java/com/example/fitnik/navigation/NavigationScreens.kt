@@ -17,8 +17,5 @@ sealed class NavigationScreens {
     object SignUp: NavigationScreens()
 
     @Serializable
-    data class UserProfileSetUp(
-        val firstName: String,
-        val lastName: String
-    ): NavigationScreens()
+    object UserProfileSetUp: NavigationScreens()
 }

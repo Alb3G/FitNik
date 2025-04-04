@@ -1,4 +1,4 @@
-package com.example.fitnik.core.presentation
+package com.example.fitnik.authentication.presentation.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

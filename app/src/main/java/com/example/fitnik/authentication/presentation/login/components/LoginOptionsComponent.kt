@@ -14,7 +14,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.fitnik.R
-import com.example.fitnik.core.presentation.AuthIconButton
 import com.example.fitnik.ui.theme.lightGray
 
 @Composable
@@ -26,7 +25,7 @@ fun LoginOptionsComponent(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AuthIconButton(
+        GoogleLoginButton(
             modifier = Modifier
                 .width(250.dp)
                 .clip(RoundedCornerShape(12.dp))

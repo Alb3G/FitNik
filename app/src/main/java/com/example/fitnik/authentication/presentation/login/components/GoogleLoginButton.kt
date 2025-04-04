@@ -1,4 +1,4 @@
-package com.example.fitnik.core.presentation
+package com.example.fitnik.authentication.presentation.login.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AuthIconButton(
+fun GoogleLoginButton(
     modifier: Modifier = Modifier,
     iconResId: Int,
     contentDescription: String,

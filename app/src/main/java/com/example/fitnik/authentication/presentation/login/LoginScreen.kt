@@ -30,10 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.fitnik.R
+import com.example.fitnik.authentication.presentation.components.LoginDivider
 import com.example.fitnik.authentication.presentation.login.components.InputGroup
 import com.example.fitnik.authentication.presentation.login.components.LoginOptionsComponent
 import com.example.fitnik.core.presentation.FitnikDefButton
-import com.example.fitnik.core.presentation.LoginDivider
 import com.example.fitnik.ui.theme.secondary
 import com.example.fitnik.ui.theme.white
 

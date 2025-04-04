@@ -102,7 +102,7 @@ class LoginViewModel @Inject constructor(
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                 val googleIdToken = googleIdTokenCredential.idToken
                 loginUseCases.loginWithGoogleCredentialUseCase(googleIdToken).onSuccess { user ->
-                     updateLoggedInState()
+                    updateLoggedInState()
                     Toast.makeText(context, "Welcome ${user.displayName}", Toast.LENGTH_SHORT).show()
                 }.onFailure {
                     Toast.makeText(context, "Something went wrong there.", Toast.LENGTH_SHORT).show()

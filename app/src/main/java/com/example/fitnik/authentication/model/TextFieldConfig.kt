@@ -1,4 +1,4 @@
-package com.example.fitnik.core.model
+package com.example.fitnik.authentication.model
 
 import androidx.compose.foundation.text.KeyboardActions
 

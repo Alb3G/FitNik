@@ -36,7 +36,7 @@ import com.example.fitnik.authentication.presentation.signup.components.InputGro
 import com.example.fitnik.authentication.presentation.signup.components.PDFTermsScreen
 import com.example.fitnik.authentication.presentation.signup.components.PasswordRequirements
 import com.example.fitnik.core.presentation.FitnikDefButton
-import com.example.fitnik.core.presentation.LoginDivider
+import com.example.fitnik.authentication.presentation.components.LoginDivider
 import com.example.fitnik.ui.theme.black
 import com.example.fitnik.ui.theme.lightGray
 import com.example.fitnik.ui.theme.primary

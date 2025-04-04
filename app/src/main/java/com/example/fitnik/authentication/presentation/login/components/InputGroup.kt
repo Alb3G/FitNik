@@ -13,10 +13,10 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.example.fitnik.R
+import com.example.fitnik.authentication.model.TextFieldConfig
+import com.example.fitnik.authentication.presentation.components.AuthTextField
 import com.example.fitnik.authentication.presentation.login.LoginEvent
 import com.example.fitnik.authentication.presentation.login.LoginViewModel
-import com.example.fitnik.core.model.TextFieldConfig
-import com.example.fitnik.core.presentation.AuthTextField
 
 @Composable
 fun InputGroup(
