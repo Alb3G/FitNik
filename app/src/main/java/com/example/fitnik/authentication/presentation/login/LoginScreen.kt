@@ -41,7 +41,8 @@ import com.example.fitnik.ui.theme.white
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
     onRegisterClick: () -> Unit,
-    onLogin: () -> Unit
+    onLogin: () -> Unit,
+    onGoogleLogin: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     val buttonTextStyle = MaterialTheme.typography.titleMedium.copy(fontSize = 18.sp)

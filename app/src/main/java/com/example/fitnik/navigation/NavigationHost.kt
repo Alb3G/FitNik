@@ -47,6 +47,10 @@ fun NavigationHost(
                 },
                 onLogin = {
                     navHostController.popBackStack()
+                    navHostController.navigate(Home)
+                },
+                onGoogleLogin = {
+                    navHostController.popBackStack()
                     navHostController.navigate(UserProfileSetUp)
                 }
             )
@@ -57,7 +61,10 @@ fun NavigationHost(
         }
 
         composable<UserProfileSetUp> {
-            UserProfileSetUpScreen()
+            UserProfileSetUpScreen {
+                navHostController.popBackStack()
+                navHostController.navigate(Home)
+            }
         }
     }
 }

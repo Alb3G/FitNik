@@ -16,10 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -37,10 +33,12 @@ import com.example.fitnik.ui.theme.white
 @Composable
 fun MeasuresTextFieldRow(
     modifier: Modifier = Modifier,
-    isWeightTextField: Boolean = true
+    value: String,
+    isWeightTextField: Boolean = true,
+    isPrimaryUnit: Boolean,
+    onValueChange: (String) -> Unit,
+    onUnitToggle: () -> Unit
 ) {
-    var buttonText by remember { mutableStateOf(false) }
-
     Row(
        modifier = modifier,
         horizontalArrangement = Arrangement.Center,
@@ -48,11 +46,11 @@ fun MeasuresTextFieldRow(
     ) {
         OutlinedTextField(
             modifier = Modifier.weight(1f),
-            value = "",
+            value = value,
             label = {
                 if (isWeightTextField) Text("Your Weight") else Text("Your Height")
             },
-            onValueChange = {},
+            onValueChange = onValueChange,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             leadingIcon = {
                 if (isWeightTextField)
@@ -74,17 +72,19 @@ fun MeasuresTextFieldRow(
                 ),
                 shape = RoundedCornerShape(percent = 20)
             ),
-            onClick = { buttonText = !buttonText },
+            onClick = onUnitToggle,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent,
                 contentColor = white,
             ),
             contentPadding = PaddingValues(10.dp)
         ) {
-            if (isWeightTextField)
-                Text(if(!buttonText) "KG" else "LB")
-            else
-                Text(if(!buttonText) "CM" else "FT")
+            val text = if (isWeightTextField) {
+                if (isPrimaryUnit) "KG" else "LB"
+            } else {
+                if (isPrimaryUnit) "CM" else "FT"
+            }
+            Text(text)
         }
     }
 }

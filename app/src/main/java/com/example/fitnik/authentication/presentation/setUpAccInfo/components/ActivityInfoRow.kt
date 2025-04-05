@@ -1,5 +1,6 @@
 package com.example.fitnik.authentication.presentation.setUpAccInfo.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -29,17 +29,19 @@ import com.example.fitnik.ui.theme.white
 
 @Composable
 fun ActivityInfoRow(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    value: String,
+    onActivityChange: (String) -> Unit,
+    onObjectiveChange: (String) -> Unit
 ) {
     val activityLevels = listOf(
         "Sedentary: little or no daily exercise",
-        "Light activity: light exercise or sports 1–3 days a week",
-        "Moderate activity: moderate exercise or sports 3–5 days a week",
-        "Intense activity: intense exercise or sports 6–7 days a week",
-        "Very intense activity: very intense exercise or physical work and daily training"
+        "Light: light exercise or sports 1–3 days a week",
+        "Moderate: moderate exercise or sports 3–5 days a week",
+        "Intense: intense exercise or sports 6–7 days a week",
+        "Very intense: very intense exercise or physical work and daily training"
     )
     var objectives by remember { mutableIntStateOf(1) }
-    var activityOptionSelection by remember { mutableStateOf("") }
 
     Row(
         modifier = modifier,
@@ -50,12 +52,14 @@ fun ActivityInfoRow(
             modifier = Modifier.weight(1f),
             options = activityLevels,
             label = "Activity",
-            selectedValue = activityOptionSelection,
+            selectedValue = value,
             displayIn2Sections = true
         ) { value ->
-            activityOptionSelection = value
+            onActivityChange(value)
         }
+
         Spacer(modifier = Modifier.width(12.dp))
+
         Button(
             modifier = Modifier
                 .width(140.dp)
@@ -68,6 +72,8 @@ fun ActivityInfoRow(
                 ),
             onClick = {
                 if (objectives < 3) objectives++ else objectives = 1
+                onObjectiveChange(changeObjectivesText(objectives))
+                Log.d("Objective", changeObjectivesText(objectives))
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent,
@@ -80,7 +86,7 @@ fun ActivityInfoRow(
     }
 }
 
-fun changeObjectivesText(objective: Int): String {
+private fun changeObjectivesText(objective: Int): String {
     return when (objective) {
         1 -> "Gain Muscle"
         2 -> "Loose Fat"

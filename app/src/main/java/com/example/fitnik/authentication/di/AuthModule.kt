@@ -4,10 +4,13 @@ import com.example.fitnik.authentication.data.matcher.EmailMatcherImpl
 import com.example.fitnik.authentication.data.repository.AuthRepositoryImpl
 import com.example.fitnik.authentication.domain.matcher.EmailMatcher
 import com.example.fitnik.authentication.domain.repository.AuthRepository
+import com.example.fitnik.authentication.domain.usecase.ConvertWeightUseCase
+import com.example.fitnik.authentication.domain.usecase.GetUserAgeUseCase
 import com.example.fitnik.authentication.domain.usecase.GetUserIdUseCase
 import com.example.fitnik.authentication.domain.usecase.LoginUseCases
 import com.example.fitnik.authentication.domain.usecase.LoginWithEmailUseCase
 import com.example.fitnik.authentication.domain.usecase.LoginWithGoogleCredentialUseCase
+import com.example.fitnik.authentication.domain.usecase.SetAccInfoUseCases
 import com.example.fitnik.authentication.domain.usecase.SignUpUseCase
 import com.example.fitnik.authentication.domain.usecase.SignUpUseCases
 import com.example.fitnik.authentication.domain.usecase.ValidateEmailUseCase
@@ -59,7 +62,7 @@ object AuthModule {
             validateNameUseCase = ValidateNameUseCase(),
             validateEmailUseCase = ValidateEmailUseCase(emailMatcher),
             validatePasswordUseCase = ValidatePasswordUseCase(),
-            signUpUseCase = SignUpUseCase(repository)
+            signUpUseCase = SignUpUseCase(repository),
         )
     }
 
@@ -69,4 +72,12 @@ object AuthModule {
         return GetUserIdUseCase(repository)
     }
 
+    @Provides
+    @Singleton
+    fun provideSetAccInfoUseCases(): SetAccInfoUseCases {
+        return SetAccInfoUseCases(
+            getUserAgeUseCase = GetUserAgeUseCase(),
+            convertWeightUseCase = ConvertWeightUseCase()
+        )
+    }
 }
