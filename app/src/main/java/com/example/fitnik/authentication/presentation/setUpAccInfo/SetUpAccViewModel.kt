@@ -4,14 +4,18 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.fitnik.authentication.domain.repository.AuthRepository
 import com.example.fitnik.authentication.domain.usecase.SetAccInfoUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SetUpAccViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
     private val setAccInfoUseCases: SetAccInfoUseCases
 ): ViewModel() {
 
@@ -65,16 +69,41 @@ class SetUpAccViewModel @Inject constructor(
     }
 
     fun confirm(context: Context) {
-        Log.d("State", "${state.value}")
-        if (_state.value.gender.isNotBlank() &&
-            _state.value.activity.isNotBlank() &&
-            _state.value.objective.isNotBlank() &&
-            _state.value.weight.isNotBlank() &&
-            _state.value.height.isNotBlank()
-        ) {
-            // TODO
-        } else {
-            Toast.makeText(context, "You must fill all fields!", Toast.LENGTH_SHORT).show() // Quitar cuando terminemos
+        loading()
+        viewModelScope.launch {
+            if (_state.value.gender.isNotBlank() &&
+                _state.value.activity.isNotBlank() &&
+                _state.value.objective.isNotBlank() &&
+                _state.value.weight.isNotBlank() &&
+                _state.value.height.isNotBlank()
+            ) {
+                val uid = authRepository.getUserId()
+                uid?.let {
+                    val fields = mapOf(
+                        "gender" to _state.value.gender,
+                        "activityLvl" to _state.value.activity,
+                        "objective" to _state.value.objective,
+                        "age" to setAccInfoUseCases.getUserAgeUseCase(_state.value.birthDate),
+                        "weight" to setAccInfoUseCases.convertWeightUseCase(_state.value.weight.toDouble(), _state.value.isWeightInKg),
+                        "height" to setAccInfoUseCases.convertHeightUseCase(_state.value.height.toDouble(), _state.value.isHeightInCm),
+                        "accIscomplete" to true
+                    )
+                    setAccInfoUseCases.updateUserFromFirestoreUseCase(it, fields).onFailure {
+                        val message = it.message
+                        Log.d("Update User Failed", message.toString())
+                    }
+                    _state.value = _state.value.copy(
+                        accIsComplete = true,
+                        isLoading = false
+                    )
+                }
+            } else {
+                Toast.makeText(context, "You must fill all fields!", Toast.LENGTH_SHORT).show() // Quitar cuando terminemos
+            }
         }
+    }
+
+    fun loading() {
+        _state.value = _state.value.copy(isLoading = true)
     }
 }

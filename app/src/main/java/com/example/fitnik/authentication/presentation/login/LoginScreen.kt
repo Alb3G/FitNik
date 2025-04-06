@@ -42,15 +42,18 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
     onRegisterClick: () -> Unit,
     onLogin: () -> Unit,
-    onGoogleLogin: () -> Unit
+    onAccCompleted: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     val buttonTextStyle = MaterialTheme.typography.titleMedium.copy(fontSize = 18.sp)
     val context = LocalContext.current
 
-    LaunchedEffect(key1 = state.isLoggedIn) {
+    LaunchedEffect(state.isLoggedIn, state.accIsCompleted) { // Esta dando problemas investigar.
         if (state.isLoggedIn) {
-            onLogin()
+            when (state.accIsCompleted) {
+                true -> onLogin()
+                false -> onAccCompleted()
+            }
         }
     }
 

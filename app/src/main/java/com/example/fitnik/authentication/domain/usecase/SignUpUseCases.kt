@@ -5,4 +5,5 @@ data class SignUpUseCases(
     val validateEmailUseCase: ValidateEmailUseCase,
     val validatePasswordUseCase: ValidatePasswordUseCase,
     val signUpUseCase: SignUpUseCase,
+    val saveUserInFireStoreUseCase: SaveUserInFireStoreUseCase,
 )

@@ -2,10 +2,14 @@ package com.example.fitnik.authentication.data.repository
 
 import android.util.Log
 import com.example.fitnik.authentication.domain.repository.AuthRepository
+import com.example.fitnik.core.domain.model.User
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
@@ -57,6 +61,48 @@ class AuthRepositoryImpl: AuthRepository {
 
     override fun getUserId(): String? {
         return Firebase.auth.currentUser?.uid
+    }
+
+    override suspend fun saveUserToFirestore(user: User): Result<Unit> {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+            ?: return Result.failure(Exception("Account doesn't exist!"))
+
+        return try {
+            FirebaseFirestore.getInstance().collection("users")
+                .document(uid)
+                .set(user)
+                .await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getUserObjFromFirestore(uid: String): Result<User> {
+        return try {
+            val snapshot = FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(uid).get().await()
+            val user = snapshot.toObject(User::class.java)
+                ?: return Result.failure(Exception("User not found!"))
+            Result.success(user)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun updateUserFromFireStore(
+        uid: String,
+        fields: Map<String, Any>
+    ): Result<Unit> {
+        return try {
+            FirebaseFirestore.getInstance().collection("users")
+                .document(uid)
+                .set(fields, SetOptions.merge()).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
 }

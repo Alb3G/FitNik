@@ -11,5 +11,6 @@ data class SetUpAccState(
     val height: String = "",
     val isWeightInKg: Boolean = true,
     val isHeightInCm: Boolean = true,
-    val accIsComplete: Boolean = false
+    val accIsComplete: Boolean = false,
+    val isLoading: Boolean = false
 )

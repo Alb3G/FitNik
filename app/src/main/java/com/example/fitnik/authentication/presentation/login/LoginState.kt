@@ -7,5 +7,6 @@ data class LoginState(
     val passwordError: String? = null,
     val isLoading: Boolean = false,
     val isLoggedIn: Boolean = false,
-    val credentialError: String? = null
+    val credentialError: String? = null,
+    val accIsCompleted: Boolean = false
 )

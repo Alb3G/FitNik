@@ -36,7 +36,7 @@ fun NavigationHost(
                     navHostController.popBackStack()
                     navHostController.navigate(Login)
                 },
-                onSignedUpSuccess = { navHostController.navigate(Home) }
+                onSignedUpSuccess = { navHostController.navigate(UserProfileSetUp) }
             )
         }
 
@@ -49,7 +49,7 @@ fun NavigationHost(
                     navHostController.popBackStack()
                     navHostController.navigate(Home)
                 },
-                onGoogleLogin = {
+                onAccCompleted = {
                     navHostController.popBackStack()
                     navHostController.navigate(UserProfileSetUp)
                 }

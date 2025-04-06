@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +27,7 @@ import com.example.fitnik.authentication.presentation.setUpAccInfo.SetUpAccState
 import com.example.fitnik.authentication.presentation.setUpAccInfo.SetUpAccViewModel
 import com.example.fitnik.core.presentation.FitnikDefButton
 import com.example.fitnik.ui.theme.black
+import com.example.fitnik.ui.theme.white
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -115,7 +117,14 @@ fun InputsGroup(
     FitnikDefButton(
         modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 62.dp),
         onAction = { viewModel.onEvent(AccounEvent.Confirm(context)) }
-    ) { Text("Confirm", style = buttonTextStyle) }
+    ) {
+        if (state.isLoading) {
+            CircularProgressIndicator(color = white)
+        } else {
+            Text("Confirm", style = buttonTextStyle)
+        }
+    }
+
     if (datePickerIsOpen) {
         CustomDatePicker(
             onAccept = { datePickeVal ->

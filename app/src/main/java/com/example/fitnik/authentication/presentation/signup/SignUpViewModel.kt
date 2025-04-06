@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.fitnik.authentication.domain.repository.AuthRepository
 import com.example.fitnik.authentication.domain.usecase.SignUpUseCases
 import com.example.fitnik.authentication.model.PasswordValidationResult
+import com.example.fitnik.core.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -65,10 +66,26 @@ class SignUpViewModel @Inject constructor(
         activateLoading()
         viewModelScope.launch {
             signUpUseCases.signUpUseCase(_state.value.email, _state.value.password).onSuccess {
-                _state.value = _state.value.copy(
-                    isSignedUp = true,
-                    isLoading = false
-                )
+                val uid = authRepository.getUserId()
+                uid?.let {
+                    val user = User(
+                        uid = uid,
+                        firstName = _state.value.firsName,
+                        lastName = _state.value.lastName,
+                        email = _state.value.email
+                    )
+                    signUpUseCases.saveUserInFireStoreUseCase(user).onFailure {
+                        val error = it.message
+                        _state.value = _state.value.copy(
+                            emailError = error.toString(),
+                            isLoading = false
+                        )
+                    }
+                    _state.value = _state.value.copy(
+                        isSignedUp = true,
+                        isLoading = false
+                    )
+                }
             }.onFailure {
                 val error = it.message
                 _state.value = _state.value.copy(
