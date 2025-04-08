@@ -7,7 +7,7 @@ class ConvertWeightUseCase {
         return if (isKgUnit) {
             weight // Devolvemos peso en KG
         } else {
-            weight * oneKgInLbs // Lo convertimos a LB
+            weight / oneKgInLbs // Lo convertimos a LB
         }
     }
 

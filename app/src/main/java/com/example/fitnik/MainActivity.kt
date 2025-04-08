@@ -5,11 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.fitnik.navigation.NavigationHost
@@ -17,8 +16,10 @@ import com.example.fitnik.navigation.NavigationScreens
 import com.example.fitnik.navigation.NavigationScreens.Home
 import com.example.fitnik.navigation.NavigationScreens.Login
 import com.example.fitnik.navigation.NavigationScreens.Onboarding
+import com.example.fitnik.navigation.NavigationScreens.UserProfileSetUp
 import com.example.fitnik.ui.theme.FitnikTheme
 import com.example.fitnik.ui.theme.white
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,6 +29,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseFirestore.setLoggingEnabled(true)
         enableEdgeToEdge()
         viewModel.checkSessionState()
         setContent {
@@ -36,28 +38,30 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = white
                 ) {
-                    if (viewModel.isLoading) {
-                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            CircularProgressIndicator()
+                    val navController = rememberNavController()
+                    val navigationState by viewModel.navigationState.collectAsState()
+
+                    when (navigationState) {
+                        is NavigationState.Loading -> {  }
+                        else -> {
+                            NavigationHost(
+                                navHostController = navController,
+                                startDestination = navigationState.toNavigationScreen()
+                            )
                         }
-                    } else {
-                        val navController = rememberNavController()
-                        NavigationHost(
-                            navHostController = navController,
-                            startDestination = getStartDestination()
-                        )
                     }
                 }
             }
         }
     }
 
-    private fun getStartDestination(): NavigationScreens {
-        return when {
-            viewModel.isLoggedIn && viewModel.accIsCompleted -> Home
-            viewModel.isLoggedIn -> Login
-            viewModel.hasSeenOnboarding -> Login
-            else -> Onboarding
+    fun NavigationState.toNavigationScreen(): NavigationScreens {
+        return when (this) {
+            NavigationState.NeedsOnboarding -> Onboarding
+            NavigationState.NotLoggedIn -> Login
+            NavigationState.LoggedInIncomplete -> UserProfileSetUp
+            NavigationState.LoggedInComplete -> Home
+            NavigationState.Loading -> Login
         }
     }
 

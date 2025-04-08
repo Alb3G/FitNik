@@ -7,9 +7,8 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fitnik.authentication.domain.repository.AuthRepository
 import com.example.fitnik.authentication.domain.usecase.LoginUseCases
-import com.example.fitnik.authentication.domain.usecase.UserAccountIsCompleted
+import com.example.fitnik.authentication.domain.usecase.UserAccountIsCompletedUseCase
 import com.example.fitnik.authentication.model.PasswordValidationResult
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
@@ -24,9 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
     private val loginUseCases: LoginUseCases,
-    private val userAccountIsCompleted: UserAccountIsCompleted
+    private val userAccountIsCompletedUseCase: UserAccountIsCompletedUseCase
 ): ViewModel() {
 
     private val _state = MutableStateFlow(LoginState())
@@ -129,7 +127,7 @@ class LoginViewModel @Inject constructor(
 
     private fun updateLoggedInState() {
         viewModelScope.launch {
-            val isCompleted = userAccountIsCompleted()
+            val isCompleted = userAccountIsCompletedUseCase()
             _state.value = _state.value.copy(
                 isLoggedIn = true,
                 accIsCompleted = isCompleted,

@@ -8,28 +8,29 @@ object TrainingMockProvider {
             sessions = listOf(
                 Session(
                     number = 1,
-                    warmUp = listOf(
+                    exercises = listOf(
                         Exercise(
                             name = "Band Pull Apart",
                             sets = 3,
                             reps = "15",
                             notes = "Movilidad cintura escapular",
                             warmUp = true
-                        )
-                    ) + listOf(
+                        ),
                         Exercise(
                             name = "Press superior multipower",
                             sets = 4,
                             reps = "4",
                             loadPercentage = "80%",
-                            restSeconds = 90
+                            restSeconds = 90,
+                            warmUp = false
                         ),
                         Exercise(
                             name = "Diamond Push Ups",
                             sets = 3,
                             reps = "J-Reps hasta el fallo",
                             method = "J-Reps",
-                            restSeconds = 60
+                            restSeconds = 60,
+                            warmUp = false
                         ),
                         Exercise(
                             name = "Triset Hombros",
@@ -38,7 +39,8 @@ object TrainingMockProvider {
                             method = "Triset",
                             restSeconds = 80,
                             notes = "Elevaciones laterales + Press militar + Elevaciones frontales",
-                            rir = "0"
+                            rir = "0",
+                            warmUp = false
                         )
                     )
                 )
@@ -53,7 +55,7 @@ object TrainingMockProvider {
             sessions = listOf(
                 Session(
                     number = 1,
-                    warmUp = listOf(
+                    exercises = listOf(
                         Exercise(
                             name = "Circuito Core",
                             sets = 3,
@@ -95,7 +97,7 @@ object TrainingMockProvider {
             sessions = listOf(
                 Session(
                     number = 1,
-                    warmUp = listOf(
+                    exercises = listOf(
                         Exercise(
                             name = "Pulldown + movilidad",
                             sets = 3,

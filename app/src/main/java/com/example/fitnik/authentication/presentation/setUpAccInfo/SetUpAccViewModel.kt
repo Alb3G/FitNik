@@ -7,6 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitnik.authentication.domain.repository.AuthRepository
 import com.example.fitnik.authentication.domain.usecase.SetAccInfoUseCases
+import com.example.fitnik.core.domain.model.Training
+import com.example.fitnik.core.domain.model.TrainingMockProvider
+import com.example.fitnik.core.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -79,13 +82,18 @@ class SetUpAccViewModel @Inject constructor(
             ) {
                 val uid = authRepository.getUserId()
                 uid?.let {
+                    val user = authRepository.getUserObjFromFirestore(it).getOrNull()
+                    val trainings = loadTrainingBasedInObjective(_state.value.objective, user)
                     val fields = mapOf(
+                        "email" to user?.email,
+                        "firstName" to user?.firstName,
                         "gender" to _state.value.gender,
                         "activityLvl" to _state.value.activity,
                         "objective" to _state.value.objective,
                         "age" to setAccInfoUseCases.getUserAgeUseCase(_state.value.birthDate),
                         "weight" to setAccInfoUseCases.convertWeightUseCase(_state.value.weight.toDouble(), _state.value.isWeightInKg),
                         "height" to setAccInfoUseCases.convertHeightUseCase(_state.value.height.toDouble(), _state.value.isHeightInCm),
+                        "trainings" to trainings,
                         "accIscomplete" to true
                     )
                     setAccInfoUseCases.updateUserFromFirestoreUseCase(it, fields).onFailure {
@@ -99,11 +107,24 @@ class SetUpAccViewModel @Inject constructor(
                 }
             } else {
                 Toast.makeText(context, "You must fill all fields!", Toast.LENGTH_SHORT).show() // Quitar cuando terminemos
+                _state.value = _state.value.copy(isLoading = false)
             }
         }
     }
 
     fun loading() {
         _state.value = _state.value.copy(isLoading = true)
+    }
+
+    private fun loadTrainingBasedInObjective(objective: String, user: User?): List<Training> {
+        val currentTrainings = user?.trainings?.toMutableList() ?: mutableListOf()
+
+        when (objective) {
+            "Gain Muscle" -> currentTrainings.add(TrainingMockProvider.getMuscleGainTraining())
+            "Loose Fat" -> currentTrainings.add(TrainingMockProvider.getFatLossTraining())
+            "Loose weight" -> currentTrainings.add(TrainingMockProvider.getWeightLossTraining())
+        }
+
+        return currentTrainings
     }
 }

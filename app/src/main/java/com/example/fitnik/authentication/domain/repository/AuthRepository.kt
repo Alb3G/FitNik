@@ -17,5 +17,5 @@ interface AuthRepository {
 
     suspend fun getUserObjFromFirestore(uid: String): Result<User>
 
-    suspend fun updateUserFromFireStore(uid: String, fields: Map<String, Any>): Result<Unit>
+    suspend fun updateUserFromFireStore(uid: String, fields: Map<String, Any?>): Result<Unit>
 }

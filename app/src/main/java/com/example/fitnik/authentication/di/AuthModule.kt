@@ -7,6 +7,7 @@ import com.example.fitnik.authentication.domain.repository.AuthRepository
 import com.example.fitnik.authentication.domain.usecase.ConvertHeightUseCase
 import com.example.fitnik.authentication.domain.usecase.ConvertWeightUseCase
 import com.example.fitnik.authentication.domain.usecase.GetUserAgeUseCase
+import com.example.fitnik.authentication.domain.usecase.GetUserFromFirestoreUseCase
 import com.example.fitnik.authentication.domain.usecase.GetUserIdUseCase
 import com.example.fitnik.authentication.domain.usecase.LoginUseCases
 import com.example.fitnik.authentication.domain.usecase.LoginWithEmailUseCase
@@ -16,7 +17,7 @@ import com.example.fitnik.authentication.domain.usecase.SetAccInfoUseCases
 import com.example.fitnik.authentication.domain.usecase.SignUpUseCase
 import com.example.fitnik.authentication.domain.usecase.SignUpUseCases
 import com.example.fitnik.authentication.domain.usecase.UpdateUserFromFirestoreUseCase
-import com.example.fitnik.authentication.domain.usecase.UserAccountIsCompleted
+import com.example.fitnik.authentication.domain.usecase.UserAccountIsCompletedUseCase
 import com.example.fitnik.authentication.domain.usecase.ValidateEmailUseCase
 import com.example.fitnik.authentication.domain.usecase.ValidateNameUseCase
 import com.example.fitnik.authentication.domain.usecase.ValidatePasswordUseCase
@@ -53,6 +54,7 @@ object AuthModule {
             validateEmailUseCase = ValidateEmailUseCase(emailMatcher),
             validatePasswordUseCase = ValidatePasswordUseCase(),
             loginWithGoogleCredentialUseCase = LoginWithGoogleCredentialUseCase(repository),
+            getUserFromFirestoreUseCase = GetUserFromFirestoreUseCase(repository)
         )
     }
 
@@ -79,8 +81,8 @@ object AuthModule {
 
     @Provides
     @Singleton
-    fun provideUserAccountIsCompleted(repository: AuthRepository): UserAccountIsCompleted {
-        return UserAccountIsCompleted(repository)
+    fun provideUserAccountIsCompleted(repository: AuthRepository): UserAccountIsCompletedUseCase {
+        return UserAccountIsCompletedUseCase(repository)
     }
 
     @Provides

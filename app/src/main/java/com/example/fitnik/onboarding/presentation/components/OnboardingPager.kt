@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,9 +30,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.fitnik.R
+import androidx.compose.ui.unit.sp
 import com.example.fitnik.core.presentation.FitnikDefButton
 import com.example.fitnik.onboarding.model.OnboardingPagerModel
 import com.example.fitnik.ui.theme.midGray
@@ -82,10 +82,13 @@ fun OnboardingPager(
         ) {
             if (pagerState.currentPage == pagerState.pageCount - 1) {
                 FitnikDefButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .defaultMinSize(minHeight = 84.dp)
+                        .fillMaxWidth()
+                        .padding(bottom = 24.dp),
                     enabled = true,
                     onAction = { onFinish() }
-                ) { Text("Get Started", style = MaterialTheme.typography.titleMedium) }
+                ) { Text("Get Started", style = MaterialTheme.typography.titleMedium.copy(fontSize = 20.sp)) }
             } else {
                 TextButton(onClick = onFinish) {
                     Text("Skip",
@@ -129,37 +132,4 @@ fun HorizontalPagerIndicator(currentPage: Int, pages: Int) {
             )
         }
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewOnboardingPager() {
-    val samplePages = listOf(
-        OnboardingPagerModel(
-            title = "AI Tracking Goals",
-            body = "",
-            image = R.drawable.onb1,
-        ),
-        OnboardingPagerModel(
-            title = "AI Tracking Goals",
-            body = "",
-            image = R.drawable.onb2,
-        ),
-        OnboardingPagerModel(
-            title = "AI Tracking Goals",
-            body = "",
-            image = R.drawable.onb3,
-        ),
-        OnboardingPagerModel(
-            title = "AI Tracking Goals",
-            body = "",
-            image = R.drawable.onb4,
-        )
-    )
-
-    OnboardingPager(
-        pages = samplePages,
-        onFinish = {},
-        modifier = Modifier.fillMaxSize()
-    )
 }

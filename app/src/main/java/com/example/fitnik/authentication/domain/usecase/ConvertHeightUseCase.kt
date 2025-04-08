@@ -7,7 +7,7 @@ class ConvertHeightUseCase {
         return if (isCmUnit) {
             height
         } else {
-            height * oneCmInFt
+            height / oneCmInFt
         }
     }
 

@@ -6,7 +6,7 @@ class UpdateUserFromFirestoreUseCase(
     private val authRepository: AuthRepository
 ) {
 
-    suspend operator fun invoke(uid: String, fields: Map<String, Any>): Result<Unit> {
+    suspend operator fun invoke(uid: String, fields: Map<String, Any?>): Result<Unit> {
         return authRepository.updateUserFromFireStore(uid, fields)
     }
 

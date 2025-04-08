@@ -1,15 +1,19 @@
 package com.example.fitnik
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.fitnik.NavigationState.Loading
+import com.example.fitnik.NavigationState.LoggedInComplete
+import com.example.fitnik.NavigationState.LoggedInIncomplete
+import com.example.fitnik.NavigationState.NeedsOnboarding
+import com.example.fitnik.NavigationState.NotLoggedIn
 import com.example.fitnik.authentication.domain.repository.AuthRepository
 import com.example.fitnik.authentication.domain.usecase.GetUserIdUseCase
-import com.example.fitnik.authentication.domain.usecase.UserAccountIsCompleted
+import com.example.fitnik.authentication.domain.usecase.UserAccountIsCompletedUseCase
 import com.example.fitnik.onboarding.domain.usecase.HasSeenOnboardingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,35 +21,32 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val hasSeenOnboardingUseCase: HasSeenOnboardingUseCase,
     private val getUserIdUseCase: GetUserIdUseCase,
-    private val userAccountIsCompleted: UserAccountIsCompleted,
+    private val userAccountIsCompleted: UserAccountIsCompletedUseCase,
     private val repository: AuthRepository
 ): ViewModel() {
 
-    var hasSeenOnboarding by mutableStateOf(hasSeenOnboardingUseCase())
-        private set
-
-    var isLoading by mutableStateOf(true)
-        private set
-
-    var isLoggedIn by mutableStateOf(getUserIdUseCase() != null)
-        private set
-
-    var accIsCompleted by mutableStateOf(false)
-        private set
+    private val _navigationState = MutableStateFlow<NavigationState>(Loading)
+    val navigationState = _navigationState.asStateFlow()
 
     fun checkSessionState() {
         viewModelScope.launch {
             val uid = getUserIdUseCase()
-            isLoggedIn = uid != null
-            accIsCompleted = if (uid != null) userAccountIsCompleted() else false
-            isLoading = false
+            val hasSeenOnboarding = hasSeenOnboardingUseCase()
+            _navigationState.value = when {
+                uid == null -> { if (hasSeenOnboarding) NotLoggedIn else NeedsOnboarding }
+                else -> {
+                    val completed = userAccountIsCompleted()
+                    if (completed) LoggedInComplete else LoggedInIncomplete
+                }
+            }
         }
     }
+}
 
-
-    fun accCompletedCheck() {
-        viewModelScope.launch {
-            accIsCompleted = userAccountIsCompleted()
-        }
-    }
+sealed class NavigationState {
+    object Loading : NavigationState()
+    object NeedsOnboarding : NavigationState()
+    object NotLoggedIn : NavigationState()
+    object LoggedInIncomplete : NavigationState()
+    object LoggedInComplete : NavigationState()
 }

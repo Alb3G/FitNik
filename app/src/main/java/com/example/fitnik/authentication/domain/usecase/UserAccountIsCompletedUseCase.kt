@@ -2,7 +2,7 @@ package com.example.fitnik.authentication.domain.usecase
 
 import com.example.fitnik.authentication.domain.repository.AuthRepository
 
-class UserAccountIsCompleted(
+class UserAccountIsCompletedUseCase(
     private val authRepository: AuthRepository
 ) {
 

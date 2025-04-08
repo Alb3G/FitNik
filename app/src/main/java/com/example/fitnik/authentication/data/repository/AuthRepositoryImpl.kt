@@ -53,7 +53,31 @@ class AuthRepositoryImpl: AuthRepository {
         return try {
             val credential = GoogleAuthProvider.getCredential(idToken, null)
             val authResult = Firebase.auth.signInWithCredential(credential).await()
-            Result.success(authResult.user!!)
+            val user = authResult.user!!
+
+            // Comprobar si es la primera vez que el usuario se registra
+            val userDoc = FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(user.uid)
+                .get()
+                .await()
+
+            if (!userDoc.exists()) {
+                // Es un nuevo usuario, guardar datos básicos
+                val newUser = User(
+                    uid = user.uid,
+                    firstName = user.displayName?.split(" ")?.firstOrNull() ?: "",
+                    lastName = user.displayName?.split(" ")?.drop(1)?.joinToString(separator = " ") ?: "",
+                    email = user.email ?: ""
+                )
+                FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(user.uid)
+                    .set(newUser)
+                    .await()
+            }
+
+            Result.success(user)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -83,6 +107,7 @@ class AuthRepositoryImpl: AuthRepository {
             val snapshot = FirebaseFirestore.getInstance()
                 .collection("users")
                 .document(uid).get().await()
+            snapshot.data?.let { Log.d("FirestoreDebug", it.toString()) }
             val user = snapshot.toObject(User::class.java)
                 ?: return Result.failure(Exception("User not found!"))
             Result.success(user)
@@ -93,7 +118,7 @@ class AuthRepositoryImpl: AuthRepository {
 
     override suspend fun updateUserFromFireStore(
         uid: String,
-        fields: Map<String, Any>
+        fields: Map<String, Any?>
     ): Result<Unit> {
         return try {
             FirebaseFirestore.getInstance().collection("users")
