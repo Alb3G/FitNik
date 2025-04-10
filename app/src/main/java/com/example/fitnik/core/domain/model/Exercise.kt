@@ -8,6 +8,7 @@ data class Exercise(
     val restSeconds: Int? = null,
     val method: String? = null,
     val notes: String? = null,
-    val loadPercentage: String? = null,
+    val rm: Int? = null,
+    val load: String? = null,
     val warmUp: Boolean = false
 )

@@ -1,13 +1,14 @@
 package com.example.fitnik.authentication.domain.usecase
 
-import com.example.fitnik.authentication.domain.repository.AuthRepository
+import com.example.fitnik.core.data.preferences.UserPreferencesManager
+import kotlinx.coroutines.flow.first
 
 class GetUserIdUseCase(
-    private val repository: AuthRepository
+    private val userPreferencesManager: UserPreferencesManager
 ) {
 
-    operator fun invoke(): String?  {
-        return repository.getUserId()
+    suspend operator fun invoke(): String?  {
+        return userPreferencesManager.getUserId().first()
     }
 
 }

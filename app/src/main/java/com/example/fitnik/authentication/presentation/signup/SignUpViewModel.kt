@@ -5,21 +5,21 @@ import androidx.lifecycle.viewModelScope
 import com.example.fitnik.authentication.domain.repository.AuthRepository
 import com.example.fitnik.authentication.domain.usecase.SignUpUseCases
 import com.example.fitnik.authentication.model.PasswordValidationResult
-import com.example.fitnik.core.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val signUpUseCases: SignUpUseCases
+    private val signUpUseCases: SignUpUseCases,
 ): ViewModel() {
 
     private val _state = MutableStateFlow(SignUpState())
-    val state: StateFlow<SignUpState> = _state
+    val state: StateFlow<SignUpState> = _state.asStateFlow()
 
     val signUpAllowed: Boolean get() =
         state.value.privacyConsent &&
@@ -65,31 +65,19 @@ class SignUpViewModel @Inject constructor(
     fun signUp() {
         activateLoading()
         viewModelScope.launch {
-            signUpUseCases.signUpUseCase(_state.value.email, _state.value.password).onSuccess {
-                val uid = authRepository.getUserId()
-                uid?.let {
-                    val user = User(
-                        uid = uid,
-                        firstName = _state.value.firsName,
-                        lastName = _state.value.lastName,
-                        email = _state.value.email
-                    )
-                    signUpUseCases.saveUserInFireStoreUseCase(user).onFailure {
-                        val error = it.message
-                        _state.value = _state.value.copy(
-                            emailError = error.toString(),
-                            isLoading = false
-                        )
-                    }
-                    _state.value = _state.value.copy(
-                        isSignedUp = true,
-                        isLoading = false
-                    )
-                }
-            }.onFailure {
-                val error = it.message
+            signUpUseCases.signUpUseCase(
+                _state.value.email,
+                _state.value.password,
+                _state.value.firsName,
+                _state.value.lastName
+            ).onSuccess { user ->
                 _state.value = _state.value.copy(
-                    emailError = error.toString(),
+                    isSignedUp = true,
+                    isLoading = false
+                )
+            }.onFailure { error ->
+                _state.value = _state.value.copy(
+                    emailError = error.message.toString(),
                     isLoading = false
                 )
             }

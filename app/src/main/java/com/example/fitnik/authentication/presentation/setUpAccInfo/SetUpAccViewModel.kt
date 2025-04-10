@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitnik.authentication.domain.repository.AuthRepository
 import com.example.fitnik.authentication.domain.usecase.SetAccInfoUseCases
-import com.example.fitnik.core.domain.model.Training
+import com.example.fitnik.core.domain.model.Workout
 import com.example.fitnik.core.domain.model.TrainingMockProvider
 import com.example.fitnik.core.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -93,7 +93,7 @@ class SetUpAccViewModel @Inject constructor(
                         "age" to setAccInfoUseCases.getUserAgeUseCase(_state.value.birthDate),
                         "weight" to setAccInfoUseCases.convertWeightUseCase(_state.value.weight.toDouble(), _state.value.isWeightInKg),
                         "height" to setAccInfoUseCases.convertHeightUseCase(_state.value.height.toDouble(), _state.value.isHeightInCm),
-                        "trainings" to trainings,
+                        "workouts" to trainings,
                         "accIscomplete" to true
                     )
                     setAccInfoUseCases.updateUserFromFirestoreUseCase(it, fields).onFailure {
@@ -116,8 +116,8 @@ class SetUpAccViewModel @Inject constructor(
         _state.value = _state.value.copy(isLoading = true)
     }
 
-    private fun loadTrainingBasedInObjective(objective: String, user: User?): List<Training> {
-        val currentTrainings = user?.trainings?.toMutableList() ?: mutableListOf()
+    private fun loadTrainingBasedInObjective(objective: String, user: User?): List<Workout> {
+        val currentTrainings = user?.workouts?.toMutableList() ?: mutableListOf()
 
         when (objective) {
             "Gain Muscle" -> currentTrainings.add(TrainingMockProvider.getMuscleGainTraining())

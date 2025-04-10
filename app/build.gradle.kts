@@ -66,6 +66,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
+    // Datastore
+    implementation(libs.datastore.preferences)
     // Compose
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.ui)

@@ -21,6 +21,8 @@ import com.example.fitnik.authentication.domain.usecase.UserAccountIsCompletedUs
 import com.example.fitnik.authentication.domain.usecase.ValidateEmailUseCase
 import com.example.fitnik.authentication.domain.usecase.ValidateNameUseCase
 import com.example.fitnik.authentication.domain.usecase.ValidatePasswordUseCase
+import com.example.fitnik.core.data.preferences.UserPreferencesManager
+import com.example.fitnik.core.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -61,28 +63,35 @@ object AuthModule {
     @Provides
     @Singleton
     fun provideSignUpUseCases(
-        repository: AuthRepository,
+        authRepository: AuthRepository,
+        localUserRepository: UserRepository,
+        userPreferencesManager: UserPreferencesManager,
         emailMatcher: EmailMatcher
     ): SignUpUseCases {
         return SignUpUseCases(
             validateNameUseCase = ValidateNameUseCase(),
             validateEmailUseCase = ValidateEmailUseCase(emailMatcher),
             validatePasswordUseCase = ValidatePasswordUseCase(),
-            signUpUseCase = SignUpUseCase(repository),
-            saveUserInFireStoreUseCase = SaveUserInFireStoreUseCase(repository)
+            signUpUseCase = SignUpUseCase(authRepository, localUserRepository, userPreferencesManager),
+            saveUserInFireStoreUseCase = SaveUserInFireStoreUseCase(authRepository)
         )
     }
 
     @Provides
     @Singleton
-    fun provideGetUserIdUseCase(repository: AuthRepository): GetUserIdUseCase {
-        return GetUserIdUseCase(repository)
+    fun provideGetUserIdUseCase(
+        userPreferencesManager: UserPreferencesManager
+    ): GetUserIdUseCase {
+        return GetUserIdUseCase(userPreferencesManager)
     }
 
     @Provides
     @Singleton
-    fun provideUserAccountIsCompleted(repository: AuthRepository): UserAccountIsCompletedUseCase {
-        return UserAccountIsCompletedUseCase(repository)
+    fun provideUserAccountIsCompleted(
+        repository: AuthRepository,
+        localUserRepository: UserRepository
+    ): UserAccountIsCompletedUseCase {
+        return UserAccountIsCompletedUseCase(repository, localUserRepository)
     }
 
     @Provides

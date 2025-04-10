@@ -11,6 +11,6 @@ data class User(
     val age: Int = 0,
     val weight: Double = 0.0,
     val height: Double = 0.0,
-    val trainings: List<Training> = emptyList(),
+    val workouts: List<Workout> = emptyList(),
     val accIscomplete: Boolean = false
 )

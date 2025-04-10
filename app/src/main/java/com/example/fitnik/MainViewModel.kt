@@ -36,7 +36,10 @@ class MainViewModel @Inject constructor(
                 uid == null -> { if (hasSeenOnboarding) NotLoggedIn else NeedsOnboarding }
                 else -> {
                     val completed = userAccountIsCompleted()
-                    if (completed) LoggedInComplete else LoggedInIncomplete
+                    if (completed)
+                        LoggedInComplete // Loggeado y cuenta completada
+                    else
+                        LoggedInIncomplete // Logeado pero faltan datos en su cuenta
                 }
             }
         }

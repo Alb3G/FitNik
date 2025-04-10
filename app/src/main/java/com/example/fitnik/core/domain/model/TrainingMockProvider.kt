@@ -1,8 +1,8 @@
 package com.example.fitnik.core.domain.model
 
 object TrainingMockProvider {
-    fun getMuscleGainTraining(): Training {
-        return Training(
+    fun getMuscleGainTraining(): Workout {
+        return Workout(
             name = "PUSH Hipertrofia",
             type = "Entreno A",
             sessions = listOf(
@@ -20,7 +20,7 @@ object TrainingMockProvider {
                             name = "Press superior multipower",
                             sets = 4,
                             reps = "4",
-                            loadPercentage = "80%",
+                            load = "80%",
                             restSeconds = 90,
                             warmUp = false
                         ),
@@ -48,8 +48,8 @@ object TrainingMockProvider {
         )
     }
 
-    fun getWeightLossTraining(): Training {
-        return Training(
+    fun getWeightLossTraining(): Workout {
+        return Workout(
             name = "FULLBODY Quemagrasa",
             type = "Entreno D",
             sessions = listOf(
@@ -90,8 +90,8 @@ object TrainingMockProvider {
         )
     }
 
-    fun getFatLossTraining(): Training {
-        return Training(
+    fun getFatLossTraining(): Workout {
+        return Workout(
             name = "PULL Definición",
             type = "Entreno B",
             sessions = listOf(
@@ -110,7 +110,7 @@ object TrainingMockProvider {
                             name = "Curl barra Z",
                             sets = 4,
                             reps = "4",
-                            loadPercentage = "80%",
+                            load = "80%",
                             restSeconds = 90
                         ),
                         Exercise(
@@ -133,7 +133,7 @@ object TrainingMockProvider {
         )
     }
 
-    fun getAllTrainings(): List<Training> = listOf(
+    fun getAllTrainings(): List<Workout> = listOf(
         getMuscleGainTraining(),
         getWeightLossTraining(),
         getFatLossTraining()
