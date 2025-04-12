@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.fitnik.authentication.domain.usecase.LoginUseCases
 import com.example.fitnik.authentication.domain.usecase.UserAccountIsCompletedUseCase
 import com.example.fitnik.authentication.model.PasswordValidationResult
+import com.example.fitnik.core.domain.model.User
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
@@ -66,6 +67,7 @@ class LoginViewModel @Inject constructor(
     fun login() {
         activateLoading()
         viewModelScope.launch {
+            // Primer login debe ser online para mantener la sesion iniciada despues
             loginUseCases.loginWithEmailUseCase(state.value.email, state.value.password).onSuccess {
                 updateLoggedInState()
             }.onFailure {
@@ -89,7 +91,7 @@ class LoginViewModel @Inject constructor(
         val hashedNonce = digest.fold("") { str, it -> str + "%02x".format(it) }
         val googleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
-            .setServerClientId("519350555394-d9f0emlj4sp0bgq1kqghb4335k8um5bt.apps.googleusercontent.com")
+            .setServerClientId("519350555394-d9f0emlj4sp0bgq1kqghb4335k8um5bt.apps.googleusercontent.com") // extraer
             .setNonce(hashedNonce)
             .build()
         val request = GetCredentialRequest.Builder()
@@ -101,7 +103,15 @@ class LoginViewModel @Inject constructor(
                 val credential = result.credential
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                 val googleIdToken = googleIdTokenCredential.idToken
+                // Recuperamos user de firebase, los datos del user quedan en firestore por el usecase
                 loginUseCases.loginWithGoogleCredentialUseCase(googleIdToken).onSuccess { user ->
+                    // Guardamos en room el user para poder trabajar con el de forma offline.
+                    loginUseCases.saveRoomUserUseCase(User(
+                        uid = user.uid,
+                        firstName = user.displayName?.split(" ")?.firstOrNull() ?: "",
+                        lastName = user.displayName?.split(" ")?.drop(1)?.joinToString(separator = " ") ?: "",
+                        email = user.email ?: ""
+                    ))
                     updateLoggedInState()
                     Toast.makeText(context, "Welcome ${user.displayName}", Toast.LENGTH_SHORT).show()
                 }.onFailure {

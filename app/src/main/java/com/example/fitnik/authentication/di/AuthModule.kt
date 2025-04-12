@@ -23,6 +23,9 @@ import com.example.fitnik.authentication.domain.usecase.ValidateNameUseCase
 import com.example.fitnik.authentication.domain.usecase.ValidatePasswordUseCase
 import com.example.fitnik.core.data.preferences.UserPreferencesManager
 import com.example.fitnik.core.domain.repository.UserRepository
+import com.example.fitnik.core.domain.usecase.GetRoomUserUseCase
+import com.example.fitnik.core.domain.usecase.SaveRoomUserUseCase
+import com.example.fitnik.core.domain.usecase.UpdateRoomUserUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -49,14 +52,16 @@ object AuthModule {
     @Singleton
     fun provideLoginUseCases(
         repository: AuthRepository,
-        emailMatcher: EmailMatcher
+        emailMatcher: EmailMatcher,
+        userRepository: UserRepository
     ): LoginUseCases {
         return LoginUseCases(
             loginWithEmailUseCase = LoginWithEmailUseCase(repository),
             validateEmailUseCase = ValidateEmailUseCase(emailMatcher),
             validatePasswordUseCase = ValidatePasswordUseCase(),
             loginWithGoogleCredentialUseCase = LoginWithGoogleCredentialUseCase(repository),
-            getUserFromFirestoreUseCase = GetUserFromFirestoreUseCase(repository)
+            getUserFromFirestoreUseCase = GetUserFromFirestoreUseCase(repository),
+            saveRoomUserUseCase = SaveRoomUserUseCase(userRepository)
         )
     }
 
@@ -80,30 +85,35 @@ object AuthModule {
     @Provides
     @Singleton
     fun provideGetUserIdUseCase(
+        authRepository: AuthRepository,
         userPreferencesManager: UserPreferencesManager
     ): GetUserIdUseCase {
-        return GetUserIdUseCase(userPreferencesManager)
+        return GetUserIdUseCase(authRepository,userPreferencesManager)
     }
 
     @Provides
     @Singleton
     fun provideUserAccountIsCompleted(
         repository: AuthRepository,
-        localUserRepository: UserRepository
+        localUserRepository: UserRepository,
+        userPreferencesManager: UserPreferencesManager
     ): UserAccountIsCompletedUseCase {
-        return UserAccountIsCompletedUseCase(repository, localUserRepository)
+        return UserAccountIsCompletedUseCase(repository, localUserRepository, userPreferencesManager)
     }
 
     @Provides
     @Singleton
     fun provideSetAccInfoUseCases(
-        repository: AuthRepository
+        repository: AuthRepository,
+        userRepository: UserRepository
     ): SetAccInfoUseCases {
         return SetAccInfoUseCases(
             convertWeightUseCase = ConvertWeightUseCase(),
             convertHeightUseCase = ConvertHeightUseCase(),
             getUserAgeUseCase = GetUserAgeUseCase(),
-            updateUserFromFirestoreUseCase = UpdateUserFromFirestoreUseCase(repository)
+            updateUserFromFirestoreUseCase = UpdateUserFromFirestoreUseCase(repository),
+            getRoomUserUseCase = GetRoomUserUseCase(userRepository),
+            updateRoomUserUseCase = UpdateRoomUserUseCase(userRepository)
         )
     }
 }

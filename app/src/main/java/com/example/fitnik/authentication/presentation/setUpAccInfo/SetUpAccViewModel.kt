@@ -7,23 +7,27 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitnik.authentication.domain.repository.AuthRepository
 import com.example.fitnik.authentication.domain.usecase.SetAccInfoUseCases
-import com.example.fitnik.core.domain.model.Workout
+import com.example.fitnik.core.data.preferences.UserPreferencesManager
 import com.example.fitnik.core.domain.model.TrainingMockProvider
 import com.example.fitnik.core.domain.model.User
+import com.example.fitnik.core.domain.model.Workout
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SetUpAccViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val setAccInfoUseCases: SetAccInfoUseCases
+    private val setAccInfoUseCases: SetAccInfoUseCases,
+    private val userPreferencesManager: UserPreferencesManager,
 ): ViewModel() {
 
     private val _state = MutableStateFlow(SetUpAccState())
-    val state: StateFlow<SetUpAccState> = _state
+    val state: StateFlow<SetUpAccState> = _state.asStateFlow()
 
     fun onEvent(event: AccounEvent) {
         when (event) {
@@ -80,9 +84,9 @@ class SetUpAccViewModel @Inject constructor(
                 _state.value.weight.isNotBlank() &&
                 _state.value.height.isNotBlank()
             ) {
-                val uid = authRepository.getUserId()
-                uid?.let {
-                    val user = authRepository.getUserObjFromFirestore(it).getOrNull()
+                val uid = userPreferencesManager.getUserId().first() ?: authRepository.getUserId()
+                uid?.let { userId ->
+                    val user = setAccInfoUseCases.getRoomUserUseCase(userId) ?: authRepository.getUserObjFromFirestore(userId).getOrNull()
                     val trainings = loadTrainingBasedInObjective(_state.value.objective, user)
                     val fields = mapOf(
                         "email" to user?.email,
@@ -96,9 +100,23 @@ class SetUpAccViewModel @Inject constructor(
                         "workouts" to trainings,
                         "accIscomplete" to true
                     )
-                    setAccInfoUseCases.updateUserFromFirestoreUseCase(it, fields).onFailure {
-                        val message = it.message
-                        Log.d("Update User Failed", message.toString())
+                    val modifiedUser = user?.copy(
+                        uid = user.uid,
+                        gender = _state.value.gender,
+                        activityLvl = _state.value.activity,
+                        objective = _state.value.objective,
+                        age = setAccInfoUseCases.getUserAgeUseCase(_state.value.birthDate),
+                        weight = setAccInfoUseCases.convertWeightUseCase(_state.value.weight.toDouble(), _state.value.isWeightInKg),
+                        height = setAccInfoUseCases.convertHeightUseCase(_state.value.height.toDouble(), _state.value.isHeightInCm),
+                        workouts = trainings,
+                        accIscomplete = true
+                    )
+                    if (!setAccInfoUseCases.updateRoomUserUseCase(modifiedUser!!)) {
+                        Log.d("UpdateUser", "Room update failed, trying Firestore")
+                        setAccInfoUseCases.updateUserFromFirestoreUseCase(userId, fields).onFailure {
+                            val message = it.message
+                            Log.d("Update User in Firestore Failed", message.toString())
+                        }
                     }
                     _state.value = _state.value.copy(
                         accIsComplete = true,
@@ -106,7 +124,7 @@ class SetUpAccViewModel @Inject constructor(
                     )
                 }
             } else {
-                Toast.makeText(context, "You must fill all fields!", Toast.LENGTH_SHORT).show() // Quitar cuando terminemos
+                Toast.makeText(context, "All fields must be filled!", Toast.LENGTH_SHORT).show() // Quitar cuando terminemos
                 _state.value = _state.value.copy(isLoading = false)
             }
         }

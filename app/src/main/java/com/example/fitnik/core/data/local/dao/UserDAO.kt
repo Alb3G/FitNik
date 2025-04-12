@@ -17,6 +17,6 @@ interface UserDAO {
     suspend fun saveUser(user: UserEntity)
 
     @Update
-    suspend fun updateUser(user: UserEntity)
+    suspend fun updateUser(user: UserEntity): Int
 
 }

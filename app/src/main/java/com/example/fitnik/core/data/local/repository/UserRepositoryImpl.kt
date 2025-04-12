@@ -21,8 +21,8 @@ class UserRepositoryImpl @Inject constructor(
         return user.toDomain()
     }
 
-    override suspend fun updateUser(user: User) {
-        userDAO.updateUser(user.toEntity())
+    override suspend fun updateUser(user: User): Boolean {
+        return userDAO.updateUser(user.toEntity()) > 0
     }
 
     override suspend fun userAccIsComplete(user: User): Boolean {
