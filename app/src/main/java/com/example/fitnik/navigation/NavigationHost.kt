@@ -1,6 +1,10 @@
 package com.example.fitnik.navigation
 
-import androidx.compose.material3.Text
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -8,6 +12,7 @@ import androidx.navigation.compose.composable
 import com.example.fitnik.authentication.presentation.login.LoginScreen
 import com.example.fitnik.authentication.presentation.setUpAccInfo.UserProfileSetUpScreen
 import com.example.fitnik.authentication.presentation.signup.SignUpScreen
+import com.example.fitnik.home.presentation.HomeScreen
 import com.example.fitnik.navigation.NavigationScreens.Home
 import com.example.fitnik.navigation.NavigationScreens.Login
 import com.example.fitnik.navigation.NavigationScreens.Onboarding
@@ -30,7 +35,20 @@ fun NavigationHost(
             )
         }
 
-        composable<SignUp> {
+        composable<SignUp>(
+            popEnterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { 300 },
+                    animationSpec = tween(300)
+                ) + fadeIn(animationSpec = tween(300))
+            },
+            exitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { -300 },
+                    animationSpec = tween(300)
+                ) + fadeOut(animationSpec = tween(300))
+            },
+        ) {
             SignUpScreen(
                 onLoginClick = {
                     navHostController.popBackStack()
@@ -40,7 +58,20 @@ fun NavigationHost(
             )
         }
 
-        composable<Login> {
+        composable<Login>(
+            popEnterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { -300 },
+                    animationSpec = tween(300)
+                ) + fadeIn(animationSpec = tween(300))
+            },
+            exitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { -300 },
+                    animationSpec = tween(300)
+                ) + fadeOut(animationSpec = tween(300))
+            },
+        ) {
             LoginScreen(
                 onRegisterClick = {
                     navHostController.navigate(SignUp)
@@ -56,11 +87,37 @@ fun NavigationHost(
             )
         }
 
-        composable<Home> {
-            Text("Home")
+        composable<Home>(
+            popEnterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { -300 },
+                    animationSpec = tween(300)
+                ) + fadeIn(animationSpec = tween(300))
+            },
+            exitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { -300 },
+                    animationSpec = tween(300)
+                ) + fadeOut(animationSpec = tween(300))
+            },
+        ) {
+            HomeScreen()
         }
 
-        composable<UserProfileSetUp> {
+        composable<UserProfileSetUp>(
+            popEnterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { 300 },
+                    animationSpec = tween(300)
+                ) + fadeIn(animationSpec = tween(300))
+            },
+            exitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { -300 },
+                    animationSpec = tween(300)
+                ) + fadeOut(animationSpec = tween(300))
+            },
+        ) {
             UserProfileSetUpScreen {
                 navHostController.popBackStack()
                 navHostController.navigate(Home)

@@ -16,5 +16,6 @@ data class SignUpState(
     val hasTypedLastName: Boolean = false,
     val hasTypedEmail: Boolean = false,
     val hasTypedPassword: Boolean = false,
-    val isSignedUp: Boolean = false
+    val isSignedUp: Boolean = false,
+    val firebaseError: String = ""
 )

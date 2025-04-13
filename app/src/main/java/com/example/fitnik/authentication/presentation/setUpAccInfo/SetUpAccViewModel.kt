@@ -99,8 +99,8 @@ class SetUpAccViewModel @Inject constructor(
                         "height" to setAccInfoUseCases.convertHeightUseCase(_state.value.height.toDouble(), _state.value.isHeightInCm),
                         "workouts" to trainings,
                         "accIscomplete" to true
-                    )
-                    val modifiedUser = user?.copy(
+                    ) // fields para actualizar en firestore
+                    val modifiedUser = user?.copy( // user para almacenar en room
                         uid = user.uid,
                         gender = _state.value.gender,
                         activityLvl = _state.value.activity,

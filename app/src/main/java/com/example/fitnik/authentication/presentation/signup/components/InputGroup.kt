@@ -7,16 +7,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.example.fitnik.R
-import com.example.fitnik.authentication.presentation.signup.SignUpViewModel
-import com.example.fitnik.authentication.presentation.components.AuthTextField
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
-import com.example.fitnik.authentication.presentation.signup.SignUpEvent
+import androidx.compose.ui.unit.dp
+import com.example.fitnik.R
 import com.example.fitnik.authentication.model.TextFieldConfig
+import com.example.fitnik.authentication.presentation.components.AuthTextField
+import com.example.fitnik.authentication.presentation.signup.SignUpEvent
+import com.example.fitnik.authentication.presentation.signup.SignUpViewModel
 
 @Composable
 fun InputGroup(
@@ -64,21 +64,27 @@ fun InputGroup(
         textFieldConfig = firstNameConfig,
         errorMessage = state.firstNameError.takeIf { state.hasTypedFirstName }
     ) { viewModel.onEvent(SignUpEvent.FirstNameChange(it)) }
+
     Spacer(modifier = Modifier.height(8.dp))
+
     AuthTextField(
         modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 64.dp),
         tfValue = state.lastName,
         textFieldConfig = lastNameConfig,
         errorMessage = state.lastNameError.takeIf { state.hasTypedLastName }
     ) { viewModel.onEvent(SignUpEvent.LastNameChange(it)) }
+
     Spacer(modifier = Modifier.height(8.dp))
+
     AuthTextField(
         modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 64.dp),
         tfValue = state.email,
         textFieldConfig = emailConfig,
         errorMessage = state.emailError.takeIf { state.hasTypedEmail }
     ) { viewModel.onEvent(SignUpEvent.EmailChange(it)) }
+
     Spacer(modifier = Modifier.height(8.dp))
+
     AuthTextField(
         modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 64.dp),
         tfValue = state.password,

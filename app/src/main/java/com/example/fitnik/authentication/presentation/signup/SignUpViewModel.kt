@@ -77,7 +77,7 @@ class SignUpViewModel @Inject constructor(
                 )
             }.onFailure { error ->
                 _state.value = _state.value.copy(
-                    emailError = error.message.toString(),
+                    firebaseError = error.localizedMessage!!,
                     isLoading = false
                 )
             }

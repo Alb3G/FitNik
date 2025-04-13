@@ -32,12 +32,13 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.fitnik.authentication.presentation.components.LoginDivider
 import com.example.fitnik.authentication.presentation.signup.components.InputGroup
 import com.example.fitnik.authentication.presentation.signup.components.PDFTermsScreen
 import com.example.fitnik.authentication.presentation.signup.components.PasswordRequirements
 import com.example.fitnik.core.presentation.FitnikDefButton
-import com.example.fitnik.authentication.presentation.components.LoginDivider
 import com.example.fitnik.ui.theme.black
+import com.example.fitnik.ui.theme.error
 import com.example.fitnik.ui.theme.lightGray
 import com.example.fitnik.ui.theme.primary
 import com.example.fitnik.ui.theme.secondary
@@ -114,6 +115,10 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
+            Text(state.firebaseError, style = MaterialTheme.typography.bodyMedium.copy(color = error))
+
+            Spacer(modifier = Modifier.weight(1f))
+
             FitnikDefButton(
                 modifier = Modifier
                 .defaultMinSize(minHeight = 84.dp)
@@ -131,7 +136,7 @@ fun SignUpScreen(
 
             LoginDivider()
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
