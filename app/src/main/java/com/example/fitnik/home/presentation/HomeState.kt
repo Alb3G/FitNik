@@ -1,0 +1,30 @@
+package com.example.fitnik.home.presentation
+
+import com.example.fitnik.R
+import com.example.fitnik.core.domain.model.Workout
+import com.example.fitnik.home.presentation.model.BottomNavItem
+
+data class HomeState(
+    val workouts: List<Workout> = emptyList(),
+    val tabsItems: List<BottomNavItem> = listOf(
+        BottomNavItem(
+            title = "Steps",
+            selectedIcon = R.drawable.shoe_prints_selected,
+            unselectedIcon = R.drawable.shoe_prints,
+            contentDescription = "Steps Screen Icon"
+        ),
+        BottomNavItem(
+            title = "Timer",
+            selectedIcon = R.drawable.duration_selected,
+            unselectedIcon = R.drawable.duration,
+            contentDescription = "Timer Screen Icon"
+        ),
+        BottomNavItem(
+            title = "Settings",
+            selectedIcon = R.drawable.settings_selected,
+            unselectedIcon = R.drawable.settings,
+            contentDescription = "Settings Screen Description"
+        )
+    ),
+    var selectedItemIndex: Int = 0,
+)

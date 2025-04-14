@@ -11,12 +11,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.example.fitnik.navigation.NavigationGraph
+import com.example.fitnik.navigation.NavigationGraph.AuthGraph.Login
+import com.example.fitnik.navigation.NavigationGraph.AuthGraph.Onboarding
+import com.example.fitnik.navigation.NavigationGraph.AuthGraph.UserProfileSetUp
+import com.example.fitnik.navigation.NavigationGraph.MainGraph.Home
 import com.example.fitnik.navigation.NavigationHost
-import com.example.fitnik.navigation.NavigationScreens
-import com.example.fitnik.navigation.NavigationScreens.Home
-import com.example.fitnik.navigation.NavigationScreens.Login
-import com.example.fitnik.navigation.NavigationScreens.Onboarding
-import com.example.fitnik.navigation.NavigationScreens.UserProfileSetUp
 import com.example.fitnik.ui.theme.FitnikTheme
 import com.example.fitnik.ui.theme.white
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun NavigationState.toNavigationScreen(): NavigationScreens {
+    fun NavigationState.toNavigationScreen(): NavigationGraph {
         return when (this) {
             NavigationState.NeedsOnboarding -> Onboarding
             NavigationState.NotLoggedIn -> Login

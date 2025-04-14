@@ -2,20 +2,37 @@ package com.example.fitnik.navigation
 
 import kotlinx.serialization.Serializable
 
-sealed class NavigationScreens {
+sealed class NavigationGraph {
+    sealed class AuthGraph : NavigationGraph() {
+        @Serializable
+        object Onboarding : AuthGraph()
 
-    @Serializable
-    object Home: NavigationScreens()
+        @Serializable
+        object Login : AuthGraph()
 
-    @Serializable
-    object Onboarding: NavigationScreens()
+        @Serializable
+        object SignUp : AuthGraph()
 
-    @Serializable
-    object Login: NavigationScreens()
+        @Serializable
+        object UserProfileSetUp : AuthGraph()
+    }
 
-    @Serializable
-    object SignUp: NavigationScreens()
+    sealed class MainGraph : NavigationGraph() {
+        @Serializable
+        object Home : MainGraph()
 
-    @Serializable
-    object UserProfileSetUp: NavigationScreens()
+        sealed class HomeTabsGraph : MainGraph() {
+            @Serializable
+            object StepsScreen : HomeTabsGraph()
+
+            @Serializable
+            object Settings : HomeTabsGraph()
+
+            @Serializable
+            object Timer : HomeTabsGraph()
+
+            @Serializable
+            object AiAssistant : HomeTabsGraph()
+        }
+    }
 }
