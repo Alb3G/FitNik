@@ -23,6 +23,9 @@ sealed class NavigationGraph {
 
         sealed class HomeTabsGraph : MainGraph() {
             @Serializable
+            object Home : HomeTabsGraph()
+
+            @Serializable
             object StepsScreen : HomeTabsGraph()
 
             @Serializable
@@ -30,9 +33,6 @@ sealed class NavigationGraph {
 
             @Serializable
             object Timer : HomeTabsGraph()
-
-            @Serializable
-            object AiAssistant : HomeTabsGraph()
         }
     }
 }

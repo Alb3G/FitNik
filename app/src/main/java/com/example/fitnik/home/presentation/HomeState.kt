@@ -8,6 +8,12 @@ data class HomeState(
     val workouts: List<Workout> = emptyList(),
     val tabsItems: List<BottomNavItem> = listOf(
         BottomNavItem(
+            title = "Home",
+            selectedIcon = R.drawable.home_selected,
+            unselectedIcon = R.drawable.home,
+            contentDescription = "Home Screen Icon"
+        ),
+        BottomNavItem(
             title = "Steps",
             selectedIcon = R.drawable.shoe_prints_selected,
             unselectedIcon = R.drawable.shoe_prints,

@@ -18,15 +18,9 @@ import com.example.fitnik.navigation.NavigationGraph.AuthGraph.Login
 import com.example.fitnik.navigation.NavigationGraph.AuthGraph.Onboarding
 import com.example.fitnik.navigation.NavigationGraph.AuthGraph.SignUp
 import com.example.fitnik.navigation.NavigationGraph.AuthGraph.UserProfileSetUp
-import com.example.fitnik.navigation.NavigationGraph.MainGraph
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.Home
-import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.Settings
-import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.StepsScreen
-import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.Timer
+import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph
 import com.example.fitnik.onboarding.presentation.OnboardingScreen
-import com.example.fitnik.settings.SettingsScreen
-import com.example.fitnik.steps.StepsScreen
-import com.example.fitnik.timer.TimerScreen
 
 @Composable
 fun NavigationHost(
@@ -109,16 +103,7 @@ fun NavigationHost(
                 ) + fadeOut(animationSpec = tween(300))
             },
         ) {
-            HomeScreen(
-                onBottomNavItemClick = { title ->
-                    when (title) {
-                        "Home" -> tabsNav(navHostController, Home)
-                        "Steps" -> tabsNav(navHostController,StepsScreen)
-                        "Timer" -> tabsNav(navHostController,Timer)
-                        "Settings" -> tabsNav(navHostController,Settings)
-                    }
-                }
-            )
+            HomeScreen(mainNavController = navHostController)
         }
 
         composable<UserProfileSetUp>(
@@ -140,61 +125,10 @@ fun NavigationHost(
                 navHostController.navigate(Home)
             }
         }
-
-        composable<StepsScreen>(
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { -300 },
-                    animationSpec = tween(300)
-                ) + fadeIn(animationSpec = tween(300))
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { -300 },
-                    animationSpec = tween(300)
-                ) + fadeOut(animationSpec = tween(300))
-            },
-        ) {
-            StepsScreen()
-        }
-
-        composable<Timer>(
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { -300 },
-                    animationSpec = tween(300)
-                ) + fadeIn(animationSpec = tween(300))
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { -300 },
-                    animationSpec = tween(300)
-                ) + fadeOut(animationSpec = tween(300))
-            },
-        ) {
-            TimerScreen()
-        }
-
-        composable<Settings>(
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { -300 },
-                    animationSpec = tween(300)
-                ) + fadeIn(animationSpec = tween(300))
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { -300 },
-                    animationSpec = tween(300)
-                ) + fadeOut(animationSpec = tween(300))
-            },
-        ) {
-            SettingsScreen()
-        }
     }
 }
 
-private fun tabsNav(navHostController: NavHostController, destination: MainGraph) {
+fun tabsNav(navHostController: NavHostController, destination: HomeTabsGraph) {
     navHostController.navigate(destination) {
         popUpTo(navHostController.graph.findStartDestination().id) {
             saveState = true
