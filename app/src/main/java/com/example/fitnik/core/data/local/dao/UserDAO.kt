@@ -10,7 +10,7 @@ import com.example.fitnik.core.data.local.entity.UserEntity
 @Dao
 interface UserDAO {
 
-    @Query("SELECT * FROM users where uid = :uid;")
+    @Query("SELECT * FROM users where id = :uid;")
     suspend fun findUserById(uid: String): UserEntity?
 
     @Insert(onConflict = REPLACE)

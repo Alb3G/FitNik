@@ -87,7 +87,7 @@ class SetUpAccViewModel @Inject constructor(
                 val uid = userPreferencesManager.getUserId().first() ?: authRepository.getUserId()
                 uid?.let { userId ->
                     val user = setAccInfoUseCases.getRoomUserUseCase(userId) ?: authRepository.getUserObjFromFirestore(userId).getOrNull()
-                    val trainings = loadTrainingBasedInObjective(_state.value.objective, user)
+                    val workouts = loadTrainingBasedInObjective(_state.value.objective, user)
                     val fields = mapOf(
                         "email" to user?.email,
                         "firstName" to user?.firstName,
@@ -97,7 +97,7 @@ class SetUpAccViewModel @Inject constructor(
                         "age" to setAccInfoUseCases.getUserAgeUseCase(_state.value.birthDate),
                         "weight" to setAccInfoUseCases.convertWeightUseCase(_state.value.weight.toDouble(), _state.value.isWeightInKg),
                         "height" to setAccInfoUseCases.convertHeightUseCase(_state.value.height.toDouble(), _state.value.isHeightInCm),
-                        "workouts" to trainings,
+                        "workouts" to workouts,
                         "accIscomplete" to true
                     ) // fields para actualizar en firestore
                     val modifiedUser = user?.copy( // user para almacenar en room
@@ -108,15 +108,13 @@ class SetUpAccViewModel @Inject constructor(
                         age = setAccInfoUseCases.getUserAgeUseCase(_state.value.birthDate),
                         weight = setAccInfoUseCases.convertWeightUseCase(_state.value.weight.toDouble(), _state.value.isWeightInKg),
                         height = setAccInfoUseCases.convertHeightUseCase(_state.value.height.toDouble(), _state.value.isHeightInCm),
-                        workouts = trainings,
+                        workouts = workouts,
                         accIscomplete = true
                     )
-                    if (!setAccInfoUseCases.updateRoomUserUseCase(modifiedUser!!)) {
-                        Log.d("UpdateUser", "Room update failed, trying Firestore")
-                        setAccInfoUseCases.updateUserFromFirestoreUseCase(userId, fields).onFailure {
-                            val message = it.message
-                            Log.d("Update User in Firestore Failed", message.toString())
-                        }
+                    setAccInfoUseCases.updateRoomUserUseCase(modifiedUser!!) // Actualizacion en ROOM
+                    setAccInfoUseCases.updateUserFromFirestoreUseCase(userId, fields).onFailure { // Actualizacion en FireBase
+                        val message = it.message
+                        Log.d("Update User in Firestore Failed", message.toString())
                     }
                     _state.value = _state.value.copy(
                         accIsComplete = true,
@@ -140,7 +138,7 @@ class SetUpAccViewModel @Inject constructor(
         when (objective) {
             "Gain Muscle" -> currentTrainings.add(TrainingMockProvider.getMuscleGainTraining())
             "Loose Fat" -> currentTrainings.add(TrainingMockProvider.getFatLossTraining())
-            "Loose weight" -> currentTrainings.add(TrainingMockProvider.getWeightLossTraining())
+            "Loose weight" -> currentTrainings.add(TrainingMockProvider.getFatLossTraining())
         }
 
         return currentTrainings

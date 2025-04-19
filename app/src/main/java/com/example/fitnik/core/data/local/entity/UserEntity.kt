@@ -2,10 +2,11 @@ package com.example.fitnik.core.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.UUID
 
 @Entity(tableName = "users")
 data class UserEntity(
-    @PrimaryKey val uid: String,
+    @PrimaryKey val id: String = UUID.randomUUID().toString(),
     val firstName: String,
     val lastName: String,
     val email: String,

@@ -1,14 +1,13 @@
 package com.example.fitnik.core.domain.model
 
 data class Exercise(
+    val id: String = "",
     val name: String = "",
-    val sets: Int = 0,
-    val reps: String = "",
-    val rir: String? = null,
-    val restSeconds: Int? = null,
     val method: String? = null,
     val notes: String? = null,
+    val isWarmUp: Boolean = false,
+    val restSeconds: Int? = null,
+    val targetSets: Int = 0,
     val rm: Int? = null,
-    val load: String? = null,
-    val warmUp: Boolean = false
+    val sets: List<Set> = emptyList()
 )

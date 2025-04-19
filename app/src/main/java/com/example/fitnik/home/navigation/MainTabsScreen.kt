@@ -19,6 +19,7 @@ import com.example.fitnik.home.presentation.HomContent
 import com.example.fitnik.home.presentation.HomeViewModel
 import com.example.fitnik.home.presentation.components.NavBar
 import com.example.fitnik.home.presentation.model.BottomNavItem
+import com.example.fitnik.navigation.NavigationGraph.MainGraph.CreateWorkout
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.Home
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.Settings
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.StepsScreen
@@ -59,7 +60,6 @@ fun MainTabsScreen(
             startDestination = Home,
             modifier = Modifier.padding(paddingValues)
         ) {
-            // Pestaña Home
             composable<Home>(
                 popEnterTransition = {
                     slideInHorizontally(
@@ -74,7 +74,9 @@ fun MainTabsScreen(
                     ) + fadeOut(animationSpec = tween(300))
                 },
             ) {
-                HomContent()
+                HomContent(
+                    onCreateWorkoutClick = { mainNavController.navigate(CreateWorkout) }
+                )
             }
 
             composable<StepsScreen>(

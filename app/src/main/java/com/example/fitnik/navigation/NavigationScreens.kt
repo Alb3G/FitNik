@@ -21,6 +21,9 @@ sealed class NavigationGraph {
         @Serializable
         object Home : MainGraph()
 
+        @Serializable
+        object CreateWorkout : MainGraph()
+
         sealed class HomeTabsGraph : MainGraph() {
             @Serializable
             object Home : HomeTabsGraph()

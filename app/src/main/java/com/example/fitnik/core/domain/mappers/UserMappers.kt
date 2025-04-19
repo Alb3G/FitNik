@@ -6,7 +6,7 @@ import com.example.fitnik.core.domain.model.Workout
 
 fun User.toEntity(): UserEntity {
     return UserEntity(
-        uid = uid,
+        id = uid,
         firstName = firstName,
         lastName = lastName,
         email = email,
@@ -22,7 +22,7 @@ fun User.toEntity(): UserEntity {
 
 fun UserEntity.toDomain(workouts: List<Workout> = emptyList()): User {
     return User(
-        uid = uid,
+        uid = id,
         firstName = firstName,
         lastName = lastName,
         email = email,

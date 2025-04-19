@@ -4,7 +4,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -13,11 +15,13 @@ import androidx.navigation.compose.composable
 import com.example.fitnik.authentication.presentation.login.LoginScreen
 import com.example.fitnik.authentication.presentation.setUpAccInfo.UserProfileSetUpScreen
 import com.example.fitnik.authentication.presentation.signup.SignUpScreen
+import com.example.fitnik.createWorkout.presentation.CreateWorkoutScreen
 import com.example.fitnik.home.presentation.HomeScreen
 import com.example.fitnik.navigation.NavigationGraph.AuthGraph.Login
 import com.example.fitnik.navigation.NavigationGraph.AuthGraph.Onboarding
 import com.example.fitnik.navigation.NavigationGraph.AuthGraph.SignUp
 import com.example.fitnik.navigation.NavigationGraph.AuthGraph.UserProfileSetUp
+import com.example.fitnik.navigation.NavigationGraph.MainGraph.CreateWorkout
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.Home
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph
 import com.example.fitnik.onboarding.presentation.OnboardingScreen
@@ -124,6 +128,23 @@ fun NavigationHost(
                 navHostController.popBackStack()
                 navHostController.navigate(Home)
             }
+        }
+
+        composable<CreateWorkout>(
+            popEnterTransition = {
+                slideInVertically(
+                    initialOffsetY = { it },
+                    animationSpec = tween(300)
+                ) + fadeIn(animationSpec = tween(300))
+            },
+            exitTransition = {
+                slideOutVertically(
+                    targetOffsetY = { it },
+                    animationSpec = tween(300)
+                ) + fadeOut(animationSpec = tween(300))
+            },
+        ) {
+            CreateWorkoutScreen()
         }
     }
 }
