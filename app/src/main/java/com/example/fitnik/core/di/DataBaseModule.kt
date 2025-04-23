@@ -3,7 +3,10 @@ package com.example.fitnik.core.di
 import android.content.Context
 import androidx.room.Room
 import com.example.fitnik.core.data.local.AppDataBase
+import com.example.fitnik.core.data.local.dao.RoutineDao
 import com.example.fitnik.core.data.local.dao.UserDAO
+import com.example.fitnik.core.data.local.dao.WorkoutDao
+import com.example.fitnik.core.data.local.dao.WorkoutLogDao
 import com.example.fitnik.core.data.local.repository.UserRepositoryImpl
 import com.example.fitnik.core.domain.repository.UserRepository
 import dagger.Module
@@ -28,7 +31,19 @@ object DataBaseModule {
     }
 
     @Provides
+    @Singleton
     fun provideUserDAO(db: AppDataBase): UserDAO = db.userDAO()
+
+    @Provides
+    @Singleton
+    fun provideWorkoutDAO(db: AppDataBase): WorkoutDao = db.workoutDAO()
+
+    @Provides
+    @Singleton
+    fun provideRoutineDAO(db: AppDataBase): RoutineDao = db.routineDAO()
+
+    @Provides
+    fun provideWorkoutLogDAO(db: AppDataBase): WorkoutLogDao = db.workoutLogDAO()
 
     @Provides
     @Singleton

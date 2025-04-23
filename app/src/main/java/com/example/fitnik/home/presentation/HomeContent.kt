@@ -43,7 +43,7 @@ fun HomContent(
     ) {
         val state by viewModel.state.collectAsState()
 
-        if (state.workouts.isEmpty()) {
+        if (state.routines.isEmpty()) {
             Column(
                 Modifier
                     .fillMaxSize()
@@ -69,13 +69,13 @@ fun HomContent(
                 )
 
                 // Lista de entrenamientos
-                state.workouts.forEach { workout ->
+                state.routines.forEach { routine ->
                     WorkoutCard(
-                        workout = workout,
-                        onClick = { /* Navegar al detalle del entreno */ },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 8.dp)
+                            .padding(vertical = 8.dp),
+                        routine = routine,
+                        onClick = { /* Navegar al detalle del entreno */ },
                     )
                 }
 

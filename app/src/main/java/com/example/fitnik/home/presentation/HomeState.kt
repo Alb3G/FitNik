@@ -1,11 +1,12 @@
 package com.example.fitnik.home.presentation
 
 import com.example.fitnik.R
-import com.example.fitnik.core.domain.model.Workout
+import com.example.fitnik.core.domain.model.Routine
+import com.example.fitnik.core.domain.model.fakeRoutine
 import com.example.fitnik.home.presentation.model.BottomNavItem
 
 data class HomeState(
-    val workouts: List<Workout> = emptyList(),
+    val routines: List<Routine> = listOf(fakeRoutine),
     val tabsItems: List<BottomNavItem> = listOf(
         BottomNavItem(
             title = "Home",

@@ -2,7 +2,6 @@ package com.example.fitnik.home.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fitnik.core.domain.model.TrainingMockProvider
 import com.example.fitnik.core.domain.usecase.GetUserWorkoutsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,10 +19,6 @@ class HomeViewModel @Inject constructor(
     private val _state = MutableStateFlow(HomeState())
     val state: StateFlow<HomeState> = _state.asStateFlow()
 
-    init {
-        loadUserWorkouts()
-    }
-
     fun updateSelectedIndex(index: Int) {
         viewModelScope.launch {
             _state.update { currentState ->
@@ -32,12 +27,4 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun loadUserWorkouts() {
-        val workout = TrainingMockProvider.getMuscleGainTraining()
-        viewModelScope.launch {
-            _state.update {
-                it.copy(workouts = listOf(workout, workout, workout))
-            }
-        }
-    }
 }

@@ -1,11 +1,9 @@
 package com.example.fitnik.core.domain.model
 
+import java.util.UUID
+
 data class Workout(
-    val id: String = "",
+    val id: String = UUID.randomUUID().toString(),
     val name: String = "",
-    val type: String = "",
-    val userId: String = "",
-    val description: String? = null,
-    val dayOfWeek: String? = null,
-    val sessions: List<Session> = emptyList()
+    val exercises: List<Exercise> = emptyList()
 )
