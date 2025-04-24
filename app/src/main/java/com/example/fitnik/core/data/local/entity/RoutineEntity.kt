@@ -7,7 +7,6 @@ import java.util.UUID
 @Entity(tableName = "routines")
 data class RoutineEntity(
     @PrimaryKey(autoGenerate = false)
-    val id: String = UUID.randomUUID().toString(),
+    val routineId: String = UUID.randomUUID().toString(),
     val name: String,
-//    val workouts: List<Workout>
 )

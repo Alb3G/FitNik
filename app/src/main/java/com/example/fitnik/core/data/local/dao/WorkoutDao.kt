@@ -7,7 +7,8 @@ import com.example.fitnik.core.data.local.entity.WorkoutEntity
 @Dao
 interface WorkoutDao {
 
-    @Query("SELECT * FROM workouts WHERE id = :id")
+
+    @Query("SELECT * FROM workouts WHERE workoutId = :id")
     fun findById(id: String): WorkoutEntity
 
 }

@@ -75,7 +75,8 @@ fun MainTabsScreen(
                 },
             ) {
                 HomContent(
-                    onCreateWorkoutClick = { mainNavController.navigate(CreateWorkout) }
+                    onCreateWorkoutClick = { mainNavController.navigate(CreateWorkout) },
+                    onWorkoutClick = { /* TODO */ }
                 )
             }
 

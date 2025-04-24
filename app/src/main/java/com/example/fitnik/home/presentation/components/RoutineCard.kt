@@ -25,7 +25,7 @@ import com.example.fitnik.ui.theme.primary
 import com.example.fitnik.ui.theme.white
 
 @Composable
-fun WorkoutCard(
+fun RoutineCard(
     routine: Routine,
     onClick: () -> Unit,
     modifier: Modifier = Modifier

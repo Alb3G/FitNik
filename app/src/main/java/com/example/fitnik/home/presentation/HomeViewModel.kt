@@ -2,22 +2,31 @@ package com.example.fitnik.home.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fitnik.core.domain.usecase.GetUserWorkoutsUseCase
+import com.example.fitnik.home.domain.usecase.GetRoutineUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getUserWorkoutsUseCase: GetUserWorkoutsUseCase
+    private val getRoutineUseCase: GetRoutineUseCase
 ): ViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
     val state: StateFlow<HomeState> = _state.asStateFlow()
+
+    init {
+       viewModelScope.launch {
+           getRoutineUseCase().collectLatest {
+               _state.value = _state.value.copy(routines = it)
+           }
+       }
+    }
 
     fun updateSelectedIndex(index: Int) {
         viewModelScope.launch {

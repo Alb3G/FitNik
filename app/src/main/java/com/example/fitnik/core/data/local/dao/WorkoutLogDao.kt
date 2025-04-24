@@ -10,7 +10,7 @@ import com.example.fitnik.core.data.local.entity.WorkoutLogEntity
 @Dao
 interface WorkoutLogDao {
 
-    @Query("SELECT * FROM workoutlogentity WHERE id = :id")
+    @Query("SELECT * FROM workoutlogentity WHERE workoutLogId = :id")
     fun findById(id: String): WorkoutLogEntity
 
     @Insert(onConflict = REPLACE)
