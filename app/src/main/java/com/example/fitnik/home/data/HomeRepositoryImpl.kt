@@ -16,11 +16,35 @@ class HomeRepositoryImpl : HomeRepository {
         workouts = listOf(
             Workout(
                 id = UUID.randomUUID().toString(),
-                name = "3x workout",
+                name = "Chest workout",
                 exercises = listOf(
                     Exercise(
                         id = UUID.randomUUID().toString(),
                         name = "Bench Press",
+                        sets = listOf(
+                            WorkoutSet(
+                                weight = 40.0,
+                                reps = 5
+                            ),
+                            WorkoutSet(
+                                weight = 20.0,
+                                reps = 8
+                            ),
+                            WorkoutSet(
+                                weight = 15.0,
+                                reps = 12
+                            )
+                        )
+                    )
+                )
+            ),
+            Workout(
+                id = UUID.randomUUID().toString(),
+                name = "Legs Workout",
+                exercises = listOf(
+                    Exercise(
+                        id = UUID.randomUUID().toString(),
+                        name = "Squat",
                         sets = listOf(
                             WorkoutSet(
                                 weight = 40.0,

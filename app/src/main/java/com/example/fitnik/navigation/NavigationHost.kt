@@ -15,7 +15,7 @@ import androidx.navigation.compose.composable
 import com.example.fitnik.authentication.presentation.login.LoginScreen
 import com.example.fitnik.authentication.presentation.setUpAccInfo.UserProfileSetUpScreen
 import com.example.fitnik.authentication.presentation.signup.SignUpScreen
-import com.example.fitnik.createWorkout.presentation.CreateWorkoutScreen
+import com.example.fitnik.createRoutine.presentation.CreateRoutineScreen
 import com.example.fitnik.home.presentation.HomeScreen
 import com.example.fitnik.navigation.NavigationGraph.AuthGraph.Login
 import com.example.fitnik.navigation.NavigationGraph.AuthGraph.Onboarding
@@ -144,7 +144,7 @@ fun NavigationHost(
                 ) + fadeOut(animationSpec = tween(300))
             },
         ) {
-            CreateWorkoutScreen()
+            CreateRoutineScreen()
         }
     }
 }

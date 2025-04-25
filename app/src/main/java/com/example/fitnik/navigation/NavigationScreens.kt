@@ -36,6 +36,9 @@ sealed class NavigationGraph {
 
             @Serializable
             object Timer : HomeTabsGraph()
+
+            @Serializable
+            data class RoutineDetail(val id: String) : HomeTabsGraph()
         }
     }
 }

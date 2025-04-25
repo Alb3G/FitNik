@@ -32,7 +32,7 @@ import com.example.fitnik.ui.theme.white
 fun HomContent(
     viewModel: HomeViewModel = hiltViewModel(),
     onCreateWorkoutClick: () -> Unit,
-    onWorkoutClick: (String) -> Unit
+    onRoutineClick: (String) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -59,14 +59,14 @@ fun HomContent(
                     )
                 }
 
-                // Lista de entrenamientos
+                // Lista de rutinas de entrenamientos
                 items(state.routines) { routine ->
                     RoutineCard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 8.dp),
                         routine = routine,
-                        onClick = { onWorkoutClick(routine.id) },
+                        onClick = { onRoutineClick(routine.id) },
                     )
                 }
 

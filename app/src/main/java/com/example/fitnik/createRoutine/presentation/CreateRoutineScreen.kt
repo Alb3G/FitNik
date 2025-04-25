@@ -1,4 +1,4 @@
-package com.example.fitnik.createWorkout.presentation
+package com.example.fitnik.createRoutine.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun CreateWorkoutScreen() {
+fun CreateRoutineScreen() {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,

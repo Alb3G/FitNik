@@ -15,12 +15,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.example.fitnik.routineDetail.presentation.RoutineDetailScreen
 import com.example.fitnik.home.presentation.HomContent
 import com.example.fitnik.home.presentation.HomeViewModel
 import com.example.fitnik.home.presentation.components.NavBar
 import com.example.fitnik.home.presentation.model.BottomNavItem
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.CreateWorkout
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.Home
+import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.RoutineDetail
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.Settings
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.StepsScreen
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.Timer
@@ -76,7 +79,7 @@ fun MainTabsScreen(
             ) {
                 HomContent(
                     onCreateWorkoutClick = { mainNavController.navigate(CreateWorkout) },
-                    onWorkoutClick = { /* TODO */ }
+                    onRoutineClick = { tabsNavController.navigate(RoutineDetail(it)) }
                 )
             }
 
@@ -129,6 +132,24 @@ fun MainTabsScreen(
                 },
             ) {
                 SettingsScreen()
+            }
+
+            composable<RoutineDetail>(
+                popEnterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { -300 },
+                        animationSpec = tween(300)
+                    ) + fadeIn(animationSpec = tween(300))
+                },
+                exitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { -300 },
+                        animationSpec = tween(300)
+                    ) + fadeOut(animationSpec = tween(300))
+                },
+            ) { backStackEntry ->
+                val detail = backStackEntry.toRoute<RoutineDetail>()
+                RoutineDetailScreen(routineId = detail.id)
             }
         }
     }
