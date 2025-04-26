@@ -1,8 +1,15 @@
 package com.example.fitnik.core.domain.mappers
 
+import com.example.fitnik.core.data.local.entity.ExerciseEntity
+import com.example.fitnik.core.data.local.entity.RoutineEntity
 import com.example.fitnik.core.data.local.entity.UserEntity
+import com.example.fitnik.core.data.local.entity.WorkoutEntity
+import com.example.fitnik.core.data.local.entity.WorkoutSetEntity
+import com.example.fitnik.core.domain.model.Exercise
+import com.example.fitnik.core.domain.model.Routine
 import com.example.fitnik.core.domain.model.User
 import com.example.fitnik.core.domain.model.Workout
+import com.example.fitnik.core.domain.model.WorkoutSet
 
 fun User.toEntity(): UserEntity {
     return UserEntity(
@@ -34,5 +41,36 @@ fun UserEntity.toDomain(workouts: List<Workout> = emptyList()): User {
         height = height,
         accIscomplete = accIscomplete,
         workouts = workouts // vacíos, los manejaremos desde otra tabla
+    )
+}
+
+fun WorkoutEntity.toDomain(exercises: List<Exercise> = emptyList()): Workout {
+    return Workout(
+        id = this.workoutId,
+        name = this.name,
+        exercises = exercises
+    )
+}
+
+fun RoutineEntity.toDomain(workouts: List<Workout> = emptyList()): Routine {
+    return Routine(
+        id = this.routineId,
+        name = this.name,
+        workouts = workouts
+    )
+}
+
+fun ExerciseEntity.toDomain(sets: List<WorkoutSet> = emptyList()): Exercise {
+    return Exercise(
+        id = this.exerciseId,
+        name = this.name,
+        sets = sets
+    )
+}
+
+fun WorkoutSetEntity.toDomain(): WorkoutSet {
+    return WorkoutSet(
+        weight = this.weight,
+        reps = this.reps
     )
 }

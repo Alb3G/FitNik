@@ -17,7 +17,8 @@ import com.example.fitnik.R
 
 @Composable
 fun NoWorkoutsComponent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    text: String
 ) {
     Column(
         modifier = modifier,
@@ -30,6 +31,6 @@ fun NoWorkoutsComponent(
             modifier = Modifier.alpha(0.3f)
         )
         Spacer(modifier = Modifier.height(24.dp))
-        Text("No Workouts Available", style = MaterialTheme.typography.headlineSmall)
+        Text(text, style = MaterialTheme.typography.headlineSmall)
     }
 }

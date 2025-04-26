@@ -3,12 +3,16 @@ package com.example.fitnik.core.di
 import android.content.Context
 import androidx.room.Room
 import com.example.fitnik.core.data.local.AppDataBase
+import com.example.fitnik.core.data.local.dao.ExerciseDao
 import com.example.fitnik.core.data.local.dao.RoutineDao
 import com.example.fitnik.core.data.local.dao.UserDAO
 import com.example.fitnik.core.data.local.dao.WorkoutDao
 import com.example.fitnik.core.data.local.dao.WorkoutLogDao
+import com.example.fitnik.core.data.local.dao.WorkoutSetDao
 import com.example.fitnik.core.data.local.repository.UserRepositoryImpl
 import com.example.fitnik.core.domain.repository.UserRepository
+import com.example.fitnik.routineDetail.data.repository.RoutineRepositoryImpl
+import com.example.fitnik.routineDetail.domain.RoutineRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,11 +47,31 @@ object DataBaseModule {
     fun provideRoutineDAO(db: AppDataBase): RoutineDao = db.routineDAO()
 
     @Provides
+    @Singleton
     fun provideWorkoutLogDAO(db: AppDataBase): WorkoutLogDao = db.workoutLogDAO()
+
+    @Provides
+    @Singleton
+    fun provideWorkoutSetDAO(db: AppDataBase): WorkoutSetDao = db.workoutSetDAO()
+
+    @Provides
+    @Singleton
+    fun provideExerciseDAO(db: AppDataBase): ExerciseDao = db.exerciseDAO()
 
     @Provides
     @Singleton
     fun provideUserRepository(userDAO: UserDAO): UserRepository {
         return UserRepositoryImpl(userDAO)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRoutineRepository(
+        routineDao: RoutineDao,
+        workoutDao: WorkoutDao,
+        exerciseDao: ExerciseDao,
+        workoutSetDao: WorkoutSetDao
+    ): RoutineRepository {
+        return RoutineRepositoryImpl(routineDao,workoutDao,exerciseDao,workoutSetDao)
     }
 }

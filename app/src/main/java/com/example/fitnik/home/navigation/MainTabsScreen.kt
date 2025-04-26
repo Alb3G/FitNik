@@ -16,7 +16,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.example.fitnik.routineDetail.presentation.RoutineDetailScreen
 import com.example.fitnik.home.presentation.HomContent
 import com.example.fitnik.home.presentation.HomeViewModel
 import com.example.fitnik.home.presentation.components.NavBar
@@ -28,6 +27,7 @@ import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.Set
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.StepsScreen
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.Timer
 import com.example.fitnik.navigation.tabsNav
+import com.example.fitnik.routineDetail.presentation.RoutineDetailScreen
 import com.example.fitnik.settings.SettingsScreen
 import com.example.fitnik.steps.StepsScreen
 import com.example.fitnik.timer.TimerScreen
@@ -78,7 +78,7 @@ fun MainTabsScreen(
                 },
             ) {
                 HomContent(
-                    onCreateWorkoutClick = { mainNavController.navigate(CreateWorkout) },
+                    onCreateRoutineClick = { mainNavController.navigate(CreateWorkout) },
                     onRoutineClick = { tabsNavController.navigate(RoutineDetail(it)) }
                 )
             }

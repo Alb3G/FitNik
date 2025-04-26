@@ -31,7 +31,7 @@ import com.example.fitnik.ui.theme.white
 @Composable
 fun HomContent(
     viewModel: HomeViewModel = hiltViewModel(),
-    onCreateWorkoutClick: () -> Unit,
+    onCreateRoutineClick: () -> Unit,
     onRoutineClick: (String) -> Unit
 ) {
     Box(
@@ -46,14 +46,15 @@ fun HomContent(
             NoWorkoutsComponent(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 24.dp)
+                    .padding(horizontal = 24.dp),
+                text = "No Routines Available"
             )
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
                 item { Spacer(modifier = Modifier.height(24.dp)) }
                 item {
                     Text(
-                        "Your Workouts",
+                        "Your Routines",
                         style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
@@ -77,7 +78,7 @@ fun HomContent(
 
         // Botón flotante para crear un nuevo entreno
         FloatingActionButton(
-            onClick = onCreateWorkoutClick,
+            onClick = onCreateRoutineClick,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),
@@ -85,7 +86,7 @@ fun HomContent(
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
-                contentDescription = "Create Workout",
+                contentDescription = "Create Routine",
                 tint = white
             )
         }

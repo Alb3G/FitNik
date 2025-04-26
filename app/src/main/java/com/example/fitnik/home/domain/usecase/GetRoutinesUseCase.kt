@@ -4,7 +4,7 @@ import com.example.fitnik.core.domain.model.Routine
 import com.example.fitnik.home.domain.repository.HomeRepository
 import kotlinx.coroutines.flow.Flow
 
-class GetRoutineUseCase(
+class GetRoutinesUseCase(
     private val homeRepository: HomeRepository
 ) {
 

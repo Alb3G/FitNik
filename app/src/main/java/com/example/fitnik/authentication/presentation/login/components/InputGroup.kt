@@ -51,7 +51,9 @@ fun InputGroup(
         textFieldConfig = emailConfig,
         errorMessage = state.emailError
     ) { viewModel.onEvent(LoginEvent.EmailChange(it)) }
+
     Spacer(modifier = Modifier.height(8.dp))
+
     AuthTextField(
         modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 64.dp),
         tfValue = state.password,

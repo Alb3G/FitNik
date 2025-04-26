@@ -2,7 +2,7 @@ package com.example.fitnik.home.di
 
 import com.example.fitnik.home.data.HomeRepositoryImpl
 import com.example.fitnik.home.domain.repository.HomeRepository
-import com.example.fitnik.home.domain.usecase.GetRoutineUseCase
+import com.example.fitnik.home.domain.usecase.GetRoutinesUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,6 +22,6 @@ object HomeModule {
     @Provides
     @Singleton
     fun provideGetRoutineUseCase(homeRepository: HomeRepository) =
-        GetRoutineUseCase(homeRepository)
+        GetRoutinesUseCase(homeRepository)
 
 }

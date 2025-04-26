@@ -20,5 +20,4 @@ sealed interface SignUpEvent {
 
     object SignUp: SignUpEvent
 
-//    object GoogleSignUp: SignUpEvent
 }
