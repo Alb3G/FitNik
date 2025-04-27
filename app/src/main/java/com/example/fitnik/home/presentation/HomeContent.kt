@@ -1,5 +1,10 @@
 package com.example.fitnik.home.presentation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -42,14 +48,12 @@ fun HomContent(
     ) {
         val state by viewModel.state.collectAsState()
 
-        if (state.routines.isEmpty()) {
-            NoWorkoutsComponent(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 24.dp),
-                text = "No Routines Available"
-            )
-        } else {
+        // Contenido principal - siempre presente
+        AnimatedVisibility(
+            visible = !state.isLoading && state.routines.isNotEmpty(),
+            enter = fadeIn() + expandVertically(),
+            exit = fadeOut() + shrinkVertically()
+        ) {
             LazyColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
                 item { Spacer(modifier = Modifier.height(24.dp)) }
                 item {
@@ -60,7 +64,6 @@ fun HomContent(
                     )
                 }
 
-                // Lista de rutinas de entrenamientos
                 items(state.routines) { routine ->
                     RoutineCard(
                         modifier = Modifier
@@ -71,12 +74,36 @@ fun HomContent(
                     )
                 }
 
-                // Espacio extra al final para que el FAB no tape el último elemento
                 item { Spacer(modifier = Modifier.height(80.dp)) }
             }
         }
 
-        // Botón flotante para crear un nuevo entreno
+        // Mensaje de no rutinas - animado
+        AnimatedVisibility(
+            visible = !state.isLoading && state.routines.isEmpty(),
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            NoWorkoutsComponent(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 24.dp),
+                text = "No Routines Available"
+            )
+        }
+
+        // Indicador de carga - animado
+        AnimatedVisibility(
+            visible = state.isLoading,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
+
+        // FAB - siempre presente
         FloatingActionButton(
             onClick = onCreateRoutineClick,
             modifier = Modifier

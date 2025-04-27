@@ -51,7 +51,8 @@ import com.example.fitnik.ui.theme.primary2
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateRoutineScreen(
-    viewModel: CreateRoutineViewModel = hiltViewModel()
+    viewModel: CreateRoutineViewModel = hiltViewModel(),
+    onFinish: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     val focusManager = LocalFocusManager.current
@@ -127,6 +128,7 @@ fun CreateRoutineScreen(
             Button(
                 onClick = {
                     viewModel.onEvent(CreateRoutineEvent.SaveRoutine)
+                    onFinish()
                 },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)

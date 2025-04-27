@@ -144,7 +144,12 @@ fun NavigationHost(
                 ) + fadeOut(animationSpec = tween(300))
             },
         ) {
-            CreateRoutineScreen()
+            CreateRoutineScreen(
+                onFinish = {
+                    navHostController.popBackStack()
+                    navHostController.navigate(Home)
+                }
+            )
         }
     }
 }

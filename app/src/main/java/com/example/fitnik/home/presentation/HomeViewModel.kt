@@ -21,11 +21,25 @@ class HomeViewModel @Inject constructor(
     val state: StateFlow<HomeState> = _state.asStateFlow()
 
     init {
-       viewModelScope.launch {
-           getRoutinesUseCase().collectLatest {
-               _state.value = _state.value.copy(routines = it)
-           }
-       }
+        loadRoutines()
+    }
+
+    private fun loadRoutines() {
+        viewModelScope.launch {
+            // Primero establecemos el estado de carga
+            _state.update { it.copy(isLoading = true) }
+
+            // Luego recogemos los datos
+            getRoutinesUseCase().collectLatest { routines ->
+                // Actualizamos el estado con los datos y desactivamos la carga en una sola operación
+                _state.update { currentState ->
+                    currentState.copy(
+                        routines = routines,
+                        isLoading = false
+                    )
+                }
+            }
+        }
     }
 
     fun updateSelectedIndex(index: Int) {
@@ -33,6 +47,12 @@ class HomeViewModel @Inject constructor(
             _state.update { currentState ->
                 currentState.copy(selectedItemIndex = index)
             }
+        }
+    }
+
+    fun toggleLoading() {
+        _state.update {
+            it.copy(isLoading = !it.isLoading)
         }
     }
 

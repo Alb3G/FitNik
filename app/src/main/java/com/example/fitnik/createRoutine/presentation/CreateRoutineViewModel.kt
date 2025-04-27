@@ -8,6 +8,7 @@ import com.example.fitnik.core.domain.model.Workout
 import com.example.fitnik.core.domain.model.WorkoutSet
 import com.example.fitnik.routineDetail.data.repository.RoutineRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -102,7 +103,11 @@ class CreateRoutineViewModel @Inject constructor(
                 }
             }
             is CreateRoutineEvent.SaveRoutine -> {
-                saveRoutine()
+                if (
+                    _state.value.routineName.isNotBlank() && _state.value.workouts.isNotEmpty()
+                ) {
+                    saveRoutine()
+                }
             }
         }
     }
@@ -141,6 +146,7 @@ class CreateRoutineViewModel @Inject constructor(
                 }
             )
             repository.createRoutine(routine)
+            delay(100)
         }
     }
 
