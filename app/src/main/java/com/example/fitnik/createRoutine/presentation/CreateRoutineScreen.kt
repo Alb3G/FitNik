@@ -96,9 +96,14 @@ fun CreateRoutineScreen(
 
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    Button(onClick = {
-                        viewModel.onEvent(CreateRoutineEvent.AddWorkout)
-                    }) {
+                    Button(
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = primary
+                        ),
+                        onClick = {
+                            viewModel.onEvent(CreateRoutineEvent.AddWorkout)
+                        }
+                    ) {
                         Text("Crear Workout")
                     }
                 }
@@ -126,17 +131,17 @@ fun CreateRoutineScreen(
 
             // Save Routine Button (fijo abajo)
             Button(
-                onClick = {
-                    viewModel.onEvent(CreateRoutineEvent.SaveRoutine)
-                    onFinish()
-                },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
                     .padding(16.dp),
+                onClick = {
+                    viewModel.onEvent(CreateRoutineEvent.SaveRoutine)
+                    onFinish()
+                },
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
+                    containerColor = primary
                 )
             ) {
                 Text(
@@ -242,6 +247,9 @@ fun WorkoutItem(
                             exerciseSets = ""
                         }
                     },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = primary
+                    )
                 ) {
                     Text("Añadir Ejercicio")
                 }

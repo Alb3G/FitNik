@@ -1,4 +1,4 @@
-package com.example.fitnik.routineDetail
+package com.example.fitnik.routineDetail.presentation
 
 import com.example.fitnik.core.domain.model.Workout
 

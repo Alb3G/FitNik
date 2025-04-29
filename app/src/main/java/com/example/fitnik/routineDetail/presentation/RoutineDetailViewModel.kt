@@ -1,4 +1,4 @@
-package com.example.fitnik.routineDetail
+package com.example.fitnik.routineDetail.presentation
 
 import androidx.lifecycle.ViewModel
 import com.example.fitnik.home.domain.usecase.GetRoutinesUseCase

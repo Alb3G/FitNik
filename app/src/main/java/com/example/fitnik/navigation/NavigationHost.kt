@@ -4,9 +4,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -132,14 +130,14 @@ fun NavigationHost(
 
         composable<CreateWorkout>(
             popEnterTransition = {
-                slideInVertically(
-                    initialOffsetY = { it },
+                slideInHorizontally(
+                    initialOffsetX = { 300 },
                     animationSpec = tween(300)
                 ) + fadeIn(animationSpec = tween(300))
             },
             exitTransition = {
-                slideOutVertically(
-                    targetOffsetY = { it },
+                slideOutHorizontally(
+                    targetOffsetX = { -300 },
                     animationSpec = tween(300)
                 ) + fadeOut(animationSpec = tween(300))
             },

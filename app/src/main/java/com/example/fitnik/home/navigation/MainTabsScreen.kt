@@ -30,7 +30,7 @@ import com.example.fitnik.navigation.tabsNav
 import com.example.fitnik.routineDetail.presentation.RoutineDetailScreen
 import com.example.fitnik.settings.SettingsScreen
 import com.example.fitnik.steps.StepsScreen
-import com.example.fitnik.timer.TimerScreen
+import com.example.fitnik.timer.presentation.TimerScreen
 
 @Composable
 fun MainTabsScreen(
