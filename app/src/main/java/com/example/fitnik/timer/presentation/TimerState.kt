@@ -1,7 +1,7 @@
 package com.example.fitnik.timer.presentation
 
 data class TimerState(
-    val time: String = "00:00:00",
+    var time: Long = 0L,
     val startButtonText: String = "Start",
     val resetLapButtonText: String = "Lap",
     val isRunning: Boolean = false
