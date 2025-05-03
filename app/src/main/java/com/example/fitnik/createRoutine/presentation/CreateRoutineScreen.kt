@@ -207,7 +207,6 @@ fun WorkoutItem(
                         value = exerciseName,
                         onValueChange = {
                             exerciseName = it
-                            // Ya no actualizar directamente el ViewModel
                         },
                         label = { Text("Exercise") },
                         singleLine = true,
@@ -221,7 +220,6 @@ fun WorkoutItem(
                         value = exerciseSets,
                         onValueChange = {
                             exerciseSets = it
-                            // Ya no actualizar directamente el ViewModel
                         },
                         label = { Text("Sets") },
                         singleLine = true,

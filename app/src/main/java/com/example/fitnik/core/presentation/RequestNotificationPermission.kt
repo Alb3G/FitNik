@@ -1,6 +1,7 @@
-package com.example.fitnik.authentication.presentation.signup.components
+package com.example.fitnik.core.presentation
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -11,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 
 @Composable
+@SuppressLint("ObsoleteSdkInt")
 fun RequestNotificationPermission(onGranted: () -> Unit) {
   val context = LocalContext.current
 
@@ -23,7 +25,6 @@ fun RequestNotificationPermission(onGranted: () -> Unit) {
 
   // Necesitamos que el usuario acepte el permiso de poner mandarle notificaciones,
   // sino nuestro servicio no va a funcionar correctamente.
-
   LaunchedEffect(Unit) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       when {

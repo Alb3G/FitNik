@@ -10,7 +10,6 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import com.example.fitnik.R
 import com.example.fitnik.timer.presentation.TimerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -50,6 +49,7 @@ class TimerService : Service() {
             ACTION_PAUSE -> pauseTimer()
             ACTION_RESET -> resetTimer()
             ACTION_STOP_SERVICE -> stopSelf()
+            ACTION_LAP -> addLap()
         }
         return START_STICKY
     }
@@ -68,16 +68,26 @@ class TimerService : Service() {
         startForeground(NOTIFICATION_ID, createNotification())
 
         timerJob?.cancel()
+
         timerJob = serviceScope.launch {
             val startTime = System.currentTimeMillis() - _timerState.value.time * 10
+
+            var nextUpdate = startTime + 1_000L  // primer “tick” en +1 s
+
             while (true) {
-                val currentTime = System.currentTimeMillis()
-                val elapsedTime = currentTime - startTime
-                _timerState.update {
-                    it.copy(time = elapsedTime / 10) // Asi lo convertimos a centiseconds
+                val now = System.currentTimeMillis()
+                val elapsed = now - startTime
+
+                // actualiza estado cada 10 ms
+                _timerState.update { it.copy(time = elapsed / 10) }
+
+                // cuando superemos nextUpdate, refrescamos la notificación
+                if (now >= nextUpdate) {
+                    updateNotification()
+                    nextUpdate += 1_000L
                 }
-                updateNotification()
-                delay(10) // Actualizamos cada 10ms
+
+                delay(10)
             }
         }
     }
@@ -102,8 +112,21 @@ class TimerService : Service() {
         timerJob?.cancel()
 
         _timerState.update {
-            it.copy(time = 0L)
+            it.copy(time = 0L, times = mutableListOf())
         }
+
+        updateNotification()
+    }
+
+    private fun addLap() {
+        if (!_timerState.value.isRunning) return
+
+        val currentTime = _timerState.value.time
+        // Tenemos que sumar todos los tiempos que se hayan hecho para no empezar con la primera vuelta a 0
+        // de esta forma los tiempos se calculan correctamente correctamente.
+        val lastLapTime = _timerState.value.times.sum()
+
+        _timerState.value.times.add(currentTime - lastLapTime)
 
         updateNotification()
     }
@@ -132,11 +155,14 @@ class TimerService : Service() {
         }
 
         val pendingIntent = PendingIntent.getService(
-            this, 1, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            this,
+            System.currentTimeMillis().toInt(),
+            actionIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         return NotificationCompat.Action.Builder(
-            R.drawable.play_svgrepo_com,
+            0,
             actionText,
             pendingIntent
         ).build()
@@ -144,18 +170,20 @@ class TimerService : Service() {
 
     private fun createResetAction(): NotificationCompat.Action? {
         val actionText = if (_timerState.value.isRunning) "Lap" else "Reset"
+
         val actionIntent = Intent(this, TimerService::class.java).apply {
-            action = ACTION_RESET
+            action = if (_timerState.value.isRunning) ACTION_LAP else ACTION_RESET
         }
+
         val pendingIntent = PendingIntent.getService(
             this,
-            2,
+            System.currentTimeMillis().toInt(),
             actionIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         return NotificationCompat.Action.Builder(
-            R.drawable.reset_timer, // Add this icon to your drawable resources
+            0,
             actionText,
             pendingIntent
         ).build()
@@ -167,7 +195,7 @@ class TimerService : Service() {
         val seconds = (time / 100) % 60
         val minutes = (time / 6000) % 60
 
-        return String.format("%02d:%02d:02d", minutes, seconds, centiSeconds)
+        return String.format("%02d:%02d:%02d", minutes, seconds, centiSeconds)
     }
 
     @SuppressLint("ObsoleteSdkInt")
@@ -204,5 +232,6 @@ class TimerService : Service() {
         const val ACTION_PAUSE = "com.example.fitnik.timer.action.PAUSE"
         const val ACTION_RESET = "com.example.fitnik.timer.action.RESET"
         const val ACTION_STOP_SERVICE = "com.example.fitnik.timer.action.STOP_SERVICE"
+        const val ACTION_LAP = "com.example.fitnik.timer.action.LAP"
     }
 }

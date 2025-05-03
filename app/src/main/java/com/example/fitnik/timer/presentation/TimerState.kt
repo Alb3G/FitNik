@@ -4,5 +4,6 @@ data class TimerState(
     var time: Long = 0L,
     val startButtonText: String = "Start",
     val resetLapButtonText: String = "Lap",
-    val isRunning: Boolean = false
+    val isRunning: Boolean = false,
+    val times: MutableList<Long> = mutableListOf()
 )

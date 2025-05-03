@@ -89,6 +89,25 @@ class TimerViewModel @Inject constructor(
             intent.action = TimerService.ACTION_RESET
             ContextCompat.startForegroundService(context, intent)
         }
+
+        viewModelScope.launch {
+            _state.value.times.clear()
+        }
+    }
+
+    fun onLapClick() {
+        Intent(context, TimerService::class.java).also { intent ->
+            intent.action = TimerService.ACTION_LAP
+            ContextCompat.startForegroundService(context, intent)
+        }
+    }
+
+    fun biggestTime(time: Long): Boolean {
+        return time == _state.value.times.maxOrNull()
+    }
+
+    fun lowestTime(time: Long): Boolean {
+        return time == _state.value.times.minOrNull()
     }
 
     override fun onCleared() {
