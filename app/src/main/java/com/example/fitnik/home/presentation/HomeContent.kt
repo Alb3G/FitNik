@@ -1,5 +1,6 @@
 package com.example.fitnik.home.presentation
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -70,7 +71,10 @@ fun HomContent(
                             .fillMaxWidth()
                             .padding(vertical = 8.dp),
                         routine = routine,
-                        onClick = { onRoutineClick(routine.id) },
+                        onClick = {
+                            onRoutineClick(routine.id)
+                            Log.d("RoutineCard", "Routine clicked with ID: ${routine.id}")
+                        },
                     )
                 }
 

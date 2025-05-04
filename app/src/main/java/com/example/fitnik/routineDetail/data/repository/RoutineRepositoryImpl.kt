@@ -17,11 +17,11 @@ import com.example.fitnik.routineDetail.domain.RoutineRepository
 import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Singleton
@@ -36,15 +36,29 @@ class RoutineRepositoryImpl @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getAllRoutineWorkouts(routineId: String): Flow<List<Workout>> {
-        return workoutDao.getAllWorkouts(routineId).map { workoutEntities ->
-            coroutineScope {
-                workoutEntities.map { workoutEntity ->
-                    async {
-                        val exercises = getExercisesForWorkout(workoutEntity.workoutId)
-                        workoutEntity.toDomain(exercises)
-                    }
-                }.awaitAll()
+        return workoutDao.getAllWorkouts(routineId).flatMapLatest { workoutEntities ->
+            if (workoutEntities.isEmpty()) {
+                return@flatMapLatest flow { emit(emptyList<Workout>()) }
             }
+
+            val workoutFlows = workoutEntities.map { workoutEntity ->
+                exerciseDao.getExercisesByWorkoutId(workoutEntity.workoutId).map { exerciseEntities ->
+
+                    val exercises = exerciseEntities.map { exerciseEntity ->
+                        val sets = workoutSetDao.getSetsByExerciseId(exerciseEntity.exerciseId).first()
+
+                        exerciseEntity.toDomain(sets.map { it.toDomain() })
+                    }
+
+                    workoutEntity.toDomain(exercises)
+                }
+            }
+
+            if (workoutFlows.isEmpty()) {
+                return@flatMapLatest flow { emit(emptyList<Workout>()) }
+            }
+
+            combine(workoutFlows) { workouts -> workouts.toList() }
         }
     }
 
@@ -54,7 +68,9 @@ class RoutineRepositoryImpl @Inject constructor(
             name = routine.name
         )
 
-        val routineId = routineDao.save(routineEntity).toString()
+        val routineId = routine.id
+
+        routineDao.save(routineEntity)
 
         routine.workouts.forEach { workout ->
             createWorkout(workout, routineId)
@@ -73,7 +89,9 @@ class RoutineRepositoryImpl @Inject constructor(
             routineId = routineId
         )
 
-        val workoutId = workoutDao.save(workoutEntity).toString()
+        val workoutId = workout.id
+
+        workoutDao.save(workoutEntity)
 
         workout.exercises.forEach { exercise ->
             createExercise(exercise, workoutId)
@@ -92,7 +110,8 @@ class RoutineRepositoryImpl @Inject constructor(
             workoutId = workoutId
         )
 
-        val exerciseId = exerciseDao.save(exerciseEntity).toString()
+        val exerciseId = exercise.id
+        exerciseDao.save(exerciseEntity)
 
         exercise.sets.forEach { set ->
             createSet(set, exerciseId)
@@ -111,21 +130,8 @@ class RoutineRepositoryImpl @Inject constructor(
             exerciseId = exerciseId
         )
 
-        workoutSetDao.save(setEntity)
-    }
+        val setId = workoutSetDao.save(setEntity)
 
-    private suspend fun getExercisesForWorkout(workoutId: String): List<Exercise> {
-        return exerciseDao.getExercisesByWorkoutId(workoutId)
-            .first() // Convierte Flow a una lista una sola vez
-            .map { exerciseEntity ->
-                val sets = getSetsForExercise(exerciseEntity.exerciseId)
-                exerciseEntity.toDomain(sets)
-            }
-    }
-
-    private suspend fun getSetsForExercise(exerciseId: String): List<WorkoutSet> {
-        return workoutSetDao.getSetsByExerciseId(exerciseId)
-            .first()
-            .map { it.toDomain() }
+        setId
     }
 }

@@ -18,7 +18,7 @@ interface WorkoutDao {
     fun getAllWorkouts(routineId: String): Flow<List<WorkoutEntity>>
 
     @Insert(onConflict = REPLACE)
-    fun save(workoutEntity: WorkoutEntity): Long
+    fun save(workoutEntity: WorkoutEntity)
 
     @Delete
     fun delete(workoutEntity: WorkoutEntity)

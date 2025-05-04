@@ -135,7 +135,6 @@ class CreateRoutineViewModel @Inject constructor(
                                 name = exerciseItem.name,
                                 sets = List(exerciseItem.sets.size) {
                                     WorkoutSet(
-                                        id = UUID.randomUUID().toString(),
                                         weight = 0.0,
                                         reps = 0
                                     )
