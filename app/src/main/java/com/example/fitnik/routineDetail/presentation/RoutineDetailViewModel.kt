@@ -1,6 +1,5 @@
 package com.example.fitnik.routineDetail.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitnik.home.domain.usecase.GetRoutinesUseCase
@@ -45,12 +44,35 @@ class RoutineDetailViewModel @Inject constructor(
                         }
                     }
             } catch (e: Exception) {
-                Log.e("RoutineViewModel", "Unhandled exception", e)
                 _state.update { it.copy(
                     isLoading = false,
                     error = e.message ?: "Unknown error occurred"
                 )}
             }
+        }
+    }
+
+    fun updateWorkoutSet(
+        workoutId: String,
+        exerciseId: String,
+        setIndex: Int,
+        weight: Float?,
+        reps: Int?
+    ) {
+
+    }
+
+    fun toggleWorkoutIsExpanded(workoutId: String) {
+        val updatedWorkouts = _state.value.workouts.map { workout ->
+            if (workoutId === workout.id) {
+                workout.copy(isExpanded = !workout.isExpanded)
+            } else {
+                workout
+            }
+        }
+
+        _state.update {
+            it.copy(workouts = updatedWorkouts)
         }
     }
 }
