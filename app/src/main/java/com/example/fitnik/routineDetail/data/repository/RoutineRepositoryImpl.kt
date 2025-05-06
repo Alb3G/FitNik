@@ -9,6 +9,7 @@ import com.example.fitnik.core.data.local.entity.RoutineEntity
 import com.example.fitnik.core.data.local.entity.WorkoutEntity
 import com.example.fitnik.core.data.local.entity.WorkoutSetEntity
 import com.example.fitnik.core.domain.mappers.toDomain
+import com.example.fitnik.core.domain.mappers.toEntity
 import com.example.fitnik.core.domain.model.Exercise
 import com.example.fitnik.core.domain.model.Routine
 import com.example.fitnik.core.domain.model.Workout
@@ -133,5 +134,15 @@ class RoutineRepositoryImpl @Inject constructor(
         val setId = workoutSetDao.save(setEntity)
 
         setId
+    }
+
+    override suspend fun updateSetsForExercise(
+        exerciseId: String,
+        sets: List<WorkoutSet>
+    ) {
+        val workoutSetEntities = sets.map {
+            it.toEntity(exerciseId)
+        }
+        workoutSetDao.updateSetsForExercise(exerciseId, workoutSetEntities)
     }
 }

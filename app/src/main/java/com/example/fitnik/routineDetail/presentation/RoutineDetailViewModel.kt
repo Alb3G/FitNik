@@ -2,6 +2,7 @@ package com.example.fitnik.routineDetail.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.fitnik.core.domain.model.WorkoutSet
 import com.example.fitnik.home.domain.usecase.GetRoutinesUseCase
 import com.example.fitnik.routineDetail.domain.RoutineRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -56,23 +57,55 @@ class RoutineDetailViewModel @Inject constructor(
         workoutId: String,
         exerciseId: String,
         setIndex: Int,
-        weight: Float?,
+        weight: Double?,
         reps: Int?
     ) {
-
+        _state.update { current ->
+            current.copy(
+                workouts = current.workouts.map { workout ->
+                    if (workout.id == workoutId) {
+                        workout.copy(
+                            exercises = workout.exercises.map { exercise ->
+                                if (exercise.id == exerciseId) {
+                                    exercise.copy(
+                                        sets = exercise.sets.mapIndexed { idx, set ->
+                                            if (idx == setIndex) set.copy(weight = weight, reps = reps)
+                                            else set
+                                        }
+                                    )
+                                } else exercise
+                            }
+                        )
+                    } else workout
+                }
+            )
+        }
     }
 
-    fun toggleWorkoutIsExpanded(workoutId: String) {
-        val updatedWorkouts = _state.value.workouts.map { workout ->
-            if (workoutId === workout.id) {
-                workout.copy(isExpanded = !workout.isExpanded)
-            } else {
-                workout
+    fun updateWorkoutSets(
+        exerciseId: String,
+        updatedSets: List<WorkoutSet>
+    ) {
+        viewModelScope.launch {
+            try {
+                routineRepository.updateSetsForExercise(exerciseId, updatedSets)
+            } catch (e: Exception) {
+                _state.update { it.copy(error = e.message ?: "Failed to update sets") }
             }
         }
+    }
 
-        _state.update {
-            it.copy(workouts = updatedWorkouts)
+
+    fun toggleWorkoutIsExpanded(workoutId: String) {
+        _state.update { currentState ->
+            val updatedWorkouts = currentState.workouts.map { workout ->
+                if (workout.id == workoutId) {
+                    workout.copy(isExpanded = !workout.isExpanded)
+                } else {
+                    workout
+                }
+            }
+            currentState.copy(workouts = updatedWorkouts)
         }
     }
 }

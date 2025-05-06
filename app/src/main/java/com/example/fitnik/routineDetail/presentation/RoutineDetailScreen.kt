@@ -2,8 +2,11 @@ package com.example.fitnik.routineDetail.presentation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,12 +23,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,11 +37,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -46,6 +53,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.fitnik.core.domain.model.Exercise
 import com.example.fitnik.core.domain.model.Workout
 import com.example.fitnik.core.domain.model.WorkoutSet
+import com.example.fitnik.ui.theme.primary
 import com.example.fitnik.ui.theme.smokeWhite
 
 @Composable
@@ -58,8 +66,6 @@ fun RoutineDetailScreen(
     }
 
     val state by viewModel.state.collectAsState()
-
-    // No necesitamos un mapa adicional ya que Workout tiene la propiedad isExpanded
 
     Box(
         modifier = Modifier
@@ -130,7 +136,10 @@ fun RoutineDetailScreen(
                                 viewModel.toggleWorkoutIsExpanded(workout.id)
                             },
                             onSetValueChange = { exerciseId, setIndex, weight, reps ->
-                                viewModel.updateWorkoutSet(workout.id, exerciseId, setIndex, weight, reps)
+                                viewModel.updateWorkoutSet(workout.id, exerciseId,setIndex, weight ,reps)
+                            },
+                            onSaveExerciseProgress = { exerciseId, sets ->
+                                viewModel.updateWorkoutSets(exerciseId, sets)
                             }
                         )
                     }
@@ -147,32 +156,34 @@ fun RoutineDetailScreen(
 @Composable
 fun ExpandableWorkoutBox(
     workout: Workout,
-    isExpanded: Boolean = false,
+    isExpanded: Boolean,
     onExpandToggle: () -> Unit,
-    onSetValueChange: (exerciseId: String, setIndex: Int, weight: Float?, reps: Int?) -> Unit
+    onSetValueChange: (exerciseId: String, setIndex: Int, weight: Double?, reps: Int?) -> Unit,
+    onSaveExerciseProgress: (exerciseId: String, workoutSets: List<WorkoutSet>) -> Unit
 ) {
     val rotationState by animateFloatAsState(
         targetValue = if (isExpanded) 180f else 0f,
         label = "rotation"
     )
 
-    Surface(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp)),
-        color = MaterialTheme.colorScheme.surface,
-        shadowElevation = 2.dp
+            .graphicsLayer()
+            .clip(RoundedCornerShape(8.dp))
+            .background(primary.copy(alpha = 0.3f))
+            .border(BorderStroke(width = 2.dp, color = primary.copy(alpha = 0.5f)))
+            .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp)
-        ) {
-            // Cabecera del workout (siempre visible)
+        Column {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onExpandToggle() }
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() },
+                        onClick = { onExpandToggle() }
+                    )
                     .padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -190,7 +201,6 @@ fun ExpandableWorkoutBox(
                 )
             }
 
-            // Contenido expandible
             AnimatedVisibility(visible = isExpanded) {
                 Column(
                     modifier = Modifier
@@ -207,6 +217,21 @@ fun ExpandableWorkoutBox(
                                 onSetValueChange(exercise.id, setIndex, weight, reps)
                             }
                         )
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            onClick = { onSaveExerciseProgress(exercise.id, exercise.sets) },
+                            shape = RoundedCornerShape(8.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = primary
+                            )
+                        ) {
+                            Text(
+                                text = "Save Progress",
+                                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                            )
+                        }
                     }
                 }
             }
@@ -217,7 +242,7 @@ fun ExpandableWorkoutBox(
 @Composable
 fun ExerciseItem(
     exercise: Exercise,
-    onSetValueChange: (setIndex: Int, weight: Float?, reps: Int?) -> Unit
+    onSetValueChange: (setIndex: Int, weight: Double?, reps: Int?) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -249,15 +274,11 @@ fun ExerciseItem(
 fun EditableSetItem(
     setNumber: Int,
     set: WorkoutSet,
-    onValueChange: (weight: Float?, reps: Int?) -> Unit
+    onValueChange: (weight: Double?, reps: Int?) -> Unit
 ) {
-    var weightText by remember { mutableStateOf((set.weight ?: 0f).toString()) }
-    var repsText by remember { mutableStateOf((set.reps ?: 0).toString()) }
-
-    LaunchedEffect(set.weight, set.reps) {
-        weightText = (set.weight ?: 0f).toString()
-        repsText = (set.reps ?: 0).toString()
-    }
+    // 1) Creamos estados locales que sólo se inicializan la primera vez
+    var weightText by rememberSaveable { mutableStateOf(set.weight?.toString() ?: "") }
+    var repsText   by rememberSaveable { mutableStateOf(set.reps?.toString() ?: "") }
 
     Row(
         modifier = Modifier
@@ -273,15 +294,15 @@ fun EditableSetItem(
         )
 
         OutlinedTextField(
-            value = weightText,
-            onValueChange = { value ->
-                weightText = value
-                onValueChange(value.toFloatOrNull(), repsText.toIntOrNull())
-            },
             modifier = Modifier
                 .weight(1f)
                 .padding(end = 8.dp)
                 .height(56.dp),
+            value = weightText,
+            onValueChange = { value ->
+                weightText = value
+                onValueChange(value.toDoubleOrNull(), repsText.toIntOrNull())
+            },
             label = { Text("Peso (kg)") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             singleLine = true,
@@ -289,14 +310,14 @@ fun EditableSetItem(
         )
 
         OutlinedTextField(
-            value = repsText,
-            onValueChange = { value ->
-                repsText = value
-                onValueChange(weightText.toFloatOrNull(), value.toIntOrNull())
-            },
             modifier = Modifier
                 .weight(1f)
                 .height(56.dp),
+            value = repsText,
+            onValueChange = { value ->
+                repsText = value
+                onValueChange(weightText.toDoubleOrNull(), value.toIntOrNull())
+            },
             label = { Text("Reps") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             singleLine = true,
