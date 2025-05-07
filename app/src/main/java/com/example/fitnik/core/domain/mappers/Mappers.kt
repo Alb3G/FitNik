@@ -77,7 +77,7 @@ fun WorkoutSetEntity.toDomain(): WorkoutSet {
 
 fun WorkoutSet.toEntity(exerciseId: String): WorkoutSetEntity {
     return WorkoutSetEntity(
-        workoutSetId = this.id.toIntOrNull() ?: 0,
+        workoutSetId = this.id,
         weight = this.weight ?: 0.0,
         reps = this.reps ?: 0,
         exerciseId = exerciseId

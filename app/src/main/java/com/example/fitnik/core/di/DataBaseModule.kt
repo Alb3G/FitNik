@@ -7,7 +7,6 @@ import com.example.fitnik.core.data.local.dao.ExerciseDao
 import com.example.fitnik.core.data.local.dao.RoutineDao
 import com.example.fitnik.core.data.local.dao.UserDAO
 import com.example.fitnik.core.data.local.dao.WorkoutDao
-import com.example.fitnik.core.data.local.dao.WorkoutLogDao
 import com.example.fitnik.core.data.local.dao.WorkoutSetDao
 import com.example.fitnik.core.data.local.repository.UserRepositoryImpl
 import com.example.fitnik.core.domain.repository.UserRepository
@@ -45,10 +44,6 @@ object DataBaseModule {
     @Provides
     @Singleton
     fun provideRoutineDAO(db: AppDataBase): RoutineDao = db.routineDAO()
-
-    @Provides
-    @Singleton
-    fun provideWorkoutLogDAO(db: AppDataBase): WorkoutLogDao = db.workoutLogDAO()
 
     @Provides
     @Singleton

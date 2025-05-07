@@ -29,7 +29,14 @@ interface WorkoutSetDao {
 
     @Transaction
     suspend fun updateSetsForExercise(exerciseId: String, sets: List<WorkoutSetEntity>) {
+        // Validación: no proceder si la lista está vacía
+        if (sets.isEmpty()) return
+
+        // Asegurarnos que todos los sets tengan el exerciseId correcto
+        val validatedSets = sets.map { it.copy(exerciseId = exerciseId) }
+
+        // Eliminar y guardar en una transacción
         deleteSetsByExerciseId(exerciseId)
-        save(sets)
+        save(validatedSets)
     }
 }

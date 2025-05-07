@@ -126,6 +126,7 @@ class RoutineRepositoryImpl @Inject constructor(
         exerciseId: String
     ): Long = withContext(Dispatchers.IO) {
         val setEntity = WorkoutSetEntity(
+            workoutSetId = set.id,
             weight = set.weight ?: 0.0,
             reps = set.reps ?: 0,
             exerciseId = exerciseId

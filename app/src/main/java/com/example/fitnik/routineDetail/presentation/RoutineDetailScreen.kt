@@ -44,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -66,6 +67,7 @@ fun RoutineDetailScreen(
     }
 
     val state by viewModel.state.collectAsState()
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -139,7 +141,7 @@ fun RoutineDetailScreen(
                                 viewModel.updateWorkoutSet(workout.id, exerciseId,setIndex, weight ,reps)
                             },
                             onSaveExerciseProgress = { exerciseId, sets ->
-                                viewModel.updateWorkoutSets(exerciseId, sets)
+                                viewModel.updateWorkoutSets(exerciseId, sets, context)
                             }
                         )
                     }

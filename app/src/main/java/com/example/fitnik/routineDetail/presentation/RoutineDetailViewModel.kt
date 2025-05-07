@@ -1,5 +1,7 @@
 package com.example.fitnik.routineDetail.presentation
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitnik.core.domain.model.WorkoutSet
@@ -58,7 +60,7 @@ class RoutineDetailViewModel @Inject constructor(
         exerciseId: String,
         setIndex: Int,
         weight: Double?,
-        reps: Int?
+        reps: Int?,
     ) {
         _state.update { current ->
             current.copy(
@@ -84,7 +86,8 @@ class RoutineDetailViewModel @Inject constructor(
 
     fun updateWorkoutSets(
         exerciseId: String,
-        updatedSets: List<WorkoutSet>
+        updatedSets: List<WorkoutSet>,
+        context: Context
     ) {
         viewModelScope.launch {
             try {
@@ -92,6 +95,8 @@ class RoutineDetailViewModel @Inject constructor(
             } catch (e: Exception) {
                 _state.update { it.copy(error = e.message ?: "Failed to update sets") }
             }
+
+            Toast.makeText(context, "Progress saved succesfully", Toast.LENGTH_SHORT).show()
         }
     }
 
