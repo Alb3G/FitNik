@@ -1,5 +1,6 @@
 package com.example.fitnik.routineDetail.data.repository
 
+import com.example.fitnik.authentication.domain.usecase.GetUserIdUseCase
 import com.example.fitnik.core.data.local.dao.ExerciseDao
 import com.example.fitnik.core.data.local.dao.RoutineDao
 import com.example.fitnik.core.data.local.dao.WorkoutDao
@@ -32,7 +33,8 @@ class RoutineRepositoryImpl @Inject constructor(
     private val routineDao: RoutineDao,
     private val workoutDao: WorkoutDao,
     private val exerciseDao: ExerciseDao,
-    private val workoutSetDao: WorkoutSetDao
+    private val workoutSetDao: WorkoutSetDao,
+    private val getUserIdUseCase: GetUserIdUseCase
 ) : RoutineRepository {
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -66,7 +68,8 @@ class RoutineRepositoryImpl @Inject constructor(
     override suspend fun createRoutine(routine: Routine): String = withContext(Dispatchers.IO) {
         val routineEntity = RoutineEntity(
             routineId = routine.id,
-            name = routine.name
+            name = routine.name,
+            userId = getUserIdUseCase() ?: "" // Ojo con algun fallo aqui.
         )
 
         val routineId = routine.id
@@ -141,9 +144,56 @@ class RoutineRepositoryImpl @Inject constructor(
         exerciseId: String,
         sets: List<WorkoutSet>
     ) {
-        val workoutSetEntities = sets.map {
-            it.toEntity(exerciseId)
+        withContext(Dispatchers.IO) {
+            val workoutSetEntities = sets.map {
+                it.toEntity(exerciseId)
+            }
+            workoutSetDao.updateSetsForExercise(exerciseId, workoutSetEntities)
         }
-        workoutSetDao.updateSetsForExercise(exerciseId, workoutSetEntities)
+    }
+
+    override suspend fun deleteRoutineById(routineId: String): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            // Primero verificamos que la rutina exista
+            val routineEntity = routineDao.getRoutineById(routineId).first()
+
+            if (routineEntity == null) {
+                return@withContext Result.failure(NoSuchElementException("Routine with ID $routineId not found"))
+            }
+
+            // Ejecutamos la eliminación en cascada dentro de una transacción
+            deleteRoutineWithRelations(routineEntity)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    private suspend fun deleteRoutineWithRelations(routineEntity: RoutineEntity) {
+        // Obtenemos primero todos los IDs de workouts asociados a esta rutina
+        val workoutEntities = workoutDao.getAllWorkouts(routineEntity.routineId).first()
+
+        // Para cada workout, eliminamos sus ejercicios y sets
+        workoutEntities.forEach { workout ->
+            val exercises = exerciseDao.getExercisesByWorkoutId(workout.workoutId).first()
+
+            // Para cada ejercicio, eliminamos sus sets
+            exercises.forEach { exercise ->
+                workoutSetDao.deleteSetsByExerciseId(exercise.exerciseId)
+            }
+
+            // Eliminamos todos los ejercicios de este workout
+            if (exercises.isNotEmpty()) {
+                exerciseDao.deleteAll(exercises)
+            }
+        }
+
+        // Eliminamos todos los workouts
+        if (workoutEntities.isNotEmpty()) {
+            workoutDao.deleteAll(workoutEntities)
+        }
+
+        // Finalmente eliminamos la rutina
+        routineDao.delete(routineEntity)
     }
 }

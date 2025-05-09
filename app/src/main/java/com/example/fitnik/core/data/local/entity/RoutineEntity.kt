@@ -9,4 +9,5 @@ data class RoutineEntity(
     @PrimaryKey(autoGenerate = false)
     val routineId: String = UUID.randomUUID().toString(),
     val name: String,
+    val userId: String
 )

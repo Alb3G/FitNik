@@ -2,6 +2,7 @@ package com.example.fitnik.core.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.fitnik.authentication.domain.usecase.GetUserIdUseCase
 import com.example.fitnik.core.data.local.AppDataBase
 import com.example.fitnik.core.data.local.dao.ExerciseDao
 import com.example.fitnik.core.data.local.dao.RoutineDao
@@ -55,8 +56,13 @@ object DataBaseModule {
 
     @Provides
     @Singleton
-    fun provideUserRepository(userDAO: UserDAO): UserRepository {
-        return UserRepositoryImpl(userDAO)
+    fun provideUserRepository(
+        userDAO: UserDAO,
+        workoutDao: WorkoutDao,
+        exerciseDao: ExerciseDao,
+        workoutSetDao: WorkoutSetDao
+    ): UserRepository {
+        return UserRepositoryImpl(userDAO, workoutDao, exerciseDao, workoutSetDao)
     }
 
     @Provides
@@ -65,8 +71,9 @@ object DataBaseModule {
         routineDao: RoutineDao,
         workoutDao: WorkoutDao,
         exerciseDao: ExerciseDao,
-        workoutSetDao: WorkoutSetDao
+        workoutSetDao: WorkoutSetDao,
+        getUserIdUseCase: GetUserIdUseCase
     ): RoutineRepository {
-        return RoutineRepositoryImpl(routineDao,workoutDao,exerciseDao,workoutSetDao)
+        return RoutineRepositoryImpl(routineDao,workoutDao,exerciseDao,workoutSetDao, getUserIdUseCase)
     }
 }

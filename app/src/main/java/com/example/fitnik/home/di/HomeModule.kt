@@ -1,7 +1,9 @@
 package com.example.fitnik.home.di
 
+import com.example.fitnik.authentication.domain.usecase.GetUserIdUseCase
 import com.example.fitnik.core.data.local.dao.RoutineDao
 import com.example.fitnik.core.data.local.dao.WorkoutDao
+import com.example.fitnik.core.domain.repository.UserRepository
 import com.example.fitnik.home.data.HomeRepositoryImpl
 import com.example.fitnik.home.domain.repository.HomeRepository
 import com.example.fitnik.home.domain.usecase.GetRoutinesUseCase
@@ -26,7 +28,11 @@ object HomeModule {
 
     @Provides
     @Singleton
-    fun provideGetRoutineUseCase(homeRepository: HomeRepository) =
-        GetRoutinesUseCase(homeRepository)
+    fun provideGetRoutineUseCase(
+        userRepository: UserRepository,
+        getUserIdUseCase: GetUserIdUseCase
+    ): GetRoutinesUseCase {
+       return GetRoutinesUseCase(userRepository, getUserIdUseCase)
+    }
 
 }

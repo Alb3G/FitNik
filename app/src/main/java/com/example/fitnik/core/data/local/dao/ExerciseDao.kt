@@ -20,4 +20,6 @@ interface ExerciseDao {
     @Delete
     fun delete(exerciseEntity: ExerciseEntity)
 
+    @Delete
+    fun deleteAll(exercises: List<ExerciseEntity>)
 }

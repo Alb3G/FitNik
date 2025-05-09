@@ -52,6 +52,14 @@ fun WorkoutEntity.toDomain(exercises: List<Exercise> = emptyList()): Workout {
     )
 }
 
+fun Workout.toEntity(routineId: String): WorkoutEntity {
+    return WorkoutEntity(
+        workoutId = this.id,
+        name = this.name,
+        routineId = routineId
+    )
+}
+
 fun RoutineEntity.toDomain(workouts: List<Workout> = emptyList()): Routine {
     return Routine(
         id = this.routineId,
@@ -67,6 +75,12 @@ fun ExerciseEntity.toDomain(sets: List<WorkoutSet> = emptyList()): Exercise {
         sets = sets
     )
 }
+
+fun Exercise.toEntity(workoutId: String) = ExerciseEntity(
+    exerciseId = this.id,
+    name = this.name,
+    workoutId = workoutId
+)
 
 fun WorkoutSetEntity.toDomain(): WorkoutSet {
     return WorkoutSet(

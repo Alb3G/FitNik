@@ -13,4 +13,5 @@ interface RoutineRepository {
     suspend fun createExercise(exercise: Exercise, workoutId: String): String
     suspend fun createSet(set: WorkoutSet, exerciseId: String): Long
     suspend fun updateSetsForExercise(exerciseId: String, sets: List<WorkoutSet>)
+    suspend fun deleteRoutineById(routineId: String): Result<Unit>
 }

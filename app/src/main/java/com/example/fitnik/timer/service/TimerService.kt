@@ -135,7 +135,7 @@ class TimerService : Service() {
         .setContentTitle("Timer")
         .setContentText(formatTime(_timerState.value.time))
         .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
-        .setPriority(NotificationCompat.PRIORITY_HIGH)
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .setOngoing(true)
         .addAction(createStartPauseAction())
         .addAction(createResetAction())

@@ -33,5 +33,6 @@ data class HomeState(
         )
     ),
     var selectedItemIndex: Int = 0,
-    var isLoading: Boolean = false
+    var isLoading: Boolean = false,
+    val errorMessage: String = ""
 )

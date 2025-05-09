@@ -27,6 +27,9 @@ interface WorkoutSetDao {
     @Delete
     fun delete(workoutSetEntity: WorkoutSetEntity)
 
+    @Delete
+    fun deleteAll(workoutSetEntities: List<WorkoutSetEntity>)
+
     @Transaction
     suspend fun updateSetsForExercise(exerciseId: String, sets: List<WorkoutSetEntity>) {
         // Validación: no proceder si la lista está vacía

@@ -27,6 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.fitnik.home.presentation.components.NoWorkoutsComponent
@@ -41,6 +42,8 @@ fun HomContent(
     onCreateRoutineClick: () -> Unit,
     onRoutineClick: (String) -> Unit
 ) {
+    val context = LocalContext.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -75,6 +78,7 @@ fun HomContent(
                             onRoutineClick(routine.id)
                             Log.d("RoutineCard", "Routine clicked with ID: ${routine.id}")
                         },
+                        onDeleteRoutine = { viewModel.deleteRoutine(routine.id, context) }
                     )
                 }
 

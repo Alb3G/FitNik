@@ -22,4 +22,7 @@ interface WorkoutDao {
 
     @Delete
     fun delete(workoutEntity: WorkoutEntity)
+
+    @Delete
+    fun deleteAll(workouts: List<WorkoutEntity>)
 }
