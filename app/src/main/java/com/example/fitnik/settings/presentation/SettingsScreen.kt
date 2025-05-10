@@ -1,4 +1,4 @@
-package com.example.fitnik.settings
+package com.example.fitnik.settings.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,8 +17,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -37,11 +35,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.fitnik.R
+import com.example.fitnik.settings.presentation.components.MenuItemRow
+import com.example.fitnik.settings.presentation.components.StatItem
 import com.example.fitnik.ui.theme.lightLightGray
+import com.example.fitnik.ui.theme.primary
+import com.example.fitnik.ui.theme.secondary
+import com.example.fitnik.ui.theme.white
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(
+    viewModel: SettingsViewModel = hiltViewModel(),
+    onLogout: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -108,20 +115,6 @@ fun SettingsScreen() {
                     fontSize = 16.sp,
                     color = Color.Gray
                 )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Edit Button
-                Button(
-                    onClick = { /* TODO: Edit profile */ },
-                    modifier = Modifier.width(160.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF8CB3F5) // Light blue color
-                    ),
-                    shape = RoundedCornerShape(50)
-                ) {
-                    Text("Edit", color = Color.White)
-                }
             }
 
             // Stats Section
@@ -132,13 +125,13 @@ fun SettingsScreen() {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 // Height
-                StatItem(value = "180cm", label = "Height")
+                StatItem(value = "180 cm", label = "Height")
 
                 // Weight
-                StatItem(value = "65kg", label = "Weight")
+                StatItem(value = "65 kg", label = "Weight")
 
                 // Age
-                StatItem(value = "22yo", label = "Age")
+                StatItem(value = "22 yo", label = "Age")
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -166,28 +159,28 @@ fun SettingsScreen() {
                         icon = R.drawable.profile,
                         title = "Personal Data",
                         iconTint = Color(0xFF8CB3F5)
-                    )
+                    ) { /* Personal Data navigation */ }
 
                     // Achievement
                     MenuItemRow(
                         icon = R.drawable.document,
                         title = "Achievement",
                         iconTint = Color(0xFF8CB3F5)
-                    )
+                    ) { /* Achivement navigation */ }
 
                     // Activity History
                     MenuItemRow(
                         icon = R.drawable.graph,
                         title = "Activity History",
                         iconTint = Color(0xFF8CB3F5)
-                    )
+                    ) { /* Activity navigation */ }
 
                     // Workout Progress
                     MenuItemRow(
                         icon = R.drawable.chart,
                         title = "Workout Progress",
                         iconTint = Color(0xFF8CB3F5)
-                    )
+                    ) { /* Workout progress navigation */ }
                 }
             }
 
@@ -240,75 +233,29 @@ fun SettingsScreen() {
                         checked = true,
                         onCheckedChange = { /* TODO: Toggle notification */ },
                         colors = SwitchDefaults.colors(
-                            checkedThumbColor = Color.White,
-                            checkedTrackColor = Color(0xFFD8A3DC), // Light purple for the track
-                            uncheckedThumbColor = Color.White,
-                            uncheckedTrackColor = Color.LightGray
+                            checkedThumbColor = white,
+                            checkedTrackColor = secondary,
+                            uncheckedThumbColor = white,
+                            uncheckedTrackColor = lightLightGray
                         )
                     )
                 }
             }
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = primary
+                ),
+                onClick = {
+                    viewModel.onLogOut()
+                    onLogout()
+                }
+            ) {
+                Text("Log Out", style = MaterialTheme.typography.bodyLarge)
+            }
         }
-    }
-}
-
-@Composable
-fun StatItem(value: String, label: String) {
-    Column(
-        modifier = Modifier
-            .width(100.dp)
-            .background(Color.White, RoundedCornerShape(16.dp))
-            .padding(vertical = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = value,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF8CB3F5) // Light blue color
-        )
-
-        Text(
-            text = label,
-            fontSize = 14.sp,
-            color = Color.Gray
-        )
-    }
-}
-
-@Composable
-fun MenuItemRow(
-    icon: Int,
-    title: String,
-    iconTint: Color
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 12.dp, horizontal = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                painter = painterResource(icon),
-                contentDescription = title,
-                tint = iconTint,
-                modifier = Modifier.size(24.dp)
-            )
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Text(
-                text = title,
-                fontSize = 16.sp
-            )
-        }
-
-        Icon(
-            imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
-            contentDescription = "Navigate",
-            tint = Color.Gray
-        )
     }
 }

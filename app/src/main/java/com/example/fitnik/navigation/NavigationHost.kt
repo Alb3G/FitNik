@@ -21,7 +21,6 @@ import com.example.fitnik.navigation.NavigationGraph.AuthGraph.SignUp
 import com.example.fitnik.navigation.NavigationGraph.AuthGraph.UserProfileSetUp
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.CreateWorkout
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.Home
-import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph
 import com.example.fitnik.onboarding.presentation.OnboardingScreen
 
 @Composable
@@ -152,7 +151,7 @@ fun NavigationHost(
     }
 }
 
-fun tabsNav(navHostController: NavHostController, destination: HomeTabsGraph) {
+fun tabsNav(navHostController: NavHostController, destination: NavigationGraph) {
     navHostController.navigate(destination) {
         popUpTo(navHostController.graph.findStartDestination().id) {
             saveState = true

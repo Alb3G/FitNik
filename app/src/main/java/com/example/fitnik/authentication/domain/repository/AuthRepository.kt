@@ -9,6 +9,8 @@ interface AuthRepository {
 
     suspend fun signUp(email: String, password: String): Result<Unit>
 
+    suspend fun signOut()
+
     suspend fun loginWithCredential(idToken: String): Result<FirebaseUser>
 
     fun getUserId(): String?

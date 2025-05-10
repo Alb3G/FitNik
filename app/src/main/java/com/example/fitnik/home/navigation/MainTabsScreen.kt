@@ -20,6 +20,7 @@ import com.example.fitnik.home.presentation.HomContent
 import com.example.fitnik.home.presentation.HomeViewModel
 import com.example.fitnik.home.presentation.components.NavBar
 import com.example.fitnik.home.presentation.model.BottomNavItem
+import com.example.fitnik.navigation.NavigationGraph.AuthGraph.Login
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.CreateWorkout
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.Home
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.RoutineDetail
@@ -28,7 +29,7 @@ import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.Ste
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.Timer
 import com.example.fitnik.navigation.tabsNav
 import com.example.fitnik.routineDetail.presentation.RoutineDetailScreen
-import com.example.fitnik.settings.SettingsScreen
+import com.example.fitnik.settings.presentation.SettingsScreen
 import com.example.fitnik.steps.StepsScreen
 import com.example.fitnik.timer.presentation.TimerScreen
 
@@ -131,7 +132,9 @@ fun MainTabsScreen(
                     ) + fadeOut(animationSpec = tween(300))
                 },
             ) {
-                SettingsScreen()
+                SettingsScreen {
+                    tabsNav(mainNavController, Login)
+                }
             }
 
             composable<RoutineDetail>(
