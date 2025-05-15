@@ -16,6 +16,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.fitnik.core.domain.model.Wod
+import com.example.fitnik.core.domain.model.WodHistory
 import com.example.fitnik.home.presentation.HomContent
 import com.example.fitnik.home.presentation.HomeViewModel
 import com.example.fitnik.home.presentation.components.NavBar
@@ -25,13 +27,15 @@ import com.example.fitnik.navigation.NavigationGraph.MainGraph.CreateWorkout
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.Home
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.RoutineDetail
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.Settings
-import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.StepsScreen
 import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.Timer
+import com.example.fitnik.navigation.NavigationGraph.MainGraph.HomeTabsGraph.WodChallenge
 import com.example.fitnik.navigation.tabsNav
 import com.example.fitnik.routineDetail.presentation.RoutineDetailScreen
 import com.example.fitnik.settings.presentation.SettingsScreen
-import com.example.fitnik.steps.StepsScreen
 import com.example.fitnik.timer.presentation.TimerScreen
+import com.example.fitnik.wod.presentation.WodChallengeScreen
+import com.example.fitnik.wod.presentation.WodState
+import java.time.LocalDate
 
 @Composable
 fun MainTabsScreen(
@@ -51,7 +55,7 @@ fun MainTabsScreen(
                 viewModel.updateSelectedIndex(index)
                 when (item.title) {
                     "Home" -> tabsNav(tabsNavController, Home)
-                    "Steps" -> tabsNav(tabsNavController, StepsScreen)
+                    "Steps" -> tabsNav(tabsNavController, WodChallenge)
                     "Timer" -> tabsNav(tabsNavController, Timer)
                     "Settings" -> tabsNav(tabsNavController, Settings)
                 }
@@ -84,7 +88,7 @@ fun MainTabsScreen(
                 )
             }
 
-            composable<StepsScreen>(
+            composable<WodChallenge>(
                 popEnterTransition = {
                     slideInHorizontally(
                         initialOffsetX = { -300 },
@@ -98,7 +102,31 @@ fun MainTabsScreen(
                     ) + fadeOut(animationSpec = tween(300))
                 },
             ) {
-                StepsScreen()
+                val currentDate = LocalDate.now()
+                val history = List(14) { index ->
+                    val date = currentDate.minusDays(index.toLong())
+                    WodHistory(
+                        date = date,
+                        completed = index % 3 != 0 // Some completed, some not
+                    )
+                }.reversed()
+
+                val sampleWod = Wod(
+                    name = "Burpees Challenge",
+                    description = "10 burpees a máximo ritmo en cada ronda. Descansa 30 segundos entre rondas.",
+                    rounds = 3,
+                    durationMinutes = 5
+                )
+
+                val state = WodState(
+                    currentWod = sampleWod,
+                    streak = 5,
+                    history = history,
+                    isCompleted = false,
+                    remainingSeconds = 180,
+                    isWorkoutActive = false
+                )
+                WodChallengeScreen(state = state, onCompleteWod = {}, onStartWorkout = {}, onCancelWorkout = {})
             }
 
             composable<Timer>(

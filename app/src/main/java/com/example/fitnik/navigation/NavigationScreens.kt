@@ -29,7 +29,7 @@ sealed class NavigationGraph {
             object Home : HomeTabsGraph()
 
             @Serializable
-            object StepsScreen : HomeTabsGraph()
+            object WodChallenge : HomeTabsGraph()
 
             @Serializable
             object Settings : HomeTabsGraph()
