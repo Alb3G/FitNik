@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat
 
 @Composable
 @SuppressLint("ObsoleteSdkInt")
-fun RequestNotificationPermission(onGranted: () -> Unit) {
+fun RequestNotificationPermission(onGranted: () -> Unit = {}) {
   val context = LocalContext.current
 
   val launcher = rememberLauncherForActivityResult(

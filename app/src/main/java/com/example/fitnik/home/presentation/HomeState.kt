@@ -14,9 +14,9 @@ data class HomeState(
             contentDescription = "Home Screen Icon"
         ),
         BottomNavItem(
-            title = "Steps",
-            selectedIcon = R.drawable.shoe_prints_selected,
-            unselectedIcon = R.drawable.shoe_prints,
+            title = "Wods",
+            selectedIcon = R.drawable.dumbell_icon,
+            unselectedIcon = R.drawable.dumbell_icon_unselected,
             contentDescription = "Steps Screen Icon"
         ),
         BottomNavItem(

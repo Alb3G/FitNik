@@ -44,7 +44,7 @@ fun TimerScreen(
         false -> timerButton
     }
 
-    RequestNotificationPermission { }
+    RequestNotificationPermission()
 
     Column(
         modifier = Modifier.background(smokeWhite).fillMaxSize().padding(24.dp),
@@ -99,6 +99,8 @@ fun TimerScreen(
         ) {
             items(
                 items = state.times.reversed(),
+                // Si clickamos muy rapido crashea porque usa el mismo index como key para 2 elementos
+                // porque no le da tiempo a actualizarlo
                 key = { item -> state.times.indexOf(item) }
             ) { item ->
                 val lapItemColor = if (viewModel.lowestTime(item)) {

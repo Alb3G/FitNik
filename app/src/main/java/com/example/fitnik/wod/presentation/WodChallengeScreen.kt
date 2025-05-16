@@ -23,8 +23,10 @@ fun WodChallengeScreen(
     modifier: Modifier = Modifier,
     state: WodState,
     onCompleteWod: () -> Unit,
-    onStartWorkout: () -> Unit,
-    onCancelWorkout: () -> Unit,
+    onStartWod: () -> Unit,
+    onCancelWod: () -> Unit,
+    onNextPeriod: () -> Unit,
+    onPreviousPeriod: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -41,7 +43,7 @@ fun WodChallengeScreen(
 
         // WOD Card
         WodCard(
-            wod = state.currentWod,
+            wod = state.currentWod!!,
             isCompleted = state.isCompleted,
             onCompleteClick = { if (!state.isCompleted) onCompleteWod() }
         )
@@ -53,14 +55,18 @@ fun WodChallengeScreen(
             isWorkoutActive = state.isWorkoutActive,
             remainingSeconds = state.remainingSeconds,
             totalSeconds = state.currentWod.durationMinutes * 60,
-            onStartWorkout = { if (!state.isWorkoutActive && !state.isCompleted) onStartWorkout() },
-            onCancelWorkout = { if (state.isWorkoutActive) onCancelWorkout() }
+            onStartWorkout = { if (!state.isWorkoutActive && !state.isCompleted) onStartWod() },
+            onCancelWorkout = { if (state.isWorkoutActive) onCancelWod() }
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         // Streak Calendar
-        StreakCalendar(history = state.history)
+        StreakCalendar(
+            history = state.history,
+            onPreviousPeriod = onPreviousPeriod,
+            onNextPeriod = onNextPeriod
+        )
     }
 }
 

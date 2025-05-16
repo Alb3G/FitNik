@@ -10,6 +10,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -55,7 +57,7 @@ fun MainTabsScreen(
                 viewModel.updateSelectedIndex(index)
                 when (item.title) {
                     "Home" -> tabsNav(tabsNavController, Home)
-                    "Steps" -> tabsNav(tabsNavController, WodChallenge)
+                    "Wods" -> tabsNav(tabsNavController, WodChallenge)
                     "Timer" -> tabsNav(tabsNavController, Timer)
                     "Settings" -> tabsNav(tabsNavController, Settings)
                 }
@@ -103,13 +105,14 @@ fun MainTabsScreen(
                 },
             ) {
                 val currentDate = LocalDate.now()
-                val history = List(14) { index ->
-                    val date = currentDate.minusDays(index.toLong())
+                val historyStartDate = remember { mutableStateOf(currentDate.minusDays(13)) }
+                val history = List(7) { index ->
+                    val date = historyStartDate.value.plusDays(index.toLong())
                     WodHistory(
                         date = date,
                         completed = index % 3 != 0 // Some completed, some not
                     )
-                }.reversed()
+                }
 
                 val sampleWod = Wod(
                     name = "Burpees Challenge",
@@ -126,7 +129,18 @@ fun MainTabsScreen(
                     remainingSeconds = 180,
                     isWorkoutActive = false
                 )
-                WodChallengeScreen(state = state, onCompleteWod = {}, onStartWorkout = {}, onCancelWorkout = {})
+                WodChallengeScreen(
+                    state = state,
+                    onCompleteWod = {},
+                    onStartWod = {},
+                    onCancelWod = {},
+                    onNextPeriod = {
+                        historyStartDate.value = historyStartDate.value.plusDays(7)
+                    },
+                    onPreviousPeriod = {
+                        historyStartDate.value = historyStartDate.value.minusDays(7)
+                    }
+                )
             }
 
             composable<Timer>(
