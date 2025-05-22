@@ -28,6 +28,7 @@ fun WodChallengeScreen(
     onNextPeriod: () -> Unit,
     onPreviousPeriod: () -> Unit
 ) {
+
     Column(
         modifier = modifier
             .fillMaxSize()

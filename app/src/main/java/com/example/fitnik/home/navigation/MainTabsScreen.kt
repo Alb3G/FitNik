@@ -10,16 +10,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.example.fitnik.core.domain.model.Wod
-import com.example.fitnik.core.domain.model.WodHistory
 import com.example.fitnik.home.presentation.HomContent
 import com.example.fitnik.home.presentation.HomeViewModel
 import com.example.fitnik.home.presentation.components.NavBar
@@ -36,8 +33,8 @@ import com.example.fitnik.routineDetail.presentation.RoutineDetailScreen
 import com.example.fitnik.settings.presentation.SettingsScreen
 import com.example.fitnik.timer.presentation.TimerScreen
 import com.example.fitnik.wod.presentation.WodChallengeScreen
-import com.example.fitnik.wod.presentation.WodState
-import java.time.LocalDate
+import com.example.fitnik.wod.presentation.WodEvent
+import com.example.fitnik.wod.presentation.WodViewModel
 
 @Composable
 fun MainTabsScreen(
@@ -104,41 +101,18 @@ fun MainTabsScreen(
                     ) + fadeOut(animationSpec = tween(300))
                 },
             ) {
-                val currentDate = LocalDate.now()
-                val historyStartDate = remember { mutableStateOf(currentDate.minusDays(13)) }
-                val history = List(7) { index ->
-                    val date = historyStartDate.value.plusDays(index.toLong())
-                    WodHistory(
-                        date = date,
-                        completed = index % 3 != 0 // Some completed, some not
-                    )
-                }
-
-                val sampleWod = Wod(
-                    name = "Burpees Challenge",
-                    description = "10 burpees a máximo ritmo en cada ronda. Descansa 30 segundos entre rondas.",
-                    rounds = 3,
-                    durationMinutes = 5
-                )
-
-                val state = WodState(
-                    currentWod = sampleWod,
-                    streak = 5,
-                    history = history,
-                    isCompleted = false,
-                    remainingSeconds = 180,
-                    isWorkoutActive = false
-                )
+                val viewModel: WodViewModel = hiltViewModel()
+                val state by viewModel.state.collectAsState()
                 WodChallengeScreen(
                     state = state,
                     onCompleteWod = {},
                     onStartWod = {},
                     onCancelWod = {},
                     onNextPeriod = {
-                        historyStartDate.value = historyStartDate.value.plusDays(7)
+                        viewModel.onEvent(WodEvent.NextPeriod)
                     },
                     onPreviousPeriod = {
-                        historyStartDate.value = historyStartDate.value.minusDays(7)
+                        viewModel.onEvent(WodEvent.PreviousPeriod)
                     }
                 )
             }
