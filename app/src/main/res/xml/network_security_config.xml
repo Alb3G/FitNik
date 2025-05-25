@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Denegamos por defecto -->
+    <base-config cleartextTrafficPermitted="false" />
+
+    <!-- Permitimos cleartext a localhost y al emulador -->
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- Para “localhost” -->
+        <domain includeSubdomains="true">localhost</domain>
+        <!-- Para la IP especial del emulador -->
+        <domain includeSubdomains="true">10.0.2.2</domain>
+    </domain-config>
+</network-security-config>
+

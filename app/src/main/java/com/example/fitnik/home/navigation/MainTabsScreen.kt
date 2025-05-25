@@ -103,11 +103,10 @@ fun MainTabsScreen(
             ) {
                 val viewModel: WodViewModel = hiltViewModel()
                 val state by viewModel.state.collectAsState()
+
                 WodChallengeScreen(
                     state = state,
-                    onCompleteWod = {},
-                    onStartWod = {},
-                    onCancelWod = {},
+                    onCompleteWod = { viewModel.onEvent(WodEvent.CompleteWod) },
                     onNextPeriod = {
                         viewModel.onEvent(WodEvent.NextPeriod)
                     },

@@ -85,6 +85,9 @@ dependencies {
     implementation(libs.google.id)
     implementation(libs.credentials)
     implementation(libs.credentials.play.services)
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
     // PDF
     //noinspection UseTomlInstead
     implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.3")

@@ -56,7 +56,7 @@ fun WodCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "WOD de hoy",
+                    text = "Todays WOD",
                     style = MaterialTheme.typography.titleLarge,
                     color = primary
                 )
@@ -70,7 +70,7 @@ fun WodCard(
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = "Completado",
+                            text = "Completed",
                             style = MaterialTheme.typography.bodyMedium,
                             color = timerButton
                         )
@@ -106,13 +106,13 @@ fun WodCard(
                 WodDetailItem(
                     icon = R.drawable.laps_icon,
                     value = "${wod.rounds}",
-                    label = "Rondas"
+                    label = "Rounds"
                 )
 
                 WodDetailItem(
                     icon = R.drawable.timer_icon,
                     value = "${wod.durationMinutes}",
-                    label = "Minutos"
+                    label = "Minutes"
                 )
             }
 
@@ -132,7 +132,7 @@ fun WodCard(
                 enabled = !isCompleted
             ) {
                 Text(
-                    text = if (isCompleted) "¡WOD Completado!" else "Completar WOD",
+                    text = if (isCompleted) "¡WOD Completed!" else "Complete WOD",
                     style = MaterialTheme.typography.titleLarge
                 )
             }
