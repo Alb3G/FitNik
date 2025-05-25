@@ -7,6 +7,7 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.fitnik.authentication.domain.repository.AuthRepository
 import com.example.fitnik.authentication.domain.usecase.LoginUseCases
 import com.example.fitnik.authentication.domain.usecase.UserAccountIsCompletedUseCase
 import com.example.fitnik.authentication.model.PasswordValidationResult
@@ -25,7 +26,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCases: LoginUseCases,
-    private val userAccountIsCompletedUseCase: UserAccountIsCompletedUseCase
+    private val userAccountIsCompletedUseCase: UserAccountIsCompletedUseCase,
+    private val authRepository: AuthRepository
 ): ViewModel() {
 
     private val _state = MutableStateFlow(LoginState())

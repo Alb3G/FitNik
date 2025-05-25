@@ -27,6 +27,8 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.fitnik.R
+import com.example.fitnik.core.domain.mappers.toEntity
 import com.example.fitnik.settings.presentation.components.MenuItemRow
 import com.example.fitnik.settings.presentation.components.StatItem
 import com.example.fitnik.ui.theme.lightLightGray
@@ -49,6 +52,9 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
     onLogout: () -> Unit
 ) {
+
+    val state by viewModel.uiState.collectAsState()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -102,7 +108,7 @@ fun SettingsScreen(
 
                 // Name
                 Text(
-                    text = "Stefani Wong",
+                    text = state.user?.toEntity()?.firstName ?: "Stefani Wong",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -111,7 +117,7 @@ fun SettingsScreen(
 
                 // Program
                 Text(
-                    text = "Lose a Fat Program",
+                    text = state.user?.toEntity()?.objective ?: "Lose a Fat Program",
                     fontSize = 16.sp,
                     color = Color.Gray
                 )
@@ -125,13 +131,22 @@ fun SettingsScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 // Height
-                StatItem(value = "180 cm", label = "Height")
+                StatItem(
+                    value = state.user?.toEntity()?.height?.toString() ?: "180 cm",
+                    label = "Height"
+                )
 
                 // Weight
-                StatItem(value = "65 kg", label = "Weight")
+                StatItem(
+                    value = state.user?.toEntity()?.weight?.toString() ?: "65 kg",
+                    label = "Weight"
+                )
 
                 // Age
-                StatItem(value = "22 yo", label = "Age")
+                StatItem(
+                    value = state.user?.toEntity()?.age?.toString() ?: "22 yo",
+                    label = "Age"
+                )
             }
 
             Spacer(modifier = Modifier.height(24.dp))
